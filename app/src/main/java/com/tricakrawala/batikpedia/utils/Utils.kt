@@ -29,7 +29,8 @@ object Utils {
         Screen.ToListProvinsi.route,
         Screen.DetailProvinsi.route,
         Screen.Berita.route,
-        Screen.DetailBatik.route
+        Screen.DetailBatik.route,
+        Screen.DetailWisataByProvinsi.route,
     )
 
 

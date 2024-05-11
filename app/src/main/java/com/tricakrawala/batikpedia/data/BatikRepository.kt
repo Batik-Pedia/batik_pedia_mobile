@@ -78,6 +78,8 @@ class BatikRepository(private val preference: UserPreference) {
         return flowOf(wisataList)
     }
 
+    fun getWisataById(idWisata : Long) = wisataList.first{it.idWisata == idWisata}
+
     fun getAllBerita() = flowOf(beritaList)
 
     fun getProvinsiById(idProvinsi : Long) : Nusantara = nusantaraList.first { it.idNusantara == idProvinsi }

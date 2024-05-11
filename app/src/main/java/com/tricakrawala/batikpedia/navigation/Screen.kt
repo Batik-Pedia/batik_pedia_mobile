@@ -11,6 +11,11 @@ sealed class Screen(val route : String) {
         fun createRoute(idNusantara : Long) = "toListProvinsi/$idNusantara"
     }
 
+    object DetailWisataByProvinsi : Screen("toListProvinsi/{idNusantara}/{idWisata}"){
+        fun createRoute(idNusantara: Long, idWisata : Long) = "toListProvinsi/$idNusantara/$idWisata"
+
+    }
+
 
     object Katalog : Screen("katalog")
 

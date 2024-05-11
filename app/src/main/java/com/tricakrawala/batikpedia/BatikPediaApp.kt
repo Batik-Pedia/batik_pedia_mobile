@@ -31,6 +31,7 @@ import com.tricakrawala.batikpedia.screen.home.HomeScreen
 import com.tricakrawala.batikpedia.screen.katalog.KatalogScreen
 import com.tricakrawala.batikpedia.screen.provinsi.DetailProvinsiScreen
 import com.tricakrawala.batikpedia.screen.provinsi.ListProvinsiScreen
+import com.tricakrawala.batikpedia.screen.provinsi.WisataProvinsiScreen
 import com.tricakrawala.batikpedia.screen.wisata.WisataScreen
 import com.tricakrawala.batikpedia.ui.components.BottomBar
 import com.tricakrawala.batikpedia.ui.theme.background2
@@ -118,7 +119,15 @@ fun BatikPediaApp(
                 arguments = listOf(navArgument("idNusantara") { type = NavType.LongType }),
             ) {
                 val id = it.arguments?.getLong("idNusantara") ?: -1L
-                DetailProvinsiScreen(idProvinsi = id)
+                DetailProvinsiScreen(idProvinsi = id, navigateToWisata = {idWisata ->
+                    navController.navigate(Screen.DetailWisataByProvinsi.createRoute(id,idWisata))
+                })
+            }
+
+            composable(Screen.DetailWisataByProvinsi.route,
+                arguments = listOf(navArgument("idWisata") { type = NavType.LongType })){
+                val  id = it.arguments?.getLong("idWisata") ?: -1L
+                WisataProvinsiScreen(idWisata = id, navController = navController)
             }
 
             composable(Screen.Wisata.route) {

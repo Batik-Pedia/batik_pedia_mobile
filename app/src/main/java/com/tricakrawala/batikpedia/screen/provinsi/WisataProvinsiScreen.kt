@@ -1,4 +1,4 @@
-package com.tricakrawala.batikpedia.screen.detailbatik
+package com.tricakrawala.batikpedia.screen.provinsi
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,7 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,45 +42,48 @@ import com.tricakrawala.batikpedia.ui.common.UiState
 import com.tricakrawala.batikpedia.ui.components.AtlasItem
 import com.tricakrawala.batikpedia.ui.components.ImgDetailBig
 import com.tricakrawala.batikpedia.ui.components.TextWithCard
+import com.tricakrawala.batikpedia.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.ui.theme.background2
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.ui.theme.textColor
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DetailMotifScreen(
+fun WisataProvinsiScreen(
     modifier: Modifier = Modifier,
-    idBatik : Long,
-    viewModel: DetailBatikViewModel = koinViewModel(),
-    navController : NavHostController,
-){
-    val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
+    viewModel: ProvinsiViewModel = koinViewModel(),
+    idWisata : Long,
+    navController: NavHostController,
+) {
 
-    LaunchedEffect(true) {
-        if (uiState is UiState.Loading){
-            viewModel.getAllWisata(idBatik)
-        }
+    val uiState by viewModel.uiStateWisataById.collectAsState(initial = UiState.Loading)
+
+    if (uiState is UiState.Loading){
+        viewModel.getWisataById(idWisata)
     }
 
-    when(val batik = uiState){
+    when(val wisata = uiState){
+        is UiState.Error -> {
 
-        is UiState.Error -> {}
-        is UiState.Success -> {
-           DetailMotifContent(imageBatik = batik.data.image, titleBatik = batik.data.namaMotif, navController = navController)
         }
+
+        is UiState.Success -> {
+            WisataProvinsiContent(navController = navController, imgWisata = wisata.data.image, titleWisata = wisata.data.namaWisata)
+        }
+
         else -> {}
     }
-}
 
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailMotifContent(
+fun WisataProvinsiContent(
     modifier: Modifier = Modifier,
-    imageBatik : Int,
-    titleBatik : String,
     navController : NavHostController,
-){
+    imgWisata : Int,
+    titleWisata : String,
+) {
 
     Box(
         modifier = Modifier
@@ -104,7 +106,7 @@ fun DetailMotifContent(
         CenterAlignedTopAppBar(
             title = {
                 Text(
-                    text = stringResource(id = R.string.motif_batik),
+                    text = stringResource(id = R.string.destinasi_wisata),
                     fontFamily = poppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     color = textColor,
@@ -133,22 +135,32 @@ fun DetailMotifContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-            ImgDetailBig(image = imageBatik, text = titleBatik, modifier = Modifier)
+            ImgDetailBig(image = imgWisata, text = titleWisata, modifier = Modifier)
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            TextWithCard(title = stringResource(id = R.string.tentang_motif_batik), text = stringResource(id = R.string.tentang_motif))
+            TextWithCard(
+                title = stringResource(id = R.string.tentang_wisata_batik),
+                text = stringResource(id = R.string.tentang_wisata)
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            AtlasItem(image = R.drawable.peta1, nusantara = "Yogyakarta", modifier = modifier.fillMaxWidth())
+            AtlasItem(
+                image = R.drawable.peta1,
+                nusantara = "Yogyakarta",
+                modifier = modifier.fillMaxWidth()
+            )
+
+
         }
     }
 }
 
-
 @Composable
-@Preview(showBackground =  true)
+@Preview(showBackground = true)
 private fun Preview(){
-    DetailMotifContent(imageBatik = R.drawable.batik1, titleBatik = "Motif kawung", navController = rememberNavController())
+    BatikPediaTheme {
+        WisataProvinsiContent(imgWisata = R.drawable.wisata1, titleWisata = "Kampung batik solo", navController = rememberNavController())
+    }
 }

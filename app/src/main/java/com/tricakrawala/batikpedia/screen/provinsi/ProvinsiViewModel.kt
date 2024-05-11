@@ -26,9 +26,12 @@ class ProvinsiViewModel(private val repository: BatikRepository) : ViewModel() {
         MutableStateFlow(UiState.Loading)
     val uiStateBatik: StateFlow<UiState<List<KatalogBatik>>> get() = _uiStateBatik
 
-    private val _uiStateWisata: MutableStateFlow<UiState<List<Wisata>>> =
-        MutableStateFlow(UiState.Loading)
+    private val _uiStateWisata: MutableStateFlow<UiState<List<Wisata>>> = MutableStateFlow(UiState.Loading)
     val uiStateWisata: StateFlow<UiState<List<Wisata>>> get() = _uiStateWisata
+
+
+    private val _uiStateWisataById: MutableStateFlow<UiState<Wisata>> = MutableStateFlow(UiState.Loading)
+    val uiStateWisataById: StateFlow<UiState<Wisata>> get() = _uiStateWisataById
 
 
     fun getAllNusantara() {
@@ -71,6 +74,13 @@ class ProvinsiViewModel(private val repository: BatikRepository) : ViewModel() {
                 .collect { wisata ->
                     _uiStateWisata.value = UiState.Success(wisata)
                 }
+        }
+    }
+
+    fun getWisataById(idWisata : Long){
+        viewModelScope.launch {
+            _uiStateWisataById.value = UiState.Loading
+            _uiStateWisataById.value = UiState.Success(repository.getWisataById(idWisata))
         }
     }
 

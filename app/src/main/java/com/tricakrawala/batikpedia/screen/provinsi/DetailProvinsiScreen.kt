@@ -2,6 +2,7 @@ package com.tricakrawala.batikpedia.screen.provinsi
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +60,8 @@ import org.koin.androidx.compose.koinViewModel
 fun DetailProvinsiScreen(
     modifier: Modifier = Modifier,
     idProvinsi: Long,
-    viewModel: ProvinsiViewModel = koinViewModel()
+    viewModel: ProvinsiViewModel = koinViewModel(),
+    navigateToWisata: (Long) -> Unit,
 ) {
 
     val uiState by viewModel.uiStateDetail.collectAsState(initial = UiState.Loading)
@@ -95,7 +97,8 @@ fun DetailProvinsiScreen(
                                 image = provinsi.data.image,
                                 textContent = provinsi.data.provinsi,
                                 listBatik = batik.data,
-                                listWisata = wisata.data
+                                listWisata = wisata.data,
+                                navigateToWisata = navigateToWisata
                             )
 
                         }
@@ -125,7 +128,8 @@ fun DetailProvinsiContent(
     image: Int,
     listBatik: List<KatalogBatik>,
     listWisata: List<Wisata>,
-    textContent: String
+    textContent: String,
+    navigateToWisata: (Long) -> Unit,
 ) {
 
     Box(
@@ -226,7 +230,7 @@ fun DetailProvinsiContent(
                 ) {
 
                     items(listWisata){wisata ->
-                        ImgRowDetail(image = wisata.image, modifier = Modifier.padding(end = 16.dp) )
+                        ImgRowDetail(image = wisata.image, modifier = modifier.padding(end = 16.dp).clickable { navigateToWisata(wisata.idWisata) })
                     }
                 }
 
@@ -258,7 +262,8 @@ private fun preview() {
             image = R.drawable.yogyakarta,
             textContent = "Yogyakarta",
             listBatik = dummyBatik,
-            listWisata = listWisata
+            listWisata = listWisata,
+            navigateToWisata = {}
         )
     }
 }
