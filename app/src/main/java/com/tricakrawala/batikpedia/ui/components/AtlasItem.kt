@@ -45,7 +45,7 @@ fun AtlasItem(
             modifier = Modifier.padding( start = 8.dp, end = 8.dp , top = 16.dp)
         )
 
-        Image(painter = painterResource(id = image),  contentDescription = "",modifier = Modifier.padding( start = 8.dp, end = 8.dp).width(304.dp).height(196.dp))
+        Image(painter = painterResource(id = image),  contentDescription = "",modifier = Modifier.padding( start = 8.dp, end = 8.dp, bottom = 8.dp).width(304.dp).height(196.dp))
     }
     
 }

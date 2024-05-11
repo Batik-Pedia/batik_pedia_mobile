@@ -53,7 +53,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToDetail: () -> Unit,
+    navigateToNusantara: (Long) -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
     navController: NavHostController,
 ) {
@@ -81,7 +81,7 @@ fun HomeScreen(
                     is UiState.Success -> {
                         val listRekomendasi = rekomendasiState.data
                         HomeContent(
-                            navigateToDetail = navigateToDetail,
+                            navigateToNusantara = navigateToNusantara,
                             listNusantara = listNusantara,
                             listRekomendasi = listRekomendasi,
                             modifier = Modifier.fillMaxSize(),
@@ -107,7 +107,7 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
-    navigateToDetail: () -> Unit,
+    navigateToNusantara: (Long) -> Unit,
     listNusantara: List<Nusantara>,
     listRekomendasi: List<Rekomendasi>,
     navController: NavHostController,
@@ -173,7 +173,7 @@ fun HomeContent(
                     NusantaraItemRow(
                         provinsi = data.provinsi,
                         image = data.image,
-                        modifier = Modifier.padding(end = 16.dp)
+                        modifier = modifier.padding(end = 16.dp).clickable { navigateToNusantara(data.idNusantara) }
                     )
                 }
             }
@@ -223,6 +223,6 @@ private fun preview() {
     )
 
     BatikPediaTheme {
-        HomeContent(navigateToDetail = {  }, listNusantara = fakeNusantaraList, listRekomendasi =fakeRekomendasiList, navController = rememberNavController() )
+        HomeContent(navigateToNusantara = {  }, listNusantara = fakeNusantaraList, listRekomendasi =fakeRekomendasiList, navController = rememberNavController() )
     }
 }

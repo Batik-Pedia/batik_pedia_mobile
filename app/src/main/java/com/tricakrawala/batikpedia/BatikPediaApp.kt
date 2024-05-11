@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
@@ -26,12 +27,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tricakrawala.batikpedia.navigation.Screen
 import com.tricakrawala.batikpedia.screen.beritaacara.BeritaAcaraScreen
+import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
 import com.tricakrawala.batikpedia.screen.home.HomeScreen
 import com.tricakrawala.batikpedia.screen.katalog.KatalogScreen
 import com.tricakrawala.batikpedia.screen.provinsi.DetailProvinsiScreen
 import com.tricakrawala.batikpedia.screen.provinsi.ListProvinsiScreen
 import com.tricakrawala.batikpedia.screen.provinsi.WisataProvinsiScreen
+import com.tricakrawala.batikpedia.screen.wisata.DetailWisataScreen
 import com.tricakrawala.batikpedia.screen.wisata.WisataScreen
 import com.tricakrawala.batikpedia.ui.components.BottomBar
 import com.tricakrawala.batikpedia.ui.theme.background2
@@ -86,8 +89,9 @@ fun BatikPediaApp(
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = {},
-                    navController = navController
+                    navController = navController,
+                    navigateToNusantara = { idNusantara -> navController.navigate(Screen.DetailProvinsi.createRoute(idNusantara))},
+
                 )
             }
 
@@ -102,7 +106,16 @@ fun BatikPediaApp(
             )
             {
                 val id = it.arguments?.getLong("idBatik") ?: -1L
-                DetailMotifScreen(idBatik = id, navController = navController)
+                DetailMotifScreen(idBatik = id, navController = navController, navToBatikFullDetail = {idBatikFull ->
+                    navController.navigate(Screen.DetailBatikFull.createRoute(id,idBatikFull))
+                })
+            }
+            composable(Screen.DetailBatikFull.route,
+                    arguments = listOf(navArgument("idBatikFull") { type = NavType.LongType }),
+            ){
+                val id = it.arguments?.getLong("idBatikFull") ?: -1L
+                DetailMotifBatikFullScreen(idBatik = id, navController = navController)
+                Log.d("IdBatikFull", "BatikPediaApp: $id")
             }
 
             composable(
@@ -121,7 +134,7 @@ fun BatikPediaApp(
                 val id = it.arguments?.getLong("idNusantara") ?: -1L
                 DetailProvinsiScreen(idProvinsi = id, navigateToWisata = {idWisata ->
                     navController.navigate(Screen.DetailWisataByProvinsi.createRoute(id,idWisata))
-                })
+                }, navController = navController)
             }
 
             composable(Screen.DetailWisataByProvinsi.route,
@@ -131,8 +144,17 @@ fun BatikPediaApp(
             }
 
             composable(Screen.Wisata.route) {
-                WisataScreen(navController = navController, navigateToDetail = { })
+                WisataScreen(navController = navController, navigateToDetail = {idWisata ->
+                    navController.navigate(Screen.DetailWisata.createRoute(idWisata))
+                })
             }
+
+            composable(Screen.DetailWisata.route,
+                arguments = listOf(navArgument("idWisata") { type = NavType.LongType })){
+                val  id = it.arguments?.getLong("idWisata") ?: -1L
+                DetailWisataScreen(idWisata = id, navController = navController)
+            }
+
             composable(Screen.Berita.route) {
                 BeritaAcaraScreen(navController = navController)
             }
