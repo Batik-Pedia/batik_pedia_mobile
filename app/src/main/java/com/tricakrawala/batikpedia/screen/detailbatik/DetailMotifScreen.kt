@@ -70,7 +70,7 @@ fun DetailMotifScreen(
 
         is UiState.Error -> {}
         is UiState.Success -> {
-           DetailMotifContent(imageBatik = batik.data.image, titleBatik = batik.data.namaMotif, navToBatikFullDetail = navToBatikFullDetail, navController = navController, idBatik = idBatik)
+           DetailMotifContent(imageBatik = batik.data.image, titleBatik = batik.data.namaMotif, navToBatikFullDetail = navToBatikFullDetail, navController = navController, idBatik = batik.data.idBatik)
         }
         else -> {}
     }
