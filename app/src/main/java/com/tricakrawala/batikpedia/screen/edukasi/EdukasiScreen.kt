@@ -53,7 +53,7 @@ import org.koin.androidx.compose.koinViewModel
 fun EdukasiScreen(
     modifier: Modifier = Modifier,
     viewModel: EdukasiViewModel = koinViewModel(),
-    navigateToDetail: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
 ) {
     val uiStateKursus by viewModel.uiStateKursus.collectAsState(initial = UiState.Loading)
@@ -97,7 +97,7 @@ fun EdukasiScreen(
 @Composable
 fun EdukasiContent(
     modifier: Modifier = Modifier,
-    navigateToDetail: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
     listVideoMembatik: List<VideoMembatik>,
     listKursus: List<KursusBatik>,
@@ -163,8 +163,7 @@ fun EdukasiContent(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .navigationBarsPadding(),
+                    .padding(top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {

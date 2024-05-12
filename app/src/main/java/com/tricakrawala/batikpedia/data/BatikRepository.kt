@@ -100,6 +100,8 @@ class BatikRepository(private val preference: UserPreference) {
     fun getAllKursus(): Flow<List<KursusBatik>> {
         return flowOf(kursusList)
     }
+
+    fun getKursusById(idKursus : Long) = kursusList.first { it.idKursus == idKursus }
     fun getAllVideo(): Flow<List<VideoMembatik>> {
         return flowOf(videoList)
     }

@@ -31,8 +31,8 @@ object Utils {
         Screen.Berita.route,
         Screen.DetailBatik.route,
         Screen.DetailWisataByProvinsi.route,
-        Screen.Edukasi.route,
         Screen.DetailBatikFull.route,
+        Screen.DetailEdukasi.route,
         Screen.DetailWisata.route,
         Screen.Filter.route,
     )

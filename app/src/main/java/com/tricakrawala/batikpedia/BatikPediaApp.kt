@@ -29,6 +29,7 @@ import com.tricakrawala.batikpedia.navigation.Screen
 import com.tricakrawala.batikpedia.screen.beritaacara.BeritaAcaraScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
+import com.tricakrawala.batikpedia.screen.edukasi.DetailEdukasiScreen
 import com.tricakrawala.batikpedia.screen.filter.FilterScreen
 import com.tricakrawala.batikpedia.screen.edukasi.EdukasiScreen
 import com.tricakrawala.batikpedia.screen.home.HomeScreen
@@ -166,7 +167,15 @@ fun BatikPediaApp(
             }
              
           composable(Screen.Edukasi.route) {
-                EdukasiScreen(navController = navController, navigateToDetail = {})
+                EdukasiScreen(navController = navController, navigateToDetail = {idKursus ->
+                    navController.navigate(Screen.DetailEdukasi.createRoute(idKursus))
+                })
+            }
+            composable(Screen.DetailEdukasi.route,
+                arguments = listOf(navArgument("idKursus"){type = NavType.LongType})
+            ){
+                val id = it.arguments?.getLong("idKursus") ?: -1L
+                DetailEdukasiScreen(idKursus = id, navController = navController)
             }
 
 
