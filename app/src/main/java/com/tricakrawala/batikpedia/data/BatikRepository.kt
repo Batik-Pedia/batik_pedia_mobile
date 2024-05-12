@@ -3,8 +3,10 @@ package com.tricakrawala.batikpedia.data
 import com.tricakrawala.batikpedia.model.Berita
 import com.tricakrawala.batikpedia.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.model.KatalogBatik
+import com.tricakrawala.batikpedia.model.KursusBatik
 import com.tricakrawala.batikpedia.model.Nusantara
 import com.tricakrawala.batikpedia.model.Rekomendasi
+import com.tricakrawala.batikpedia.model.VideoMembatik
 import com.tricakrawala.batikpedia.model.Wisata
 import com.tricakrawala.batikpedia.pref.UserModel
 import com.tricakrawala.batikpedia.pref.UserPreference
@@ -18,6 +20,8 @@ class BatikRepository(private val preference: UserPreference) {
     private val batikList = mutableListOf<KatalogBatik>()
     private val wisataList = mutableListOf<Wisata>()
     private val beritaList = mutableListOf<Berita>()
+    private val kursusList = mutableListOf<KursusBatik>()
+    private val videoList = mutableListOf<VideoMembatik>()
 
     init{
         if (nusantaraList.isEmpty()){
@@ -47,6 +51,16 @@ class BatikRepository(private val preference: UserPreference) {
         if(beritaList.isEmpty()){
             FakeSourceBatik.listBerita.forEach {
                 beritaList.add(it)
+            }
+        }
+        if (kursusList.isEmpty()){
+            FakeSourceBatik.listKursus.forEach {
+                kursusList.add(it)
+            }
+        }
+        if (videoList.isEmpty()){
+            FakeSourceBatik.listVideoMembatik.forEach {
+                videoList.add(it)
             }
         }
     }
@@ -83,5 +97,11 @@ class BatikRepository(private val preference: UserPreference) {
     fun getAllBerita() = flowOf(beritaList)
 
     fun getProvinsiById(idProvinsi : Long) : Nusantara = nusantaraList.first { it.idNusantara == idProvinsi }
+    fun getAllKursus(): Flow<List<KursusBatik>> {
+        return flowOf(kursusList)
+    }
+    fun getAllVideo(): Flow<List<VideoMembatik>> {
+        return flowOf(videoList)
+    }
 
 }

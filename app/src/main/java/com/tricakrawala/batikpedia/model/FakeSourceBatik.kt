@@ -84,5 +84,19 @@ object FakeSourceBatik {
             "Solo, Indonesia"
         ),
     )
+    val listKursus = listOf(
+        KursusBatik(1, R.drawable.kursus1, "Superprof"),
+        KursusBatik(2, R.drawable.kursus1, "Citra Alam"),
+        KursusBatik(3, R.drawable.kursus1, "Udemy"),
+        KursusBatik(4, R.drawable.kursus2, "Superprof")
+
+    )
+    val listVideoMembatik= listOf(
+        VideoMembatik(1, R.drawable.kursus1, "Superprof"),
+        VideoMembatik(2, R.drawable.kursus1, "Citra Alam"),
+        VideoMembatik(3, R.drawable.kursus1, "Udemy"),
+        VideoMembatik(4, R.drawable.kursus2, "Superprof")
+
+    )
 
 }
