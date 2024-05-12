@@ -192,8 +192,8 @@ private fun preview() {
         KursusBatik(4, R.drawable.kursus2, "Superprof")
     )
     val fakeVideoMembatik = listOf(
-        VideoMembatik(1, R.drawable.kursus1, "Superprof"),
-        VideoMembatik(2, R.drawable.kursus1, "Citra Alam"),
+        VideoMembatik(1, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
+        VideoMembatik(2, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
         VideoMembatik(3, R.drawable.kursus1, "Udemy"),
         VideoMembatik(4, R.drawable.kursus2, "Superprof"))
 
