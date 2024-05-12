@@ -62,6 +62,7 @@ fun DetailProvinsiScreen(
     idProvinsi: Long,
     viewModel: ProvinsiViewModel = koinViewModel(),
     navigateToWisata: (Long) -> Unit,
+    navController: NavHostController,
 ) {
 
     val uiState by viewModel.uiStateDetail.collectAsState(initial = UiState.Loading)
@@ -93,7 +94,7 @@ fun DetailProvinsiScreen(
                         is UiState.Error -> {}
                         is UiState.Success -> {
                             DetailProvinsiContent(
-                                navController = rememberNavController(),
+                                navController = navController,
                                 image = provinsi.data.image,
                                 textContent = provinsi.data.provinsi,
                                 listBatik = batik.data,

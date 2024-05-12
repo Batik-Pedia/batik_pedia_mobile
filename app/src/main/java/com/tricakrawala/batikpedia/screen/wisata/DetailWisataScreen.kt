@@ -2,30 +2,30 @@ package com.tricakrawala.batikpedia.screen.wisata
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,10 +38,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.model.Wisata
+import com.tricakrawala.batikpedia.screen.provinsi.WisataProvinsiContent
 import com.tricakrawala.batikpedia.ui.common.UiState
-import com.tricakrawala.batikpedia.ui.components.ProvinsiItemRow
-import com.tricakrawala.batikpedia.ui.components.SearchBarKatalog
+import com.tricakrawala.batikpedia.ui.components.AtlasItem
+import com.tricakrawala.batikpedia.ui.components.ImgDetailBig
+import com.tricakrawala.batikpedia.ui.components.TextWithCard
 import com.tricakrawala.batikpedia.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.ui.theme.background2
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
@@ -49,48 +50,47 @@ import com.tricakrawala.batikpedia.ui.theme.textColor
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun WisataScreen(
+fun DetailWisataScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
-    navigateToDetail : (Long) -> Unit,
-    viewModel: WisataViewModel = koinViewModel()
+    idWisata : Long,
+    navController : NavHostController,
+    viewModel: WisataViewModel = koinViewModel(),
 ){
-    val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
-    LaunchedEffect(true) {
-        if (uiState is UiState.Loading) {
-            viewModel.getAllWisata()
-        }
+    val uiState by viewModel.uiStateWisataById.collectAsState(initial = UiState.Loading)
+
+    if (uiState is UiState.Loading){
+        viewModel.getWisataById(idWisata)
     }
 
-    when (val wisata = uiState) {
+    when(val wisata = uiState){
+        is UiState.Error -> {
+
+        }
+
         is UiState.Success -> {
-            WisataContent( navController = navController , listWisata = wisata.data, navigateToDetail = navigateToDetail)
+            DetailWisataContent(navController = navController, imgWisata = wisata.data.image, titleWisata = wisata.data.namaWisata)
         }
 
-        is UiState.Error -> {}
-        else -> {
-
-        }
+        else -> {}
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WisataContent(
+fun DetailWisataContent(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
-    listWisata : List<Wisata>,
-    navigateToDetail : (Long) -> Unit,
-
+    navController : NavHostController,
+    imgWisata : Int,
+    titleWisata : String,
 ){
-
-    var query by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .background(background2)
             .fillMaxSize()
             .statusBarsPadding()
+            .navigationBarsPadding()
+            .verticalScroll(rememberScrollState())
 
     ) {
         Image(
@@ -112,6 +112,17 @@ fun WisataContent(
                     fontSize = 16.sp
                 )
             },
+            navigationIcon = {
+                IconButton(
+                    onClick = { navController.popBackStack() }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        contentDescription = stringResource(id = R.string.back),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            },
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 16.dp),
@@ -122,44 +133,34 @@ fun WisataContent(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
-
-
         ) {
-            SearchBarKatalog(
-                query = query,
-                onQueryChange = { newQuery -> query = newQuery },
-                modifier = Modifier
-                    .fillMaxWidth()
+            ImgDetailBig(image = imgWisata, text = titleWisata, modifier = Modifier)
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            TextWithCard(
+                title = stringResource(id = R.string.tentang_destinasi),
+                text = stringResource(id = R.string.tentang_destinasi_detail)
             )
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
-            ) {
-                items(listWisata){data ->
-                    ProvinsiItemRow(image = data.image, provinsi = data.namaWisata, modifier = modifier.clickable { navigateToDetail(data.idWisata) })
-                }
-            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            AtlasItem(
+                image = R.drawable.peta1,
+                nusantara = "Yogyakarta",
+                modifier = modifier.fillMaxWidth()
+            )
+
 
         }
     }
 
 }
 
-@Preview
 @Composable
-private fun preview(){
-    val listWisata = listOf(
-        Wisata(1, R.drawable.wisata1, "Kampung Batik Laweyan"),
-        Wisata(2, R.drawable.wisata1, "Kampung Batik Laweyan"),
-
-    )
-    BatikPediaTheme() {
-        WisataContent(navController = rememberNavController(), listWisata = listWisata) {
-
-        }
+@Preview(showBackground = true)
+private fun Preview(){
+    BatikPediaTheme {
+        DetailWisataContent(navController = rememberNavController(), imgWisata = R.drawable.wisata1, titleWisata = "Kampung batik laweyan")
     }
 }
