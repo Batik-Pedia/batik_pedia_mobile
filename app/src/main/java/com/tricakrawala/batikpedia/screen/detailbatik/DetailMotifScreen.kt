@@ -2,6 +2,7 @@ package com.tricakrawala.batikpedia.screen.detailbatik
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +46,7 @@ import com.tricakrawala.batikpedia.ui.components.ImgDetailBig
 import com.tricakrawala.batikpedia.ui.components.TextWithCard
 import com.tricakrawala.batikpedia.ui.theme.background2
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
+import com.tricakrawala.batikpedia.ui.theme.primary
 import com.tricakrawala.batikpedia.ui.theme.textColor
 import org.koin.androidx.compose.koinViewModel
 
@@ -53,6 +55,7 @@ fun DetailMotifScreen(
     modifier: Modifier = Modifier,
     idBatik : Long,
     viewModel: DetailBatikViewModel = koinViewModel(),
+    navToBatikFullDetail : (Long) -> Unit,
     navController : NavHostController,
 ){
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
@@ -67,7 +70,7 @@ fun DetailMotifScreen(
 
         is UiState.Error -> {}
         is UiState.Success -> {
-           DetailMotifContent(imageBatik = batik.data.image, titleBatik = batik.data.namaMotif, navController = navController)
+           DetailMotifContent(imageBatik = batik.data.image, titleBatik = batik.data.namaMotif, navToBatikFullDetail = navToBatikFullDetail, navController = navController, idBatik = idBatik)
         }
         else -> {}
     }
@@ -77,9 +80,11 @@ fun DetailMotifScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailMotifContent(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier ,
+    idBatik : Long,
     imageBatik : Int,
     titleBatik : String,
+    navToBatikFullDetail : (Long) -> Unit,
     navController : NavHostController,
 ){
 
@@ -91,7 +96,7 @@ fun DetailMotifContent(
             .navigationBarsPadding()
             .verticalScroll(rememberScrollState())
 
-    ) {
+    )  {
         Image(
             painter = painterResource(id = R.drawable.ornamen_batik_beranda),
             contentDescription = "",
@@ -137,7 +142,19 @@ fun DetailMotifContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            TextWithCard(title = stringResource(id = R.string.tentang_motif_batik), text = stringResource(id = R.string.tentang_motif))
+            Box {
+                TextWithCard(title = stringResource(id = R.string.tentang_motif_batik), text = stringResource(id = R.string.tentang_motif))
+
+                Text(
+                    text = stringResource(id = R.string.selengkapnya),
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight.Normal,
+                    color = primary,
+                    fontSize = 10.sp,
+                    modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp).align(Alignment.BottomEnd).clickable { navToBatikFullDetail(idBatik) }
+                )
+            }
+
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -150,5 +167,5 @@ fun DetailMotifContent(
 @Composable
 @Preview(showBackground =  true)
 private fun Preview(){
-    DetailMotifContent(imageBatik = R.drawable.batik1, titleBatik = "Motif kawung", navController = rememberNavController())
+    DetailMotifContent(imageBatik = R.drawable.batik1, titleBatik = "Motif kawung", navController = rememberNavController(), navToBatikFullDetail = {}, idBatik = 1L)
 }
