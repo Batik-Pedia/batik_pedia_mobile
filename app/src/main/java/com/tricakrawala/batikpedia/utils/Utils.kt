@@ -33,6 +33,7 @@ object Utils {
         Screen.DetailWisataByProvinsi.route,
         Screen.DetailBatikFull.route,
         Screen.DetailWisata.route,
+        Screen.Filter.route,
     )
 
 

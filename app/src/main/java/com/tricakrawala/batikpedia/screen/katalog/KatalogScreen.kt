@@ -39,8 +39,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.model.KatalogBatik
+import com.tricakrawala.batikpedia.navigation.Screen
 import com.tricakrawala.batikpedia.ui.common.UiState
 import com.tricakrawala.batikpedia.ui.components.KatalogItemRow
 import com.tricakrawala.batikpedia.ui.components.SearchBarKatalog
@@ -56,6 +59,7 @@ fun KatalogScreen(
     modifier: Modifier = Modifier,
     viewModel: KatalogViewModel = koinViewModel(),
     navToDetail : (Long) -> Unit,
+    navController : NavHostController,
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
     LaunchedEffect(true) {
@@ -66,7 +70,7 @@ fun KatalogScreen(
 
     when (val batik = uiState) {
         is UiState.Success -> {
-            KatalogContent(listBatik = batik.data, navToDetail = navToDetail)
+            KatalogContent(listBatik = batik.data, navToDetail = navToDetail, navController = navController)
         }
 
         is UiState.Error -> {}
@@ -83,6 +87,7 @@ fun KatalogContent(
     modifier: Modifier = Modifier,
     listBatik: List<KatalogBatik>,
     navToDetail : (Long) -> Unit,
+    navController : NavHostController,
 ) {
     var query by remember { mutableStateOf("") }
 //    val focusManager = LocalFocusManager.current
@@ -135,16 +140,19 @@ fun KatalogContent(
                 SearchBarKatalog(
                     query = query,
                     onQueryChange = { newQuery -> query = newQuery },
-                    modifier = Modifier.weight(1f).padding(end = 16.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 16.dp)
                 )
 
 
                 Box(
-                    modifier = Modifier
+                    modifier = modifier
                         .align(Alignment.CenterVertically)
                         .clip(RoundedCornerShape(10.dp))
                         .size(56.dp)
-                        .background(primary),
+                        .background(primary)
+                        .clickable { navController.navigate(Screen.Filter.route) },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_filter_catalog),
@@ -198,6 +206,6 @@ private fun preview() {
         KatalogBatik(9, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
     )
     BatikPediaTheme {
-        KatalogContent(listBatik = dummyBatik, navToDetail = {})
+        KatalogContent(listBatik = dummyBatik, navToDetail = {}, navController = rememberNavController())
     }
 }

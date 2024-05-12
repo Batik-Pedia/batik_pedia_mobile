@@ -32,4 +32,6 @@ sealed class Screen(val route : String) {
     object DetailWisata : Screen("wisata/{idWisata}"){
         fun createRoute(idWisata: Long) = "wisata/$idWisata"
     }
+
+    object Filter : Screen("filter")
 }

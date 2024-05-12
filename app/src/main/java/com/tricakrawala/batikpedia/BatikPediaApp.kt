@@ -29,6 +29,7 @@ import com.tricakrawala.batikpedia.navigation.Screen
 import com.tricakrawala.batikpedia.screen.beritaacara.BeritaAcaraScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
+import com.tricakrawala.batikpedia.screen.filter.FilterScreen
 import com.tricakrawala.batikpedia.screen.home.HomeScreen
 import com.tricakrawala.batikpedia.screen.katalog.KatalogScreen
 import com.tricakrawala.batikpedia.screen.provinsi.DetailProvinsiScreen
@@ -91,14 +92,13 @@ fun BatikPediaApp(
                 HomeScreen(
                     navController = navController,
                     navigateToNusantara = { idNusantara -> navController.navigate(Screen.DetailProvinsi.createRoute(idNusantara))},
-
                 )
             }
 
             composable(Screen.Katalog.route) {
                 KatalogScreen(navToDetail = { idBatik ->
                     navController.navigate(Screen.DetailBatik.createRoute(idBatik))
-                })
+                }, navController = navController)
             }
             composable(
                 Screen.DetailBatik.route,
@@ -157,6 +157,10 @@ fun BatikPediaApp(
 
             composable(Screen.Berita.route) {
                 BeritaAcaraScreen(navController = navController)
+            }
+            
+            composable(Screen.Filter.route){
+                FilterScreen(navController = navController)
             }
 
 
