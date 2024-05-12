@@ -54,6 +54,7 @@ import com.tricakrawala.batikpedia.ui.theme.background2
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.ui.theme.primary
 import com.tricakrawala.batikpedia.ui.theme.textColor
+import com.tricakrawala.batikpedia.utils.Utils
 
 @Composable
 fun FilterScreen(
@@ -79,16 +80,14 @@ fun FilterContent(
     var isModern by remember { mutableStateOf(false) }
 
     var selectedArea by remember { mutableStateOf("Pilih Wilayah") }
-    val areas = listOf("Bali", "Cirebon", "Jawa Barat", "Jawa Tengah", "Jawa Timur", "Nusa Tenggara Barat", "Solo", "Sumatera", "Sulawesi Selatan", "Surakarta", "Yogyakarta")
+    val areas = Utils.wilayah
 
     var dropdownExpanded by remember { mutableStateOf(false) }
 
-    // Fungsi untuk menampilkan Popup
     fun showPopup() {
         dropdownExpanded = true
     }
 
-    // Fungsi untuk menutup Popup
     fun closePopup() {
         dropdownExpanded = false
     }

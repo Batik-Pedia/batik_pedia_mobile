@@ -36,6 +36,8 @@ object Utils {
         Screen.Filter.route,
     )
 
+    val wilayah = listOf("Bali", "Cirebon", "Jawa Barat", "Jawa Tengah", "Jawa Timur", "Nusa Tenggara Barat", "Solo", "Sumatera", "Sulawesi Selatan", "Surakarta", "Yogyakarta")
+
 
     private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
     private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
