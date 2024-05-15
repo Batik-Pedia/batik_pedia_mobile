@@ -2,12 +2,15 @@ package com.tricakrawala.batikpedia.screen.edukasi
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +43,7 @@ import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.model.KursusBatik
 import com.tricakrawala.batikpedia.model.VideoMembatik
 import com.tricakrawala.batikpedia.ui.common.UiState
+import com.tricakrawala.batikpedia.ui.components.CardBerita
 import com.tricakrawala.batikpedia.ui.components.KursusBox
 import com.tricakrawala.batikpedia.ui.components.NavbarHome
 import com.tricakrawala.batikpedia.ui.components.VideoColumn
@@ -154,9 +158,14 @@ fun EdukasiContent(
 
             ) {
                 items(listKursus) { data ->
-                    KursusBox(image = data.image, kursus = data.kursus)
+                    KursusBox(
+                        image = data.image,
+                        kursus = data.kursus,
+                        modifier = modifier.clickable { navigateToDetail(data.idKursus) })
                 }
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             NavbarHome(textContent = stringResource(id = R.string.video_membatik))
 
@@ -191,8 +200,8 @@ private fun preview() {
         KursusBatik(4, R.drawable.kursus2, "Superprof")
     )
     val fakeVideoMembatik = listOf(
-        VideoMembatik(1, R.drawable.kursus1, "Superprof"),
-        VideoMembatik(2, R.drawable.kursus1, "Citra Alam"),
+        VideoMembatik(1, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
+        VideoMembatik(2, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
         VideoMembatik(3, R.drawable.kursus1, "Udemy"),
         VideoMembatik(4, R.drawable.kursus2, "Superprof"))
 

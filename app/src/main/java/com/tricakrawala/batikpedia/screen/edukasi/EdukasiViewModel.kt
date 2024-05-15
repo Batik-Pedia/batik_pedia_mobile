@@ -21,9 +21,7 @@ class EdukasiViewModel(private val repository: BatikRepository) : ViewModel() {
     private val _uiStateVideoMembatik: MutableStateFlow<UiState<List<VideoMembatik>>> =
         MutableStateFlow(UiState.Loading)
     val uiStateVideoMembatik: StateFlow<UiState<List<VideoMembatik>>> get() = _uiStateVideoMembatik
-
-
-    private val _uiStateKursusById : MutableStateFlow<UiState<KursusBatik>> = MutableStateFlow(UiState.Loading)
+      private val _uiStateKursusById : MutableStateFlow<UiState<KursusBatik>> = MutableStateFlow(UiState.Loading)
 
     val uiStateKursusById : StateFlow<UiState<KursusBatik>> get() = _uiStateKursusById
 

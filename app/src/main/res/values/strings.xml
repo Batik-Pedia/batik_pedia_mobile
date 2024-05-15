@@ -41,4 +41,5 @@
     <string name="urutan">Urutan</string>
     <string name="jenis_batik">Jenis Batik</string>
     <string name="wilayah">Wilayah</string>
+    <string name="deskrip">Deskripsi</string>
 </resources>

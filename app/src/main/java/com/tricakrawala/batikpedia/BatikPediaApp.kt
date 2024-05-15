@@ -30,6 +30,7 @@ import com.tricakrawala.batikpedia.screen.beritaacara.BeritaAcaraScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
 import com.tricakrawala.batikpedia.screen.edukasi.DetailEdukasiScreen
+import com.tricakrawala.batikpedia.screen.detailedukasi.DetailKursusScreen
 import com.tricakrawala.batikpedia.screen.filter.FilterScreen
 import com.tricakrawala.batikpedia.screen.edukasi.EdukasiScreen
 import com.tricakrawala.batikpedia.screen.home.HomeScreen
@@ -166,6 +167,27 @@ fun BatikPediaApp(
                 FilterScreen(navController = navController)
             }
              
+           composable(Screen.Edukasi.route) {
+                EdukasiScreen(navigateToDetail = { idKursus ->
+                    navController.navigate(Screen.DetailKursus.createRoute(idKursus))
+                },navController = navController)
+            }
+            composable(
+                Screen.DetailKursus.route,
+                arguments = listOf(navArgument("idKursus") { type = NavType.LongType }),
+            )
+            {
+                val id = it.arguments?.getLong("idKursus") ?: -1L
+                DetailKursusScreen(idKursus = id, navController = navController, navToBatikFullDetail = {idBatikFull ->
+                    navController.navigate(Screen.DetailBatikFull.createRoute(id,idBatikFull))
+                })
+            }
+            composable(Screen.DetailBatikFull.route,
+                arguments = listOf(navArgument("idBatikFull") { type = NavType.LongType }),
+            ){
+                val id = it.arguments?.getLong("idBatikFull") ?: -1L
+                DetailMotifBatikFullScreen(idBatik = id, navController = navController)
+                Log.d("IdBatikFull", "BatikPediaApp: $id")
           composable(Screen.Edukasi.route) {
                 EdukasiScreen(navController = navController, navigateToDetail = {idKursus ->
                     navController.navigate(Screen.DetailEdukasi.createRoute(idKursus))
