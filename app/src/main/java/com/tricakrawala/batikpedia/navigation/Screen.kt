@@ -23,10 +23,13 @@ sealed class Screen(val route : String) {
         fun createRoute(idBatik : Long) = "katalog/$idBatik"
     }
 
-    object DetailBatikFull : Screen("katalog//{idBatik}/{idBatikFull}"){
+    object DetailBatikFull : Screen("katalog/{idBatik}/{idBatikFull}"){
         fun createRoute(idBatik : Long, idBatikFull : Long) = "katalog/$idBatik/$idBatikFull"
     }
     object Edukasi : Screen("edukasi")
+    object DetailEdukasi : Screen ("edukasi/{idKursus}"){
+        fun createRoute(idKursus : Long) = "edukasi/$idKursus"
+    }
     object Wisata : Screen("wisata")
 
     object DetailWisata : Screen("wisata/{idWisata}"){
