@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.screen.edukasi
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.BatikRepository
@@ -20,6 +21,9 @@ class EdukasiViewModel(private val repository: BatikRepository) : ViewModel() {
     private val _uiStateVideoMembatik: MutableStateFlow<UiState<List<VideoMembatik>>> =
         MutableStateFlow(UiState.Loading)
     val uiStateVideoMembatik: StateFlow<UiState<List<VideoMembatik>>> get() = _uiStateVideoMembatik
+      private val _uiStateKursusById : MutableStateFlow<UiState<KursusBatik>> = MutableStateFlow(UiState.Loading)
+
+    val uiStateKursusById : StateFlow<UiState<KursusBatik>> get() = _uiStateKursusById
 
     fun getAllKursus() {
         viewModelScope.launch {
@@ -41,6 +45,13 @@ class EdukasiViewModel(private val repository: BatikRepository) : ViewModel() {
                 .collect { video ->
                     _uiStateVideoMembatik.value = UiState.Success(video)
                 }
+        }
+    }
+
+    fun getKursusById(idKursus : Long) {
+        viewModelScope.launch {
+            _uiStateKursusById.value = UiState.Loading
+            _uiStateKursusById.value = UiState.Success(repository.getKursusById(idKursus))
         }
     }
 
