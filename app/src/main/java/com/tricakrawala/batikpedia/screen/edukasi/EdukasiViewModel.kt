@@ -19,7 +19,7 @@ class EdukasiViewModel(private val repository: BatikRepository) : ViewModel() {
 
     private val _uiStateVideoMembatik: MutableStateFlow<UiState<List<VideoMembatik>>> =
         MutableStateFlow(UiState.Loading)
-    val uiStateVideoMembatik: StateFlow<UiState<List<VideoMembatik>>> get() = uiStateVideoMembatik
+    val uiStateVideoMembatik: StateFlow<UiState<List<VideoMembatik>>> get() = _uiStateVideoMembatik
 
     fun getAllKursus() {
         viewModelScope.launch {

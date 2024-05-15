@@ -1,7 +1,9 @@
 package com.tricakrawala.batikpedia.screen.detailedukasi
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,36 +41,42 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.screen.detailbatik.DetailBatikViewModel
+import com.tricakrawala.batikpedia.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.ui.common.UiState
 import com.tricakrawala.batikpedia.ui.components.AtlasItem
 import com.tricakrawala.batikpedia.ui.components.ImgDetailBig
+import com.tricakrawala.batikpedia.ui.components.KursusDetail
+import com.tricakrawala.batikpedia.ui.components.ProvinsiItemRow
+import com.tricakrawala.batikpedia.ui.components.TextInfoKursus
 import com.tricakrawala.batikpedia.ui.components.TextWithCard
+import com.tricakrawala.batikpedia.ui.components.TextWithoutCard
 import com.tricakrawala.batikpedia.ui.theme.background2
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
+import com.tricakrawala.batikpedia.ui.theme.primary
 import com.tricakrawala.batikpedia.ui.theme.textColor
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailKursusScreen(
     modifier: Modifier = Modifier,
-    idBatik : Long,
-    viewModel: DetailBatikViewModel = koinViewModel(),
+    idKursus: Long,
+    viewModel: DetailKursusViewModel = koinViewModel(),
+    navToBatikFullDetail : (Long) -> Unit,
     navController : NavHostController,
 ){
-    val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
+    val  _uiStateKursus by viewModel._uiStateKursus.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (uiState is UiState.Loading){
-            viewModel.getAllWisata(idBatik)
+        if ( _uiStateKursus is UiState.Loading){
+            viewModel.getAllKursusDetail(idKursus)
         }
     }
 
-    when(val batik = uiState){
+    when(val kursus = _uiStateKursus){
 
         is UiState.Error -> {}
         is UiState.Success -> {
-            DetailMotifContent(imageBatik = batik.data.image, titleBatik = batik.data.namaMotif, navController = navController)
+            DetailKursusContent(imageKursus = kursus.data.image, titleKursus = kursus.data.kursus, navToBatikFullDetail = navToBatikFullDetail, navController = navController, idKursus = idKursus)
         }
         else -> {}
     }
@@ -77,12 +85,14 @@ fun DetailKursusScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailMotifContent(
-    modifier: Modifier = Modifier,
-    imageBatik : Int,
-    titleBatik : String,
+fun DetailKursusContent(
+    modifier: Modifier = Modifier ,
+    idKursus : Long,
+    imageKursus : Int,
+    titleKursus : String,
+    navToBatikFullDetail : (Long) -> Unit,
     navController : NavHostController,
-){
+) {
 
     Box(
         modifier = Modifier
@@ -105,7 +115,7 @@ fun DetailMotifContent(
         CenterAlignedTopAppBar(
             title = {
                 Text(
-                    text = stringResource(id = R.string.motif_batik),
+                    text = titleKursus,
                     fontFamily = poppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     color = textColor,
@@ -120,6 +130,8 @@ fun DetailMotifContent(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = stringResource(id = R.string.back),
                         modifier = Modifier.size(24.dp)
+                            .clickable { navController.popBackStack() }
+                            .background(Color.Transparent)
                     )
                 }
             },
@@ -134,22 +146,40 @@ fun DetailMotifContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-            ImgDetailBig(image = imageBatik, text = titleBatik, modifier = Modifier)
+            KursusDetail(image = imageKursus, modifier = Modifier)
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            TextWithCard(title = stringResource(id = R.string.tentang_motif_batik), text = stringResource(id = R.string.tentang_motif))
+            Box {
+                TextInfoKursus(
+                    title = titleKursus,
+                    text = stringResource(id = R.string.tentang_motif)
+                )
+            }
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Box {
+                    TextWithoutCard(
+                        title = stringResource(id = R.string.deskrip),
+                        text = stringResource(id = R.string.tentang_motif)
+                    )
 
-            AtlasItem(image = R.drawable.peta1, nusantara = "Yogyakarta", modifier = modifier.fillMaxWidth())
+                    Text(
+                        text = stringResource(id = R.string.selengkapnya),
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.Normal,
+                        color = primary,
+                        fontSize = 10.sp,
+                        modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            .align(Alignment.BottomEnd).clickable { navToBatikFullDetail(idKursus) }
+                    )
+                }
+            }
         }
     }
-}
-
 
 @Composable
 @Preview(showBackground =  true)
 private fun Preview(){
-    DetailMotifContent(imageBatik = R.drawable.batik1, titleBatik = "Motif kawung", navController = rememberNavController())
+    DetailKursusContent(imageKursus = R.drawable.batik1, titleKursus = "Motif kawung", navController = rememberNavController(), navToBatikFullDetail = {}, idKursus = 1L)
 }

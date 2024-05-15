@@ -2,12 +2,15 @@ package com.tricakrawala.batikpedia.screen.edukasi
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +43,7 @@ import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.model.KursusBatik
 import com.tricakrawala.batikpedia.model.VideoMembatik
 import com.tricakrawala.batikpedia.ui.common.UiState
+import com.tricakrawala.batikpedia.ui.components.CardBerita
 import com.tricakrawala.batikpedia.ui.components.KursusBox
 import com.tricakrawala.batikpedia.ui.components.NavbarHome
 import com.tricakrawala.batikpedia.ui.components.VideoColumn
@@ -53,7 +57,7 @@ import org.koin.androidx.compose.koinViewModel
 fun EdukasiScreen(
     modifier: Modifier = Modifier,
     viewModel: EdukasiViewModel = koinViewModel(),
-    navigateToDetail: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
 ) {
     val uiStateKursus by viewModel.uiStateKursus.collectAsState(initial = UiState.Loading)
@@ -97,7 +101,7 @@ fun EdukasiScreen(
 @Composable
 fun EdukasiContent(
     modifier: Modifier = Modifier,
-    navigateToDetail: () -> Unit,
+    navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
     listVideoMembatik: List<VideoMembatik>,
     listKursus: List<KursusBatik>,
@@ -154,9 +158,14 @@ fun EdukasiContent(
 
             ) {
                 items(listKursus) { data ->
-                    KursusBox(image = data.image, kursus = data.kursus)
+                    KursusBox(
+                        image = data.image,
+                        kursus = data.kursus,
+                        modifier = modifier.clickable { navigateToDetail(data.idKursus) })
                 }
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             NavbarHome(textContent = stringResource(id = R.string.video_membatik))
 

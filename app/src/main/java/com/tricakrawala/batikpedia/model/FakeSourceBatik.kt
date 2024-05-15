@@ -92,8 +92,8 @@ object FakeSourceBatik {
 
     )
     val listVideoMembatik= listOf(
-        VideoMembatik(1, R.drawable.kursus1, "Superprof"),
-        VideoMembatik(2, R.drawable.kursus1, "Citra Alam"),
+        VideoMembatik(1, R.drawable.videomembatik, "Tutorial Membatik Teknik Counting tulis-PART 1"),
+        VideoMembatik(2, R.drawable.videomembatik, "Citra Alam"),
         VideoMembatik(3, R.drawable.kursus1, "Udemy"),
         VideoMembatik(4, R.drawable.kursus2, "Superprof")
 
