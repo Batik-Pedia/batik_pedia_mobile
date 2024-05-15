@@ -124,7 +124,8 @@ fun ListProvinsiContent(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = stringResource(id = R.string.back),
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
+                        tint = textColor,
                     )
                 }
             },

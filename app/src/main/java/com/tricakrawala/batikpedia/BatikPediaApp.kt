@@ -30,6 +30,8 @@ import com.tricakrawala.batikpedia.screen.beritaacara.BeritaAcaraScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
 import com.tricakrawala.batikpedia.screen.detailedukasi.DetailKursusScreen
+import com.tricakrawala.batikpedia.screen.detailedukasi.ListKursusScreen
+import com.tricakrawala.batikpedia.screen.detailedukasi.ListVideoScreen
 import com.tricakrawala.batikpedia.screen.filter.FilterScreen
 import com.tricakrawala.batikpedia.screen.edukasi.EdukasiScreen
 import com.tricakrawala.batikpedia.screen.home.HomeScreen
@@ -188,7 +190,16 @@ fun BatikPediaApp(
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
                 Log.d("IdBatikFull", "BatikPediaApp: $id")
             }
-
+            composable(
+                Screen.ToListKursus.route,
+                ) {
+                ListKursusScreen(navigateToDetail = { idKursus ->
+                    navController.navigate(Screen.DetailKursus.createRoute(idKursus))
+                }, navController = navController)
+            }
+            composable(Screen.VideoEdukasi.route) {
+                ListVideoScreen(navController = navController)
+            }
 
         }
     }

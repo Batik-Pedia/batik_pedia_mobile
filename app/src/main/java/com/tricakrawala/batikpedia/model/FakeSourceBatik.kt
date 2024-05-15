@@ -88,6 +88,10 @@ object FakeSourceBatik {
         KursusBatik(1, R.drawable.kursus1, "Superprof"),
         KursusBatik(2, R.drawable.kursus1, "Citra Alam"),
         KursusBatik(3, R.drawable.kursus1, "Udemy"),
+        KursusBatik(4, R.drawable.kursus2, "Superprof"),
+        KursusBatik(1, R.drawable.kursus1, "Superprof"),
+        KursusBatik(2, R.drawable.kursus1, "Citra Alam"),
+        KursusBatik(3, R.drawable.kursus1, "Udemy"),
         KursusBatik(4, R.drawable.kursus2, "Superprof")
 
     )

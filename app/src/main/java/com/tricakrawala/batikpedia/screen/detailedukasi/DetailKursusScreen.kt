@@ -129,9 +129,11 @@ fun DetailKursusContent(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = stringResource(id = R.string.back),
+                        tint = textColor,
                         modifier = Modifier.size(24.dp)
                             .clickable { navController.popBackStack() }
                             .background(Color.Transparent)
+
                     )
                 }
             },
