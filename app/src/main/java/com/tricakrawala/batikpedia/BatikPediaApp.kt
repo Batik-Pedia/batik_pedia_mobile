@@ -212,13 +212,7 @@ fun BatikPediaApp(
                         navController.navigate(Screen.DetailEdukasi.createRoute(idKursus))
                     })
                 }
-                composable(
-                    Screen.DetailEdukasi.route,
-                    arguments = listOf(navArgument("idKursus") { type = NavType.LongType })
-                ) {
-                    val id = it.arguments?.getLong("idKursus") ?: -1L
-                    DetailEdukasiScreen(idKursus = id, navController = navController)
-                }
+
                 composable(
                     Screen.ToListKursus.route,
                 ) {
