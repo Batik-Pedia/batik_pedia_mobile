@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -41,14 +40,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.ui.common.UiState
-import com.tricakrawala.batikpedia.ui.components.AtlasItem
-import com.tricakrawala.batikpedia.ui.components.ImgDetailBig
 import com.tricakrawala.batikpedia.ui.components.KursusDetail
-import com.tricakrawala.batikpedia.ui.components.ProvinsiItemRow
 import com.tricakrawala.batikpedia.ui.components.TextInfoKursus
-import com.tricakrawala.batikpedia.ui.components.TextWithCard
 import com.tricakrawala.batikpedia.ui.components.TextWithoutCard
 import com.tricakrawala.batikpedia.ui.theme.background2
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
