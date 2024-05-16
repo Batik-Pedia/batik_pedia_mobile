@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.ui.theme.Purple80
+import com.tricakrawala.batikpedia.ui.theme.black
+import com.tricakrawala.batikpedia.ui.theme.bottomNavigation
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.ui.theme.primary
 
@@ -69,7 +73,6 @@ fun SearchBarKatalog(
         ),
         shape = RoundedCornerShape(10.dp),
         modifier = modifier
-
             .fillMaxWidth()
 
 

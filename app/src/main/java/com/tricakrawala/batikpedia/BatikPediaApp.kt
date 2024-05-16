@@ -31,6 +31,8 @@ import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
 import com.tricakrawala.batikpedia.screen.edukasi.DetailEdukasiScreen
 import com.tricakrawala.batikpedia.screen.detailedukasi.DetailKursusScreen
+import com.tricakrawala.batikpedia.screen.detailedukasi.ListKursusScreen
+import com.tricakrawala.batikpedia.screen.detailedukasi.ListVideoScreen
 import com.tricakrawala.batikpedia.screen.filter.FilterScreen
 import com.tricakrawala.batikpedia.screen.edukasi.EdukasiScreen
 import com.tricakrawala.batikpedia.screen.home.HomeScreen
@@ -94,7 +96,13 @@ fun BatikPediaApp(
             composable(Screen.Home.route) {
                 HomeScreen(
                     navController = navController,
-                    navigateToNusantara = { idNusantara -> navController.navigate(Screen.DetailProvinsi.createRoute(idNusantara))},
+                    navigateToNusantara = { idNusantara ->
+                        navController.navigate(
+                            Screen.DetailProvinsi.createRoute(
+                                idNusantara
+                            )
+                        )
+                    },
                 )
             }
 
@@ -109,13 +117,17 @@ fun BatikPediaApp(
             )
             {
                 val id = it.arguments?.getLong("idBatik") ?: -1L
-                DetailMotifScreen(idBatik = id, navController = navController, navToBatikFullDetail = {idBatikFull ->
-                    navController.navigate(Screen.DetailBatikFull.createRoute(id,idBatikFull))
-                })
+                DetailMotifScreen(
+                    idBatik = id,
+                    navController = navController,
+                    navToBatikFullDetail = { idBatikFull ->
+                        navController.navigate(Screen.DetailBatikFull.createRoute(id, idBatikFull))
+                    })
             }
-            composable(Screen.DetailBatikFull.route,
-                    arguments = listOf(navArgument("idBatikFull") { type = NavType.LongType }),
-            ){
+            composable(
+                Screen.DetailBatikFull.route,
+                arguments = listOf(navArgument("idBatikFull") { type = NavType.LongType }),
+            ) {
                 val id = it.arguments?.getLong("idBatikFull") ?: -1L
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
                 Log.d("IdBatikFull", "BatikPediaApp: $id")
@@ -135,42 +147,44 @@ fun BatikPediaApp(
                 arguments = listOf(navArgument("idNusantara") { type = NavType.LongType }),
             ) {
                 val id = it.arguments?.getLong("idNusantara") ?: -1L
-                DetailProvinsiScreen(idProvinsi = id, navigateToWisata = {idWisata ->
-                    navController.navigate(Screen.DetailWisataByProvinsi.createRoute(id,idWisata))
+                DetailProvinsiScreen(idProvinsi = id, navigateToWisata = { idWisata ->
+                    navController.navigate(Screen.DetailWisataByProvinsi.createRoute(id, idWisata))
                 }, navController = navController)
             }
 
             composable(Screen.DetailWisataByProvinsi.route,
-                arguments = listOf(navArgument("idWisata") { type = NavType.LongType })){
-                val  id = it.arguments?.getLong("idWisata") ?: -1L
+                arguments = listOf(navArgument("idWisata") { type = NavType.LongType })
+            ) {
+                val id = it.arguments?.getLong("idWisata") ?: -1L
                 WisataProvinsiScreen(idWisata = id, navController = navController)
             }
 
             composable(Screen.Wisata.route) {
-                WisataScreen(navController = navController, navigateToDetail = {idWisata ->
+                WisataScreen(navController = navController, navigateToDetail = { idWisata ->
                     navController.navigate(Screen.DetailWisata.createRoute(idWisata))
                 })
             }
 
             composable(Screen.DetailWisata.route,
-                arguments = listOf(navArgument("idWisata") { type = NavType.LongType })){
-                val  id = it.arguments?.getLong("idWisata") ?: -1L
+                arguments = listOf(navArgument("idWisata") { type = NavType.LongType })
+            ) {
+                val id = it.arguments?.getLong("idWisata") ?: -1L
                 DetailWisataScreen(idWisata = id, navController = navController)
             }
 
             composable(Screen.Berita.route) {
                 BeritaAcaraScreen(navController = navController)
             }
-       
-            
-            composable(Screen.Filter.route){
+
+
+            composable(Screen.Filter.route) {
                 FilterScreen(navController = navController)
             }
-             
-           composable(Screen.Edukasi.route) {
+
+            composable(Screen.Edukasi.route) {
                 EdukasiScreen(navigateToDetail = { idKursus ->
                     navController.navigate(Screen.DetailKursus.createRoute(idKursus))
-                },navController = navController)
+                }, navController = navController)
             }
             composable(
                 Screen.DetailKursus.route,
@@ -178,33 +192,42 @@ fun BatikPediaApp(
             )
             {
                 val id = it.arguments?.getLong("idKursus") ?: -1L
-                DetailKursusScreen(idKursus = id, navController = navController, navToBatikFullDetail = {idBatikFull ->
-                    navController.navigate(Screen.DetailBatikFull.createRoute(id,idBatikFull))
-                })
+                DetailKursusScreen(
+                    idKursus = id,
+                    navController = navController,
+                    navToBatikFullDetail = { idBatikFull ->
+                        navController.navigate(Screen.DetailBatikFull.createRoute(id, idBatikFull))
+                    })
             }
-            composable(Screen.DetailBatikFull.route,
+            composable(
+                Screen.DetailBatikFull.route,
                 arguments = listOf(navArgument("idBatikFull") { type = NavType.LongType }),
-            ){
+            ) {
                 val id = it.arguments?.getLong("idBatikFull") ?: -1L
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
-                Log.d("IdBatikFull", "BatikPediaApp: $id")
-          composable(Screen.Edukasi.route) {
-                EdukasiScreen(navController = navController, navigateToDetail = {idKursus ->
-                    navController.navigate(Screen.DetailEdukasi.createRoute(idKursus))
-                })
-            }
-            composable(Screen.DetailEdukasi.route,
-                arguments = listOf(navArgument("idKursus"){type = NavType.LongType})
-            ){
-                val id = it.arguments?.getLong("idKursus") ?: -1L
-                DetailEdukasiScreen(idKursus = id, navController = navController)
-            }
+                Log.d("IdBatikFull", "BatikPediaApp: $id")}
 
+            composable(Screen.Edukasi.route) {
+                    EdukasiScreen(navController = navController, navigateToDetail = { idKursus ->
+                        navController.navigate(Screen.DetailEdukasi.createRoute(idKursus))
+                    })
+                }
 
+                composable(
+                    Screen.ToListKursus.route,
+                ) {
+                    ListKursusScreen(navigateToDetail = { idKursus ->
+                        navController.navigate(Screen.DetailKursus.createRoute(idKursus))
+                    }, navController = navController)
+                }
+                composable(Screen.VideoEdukasi.route) {
+                    ListVideoScreen(navController = navController)
+                }
+
+            }
         }
     }
 
-}
 
 @Composable
 @Preview(showBackground = true)
