@@ -11,6 +11,9 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.tricakrawala.batikpedia.BuildConfig
 import com.tricakrawala.batikpedia.navigation.Screen
@@ -38,6 +41,7 @@ object Utils {
         Screen.ToListKursus.route,
         Screen.DetailKursus.route,
         Screen.VideoEdukasi.route,
+        Screen.Camera.route,
     )
 
     val wilayah = listOf("Bali", "Cirebon", "Jawa Barat", "Jawa Tengah", "Jawa Timur", "Nusa Tenggara Barat", "Solo", "Sumatera", "Sulawesi Selatan", "Surakarta", "Yogyakarta")
@@ -46,6 +50,52 @@ object Utils {
     private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
     private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
     private const val MAXIMAL_SIZE = 1000000
+
+
+    fun captureImage(imageCapture: ImageCapture, context: Context, onImageCaptured: (Bitmap) -> Unit) {
+        val name = "CameraxImage_${System.currentTimeMillis()}.jpeg"
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+            }
+        }
+        val outputOptions = ImageCapture.OutputFileOptions
+            .Builder(
+                context.contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues
+            )
+            .build()
+
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(context),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    val savedUri = outputFileResults.savedUri ?: return
+                    val file = uriToFile(savedUri, context)
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val reducedFile = file.reduceFileImage()
+                        val bitmap = BitmapFactory.decodeFile(reducedFile.path)
+                        onImageCaptured(bitmap)
+                    } else {
+                        val bitmap = BitmapFactory.decodeFile(file.path)
+                        onImageCaptured(bitmap)
+                    }
+
+                    println("Image saved successfully: $savedUri")
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    println("Failed to save image: ${exception.message}")
+                }
+            }
+        )
+    }
+
 
     fun getImageUri(context: Context): Uri {
         var uri: Uri? = null
@@ -59,8 +109,7 @@ object Utils {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 contentValues
             )
-            // content://media/external/images/media/1000000062
-            // storage/emulated/0/Pictures/MyCamera/20230825_155303.jpg
+
         }
         return uri ?: getImageUriForPreQ(context)
     }
@@ -74,7 +123,6 @@ object Utils {
             "${BuildConfig.APPLICATION_ID}.fileprovider",
             imageFile
         )
-        //content://com.dicoding.picodiploma.mycamera.fileprovider/my_images/MyCamera/20230825_133659.jpg
     }
 
     fun createCustomTempFile(context: Context): File {

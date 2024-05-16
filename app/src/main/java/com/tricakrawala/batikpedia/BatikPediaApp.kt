@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tricakrawala.batikpedia.navigation.Screen
 import com.tricakrawala.batikpedia.screen.beritaacara.BeritaAcaraScreen
+import com.tricakrawala.batikpedia.screen.camera.CameraScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
 import com.tricakrawala.batikpedia.screen.detailedukasi.DetailKursusScreen
@@ -65,7 +66,7 @@ fun BatikPediaApp(
             if (shouldShowBottomBar) {
                 Box(modifier = Modifier.offset(y = (-5).dp)) {
                     FloatingActionButton(
-                        onClick = {},
+                        onClick = {navController.navigate(Screen.Camera.route)},
                         shape = CircleShape,
                         containerColor = primary,
                         modifier = Modifier.padding(4.dp)
@@ -222,6 +223,10 @@ fun BatikPediaApp(
                 composable(Screen.VideoEdukasi.route) {
                     ListVideoScreen(navController = navController)
                 }
+
+            composable(Screen.Camera.route){
+                CameraScreen(navController = navController)
+            }
 
             }
         }

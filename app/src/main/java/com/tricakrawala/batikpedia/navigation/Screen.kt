@@ -43,4 +43,6 @@ sealed class Screen(val route : String) {
 
 
     object Filter : Screen("filter")
+
+    object Camera : Screen("camera")
 }
