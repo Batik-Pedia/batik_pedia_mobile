@@ -2,6 +2,7 @@ package com.tricakrawala.batikpedia.screen.beritaacara
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.model.Berita
+import com.tricakrawala.batikpedia.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.ui.common.UiState
 import com.tricakrawala.batikpedia.ui.components.BeritaRow
 import com.tricakrawala.batikpedia.ui.theme.BatikPediaTheme
@@ -52,6 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 fun BeritaAcaraScreen(
     modifier: Modifier = Modifier,
     viewModel: BeritaViewModel = koinViewModel(),
+    navigateToDetail : (Long) -> Unit,
     navController : NavHostController,
 
 ){
@@ -67,7 +70,7 @@ fun BeritaAcaraScreen(
     when(val listBerita = uiState){
         is UiState.Error -> {}
         is UiState.Success -> {
-            BeritaAcaraContent(listBerita = listBerita.data, navController = navController)
+            BeritaAcaraContent(listBerita = listBerita.data, navigateToDetail = navigateToDetail,navController = navController)
         }
 
         else -> {}
@@ -79,6 +82,7 @@ fun BeritaAcaraScreen(
 fun BeritaAcaraContent(
     modifier: Modifier = Modifier,
     listBerita: List<Berita>,
+    navigateToDetail : (Long) -> Unit,
     navController : NavHostController,
 ){
 
@@ -142,7 +146,7 @@ fun BeritaAcaraContent(
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
                 items(listBerita){data ->
-                    BeritaRow(image = data.image, title = data.title, time = data.time, lokasi = data.lokasi)
+                    BeritaRow(image = data.image, title = data.title, time = data.time, lokasi = data.lokasi, modifier = modifier.clickable { navigateToDetail(data.idBerita) })
                 }
             }
 
@@ -154,53 +158,10 @@ fun BeritaAcaraContent(
 @Preview(showBackground = true)
 private fun preview(){
 
-    val listBerita = listOf(
-        Berita(
-            1,
-            "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
-            R.drawable.fake_berita_image,
-            "04 Apr 2024 08.00",
-            "Solo, Indonesia"
-        ),
-        Berita(
-            2,
-            "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
-            R.drawable.fake_berita_image,
-            "04 Apr 2024 08.00",
-            "Solo, Indonesia"
-        ),
-        Berita(
-            3,
-            "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
-            R.drawable.fake_berita_image,
-            "04 Apr 2024 08.00",
-            "Solo, Indonesia"
-        ),
-        Berita(
-            4,
-            "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
-            R.drawable.fake_berita_image,
-            "04 Apr 2024 08.00",
-            "Solo, Indonesia"
-        ),
-        Berita(
-            5,
-            "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
-            R.drawable.fake_berita_image,
-            "04 Apr 2024 08.00",
-            "Solo, Indonesia"
-        ),
-        Berita(
-            6,
-            "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
-            R.drawable.fake_berita_image,
-            "04 Apr 2024 08.00",
-            "Solo, Indonesia"
-        ),
-    )
+
 
     BatikPediaTheme {
-        BeritaAcaraContent(listBerita = listBerita, navController = rememberNavController())
+        BeritaAcaraContent(listBerita = FakeSourceBatik.listBerita, navigateToDetail = {}, navController = rememberNavController())
     }
 }
 

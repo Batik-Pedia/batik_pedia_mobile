@@ -95,6 +95,7 @@ class BatikRepository(private val preference: UserPreference) {
     fun getWisataById(idWisata : Long) = wisataList.first{it.idWisata == idWisata}
 
     fun getAllBerita() = flowOf(beritaList)
+    fun getBeritaById(idBerita: Long) = beritaList.first { it.idBerita == idBerita }
 
     fun getProvinsiById(idProvinsi : Long) : Nusantara = nusantaraList.first { it.idNusantara == idProvinsi }
     fun getAllKursus(): Flow<List<KursusBatik>> {

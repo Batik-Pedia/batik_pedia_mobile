@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tricakrawala.batikpedia.navigation.Screen
 import com.tricakrawala.batikpedia.screen.beritaacara.BeritaAcaraScreen
+import com.tricakrawala.batikpedia.screen.beritaacara.DetailBeritaScreen
 import com.tricakrawala.batikpedia.screen.camera.CameraScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.screen.detailbatik.DetailMotifScreen
@@ -66,7 +67,7 @@ fun BatikPediaApp(
             if (shouldShowBottomBar) {
                 Box(modifier = Modifier.offset(y = (-5).dp)) {
                     FloatingActionButton(
-                        onClick = {navController.navigate(Screen.Camera.route)},
+                        onClick = { navController.navigate(Screen.Camera.route) },
                         shape = CircleShape,
                         containerColor = primary,
                         modifier = Modifier.padding(4.dp)
@@ -152,7 +153,8 @@ fun BatikPediaApp(
                 }, navController = navController)
             }
 
-            composable(Screen.DetailWisataByProvinsi.route,
+            composable(
+                Screen.DetailWisataByProvinsi.route,
                 arguments = listOf(navArgument("idWisata") { type = NavType.LongType })
             ) {
                 val id = it.arguments?.getLong("idWisata") ?: -1L
@@ -165,7 +167,8 @@ fun BatikPediaApp(
                 })
             }
 
-            composable(Screen.DetailWisata.route,
+            composable(
+                Screen.DetailWisata.route,
                 arguments = listOf(navArgument("idWisata") { type = NavType.LongType })
             ) {
                 val id = it.arguments?.getLong("idWisata") ?: -1L
@@ -173,7 +176,9 @@ fun BatikPediaApp(
             }
 
             composable(Screen.Berita.route) {
-                BeritaAcaraScreen(navController = navController)
+                BeritaAcaraScreen(navController = navController, navigateToDetail = { idBerita ->
+                    navController.navigate(Screen.DetailBerita.createRoute(idBerita))
+                })
             }
 
 
@@ -205,32 +210,41 @@ fun BatikPediaApp(
             ) {
                 val id = it.arguments?.getLong("idBatikFull") ?: -1L
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
-                Log.d("IdBatikFull", "BatikPediaApp: $id")}
+                Log.d("IdBatikFull", "BatikPediaApp: $id")
+            }
 
             composable(Screen.Edukasi.route) {
-                    EdukasiScreen(navController = navController, navigateToDetail = { idKursus ->
-                        navController.navigate(Screen.DetailEdukasi.createRoute(idKursus))
-                    })
-                }
+                EdukasiScreen(navController = navController, navigateToDetail = { idKursus ->
+                    navController.navigate(Screen.DetailEdukasi.createRoute(idKursus))
+                })
+            }
 
-                composable(
-                    Screen.ToListKursus.route,
-                ) {
-                    ListKursusScreen(navigateToDetail = { idKursus ->
-                        navController.navigate(Screen.DetailKursus.createRoute(idKursus))
-                    }, navController = navController)
-                }
-                composable(Screen.VideoEdukasi.route) {
-                    ListVideoScreen(navController = navController)
-                }
+            composable(
+                Screen.ToListKursus.route,
+            ) {
+                ListKursusScreen(navigateToDetail = { idKursus ->
+                    navController.navigate(Screen.DetailKursus.createRoute(idKursus))
+                }, navController = navController)
+            }
+            composable(Screen.VideoEdukasi.route) {
+                ListVideoScreen(navController = navController)
+            }
 
-            composable(Screen.Camera.route){
+            composable(Screen.Camera.route) {
                 CameraScreen(navController = navController)
             }
 
+            composable(
+                Screen.DetailBerita.route,
+                arguments = listOf(navArgument("idBerita") { type = NavType.LongType }),
+            ) {
+                val id = it.arguments?.getLong("idBerita") ?: -1L
+                DetailBeritaScreen(idBerita = id)
             }
+
         }
     }
+}
 
 
 @Composable

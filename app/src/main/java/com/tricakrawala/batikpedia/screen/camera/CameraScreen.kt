@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.view.View
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
@@ -68,6 +69,7 @@ fun CameraContent(
     modifier: Modifier,
     navController: NavHostController,
 ) {
+
     var capturedImage by remember { mutableStateOf<Bitmap?>(null) }
     var hasCameraPermission by remember { mutableStateOf(false) }
     var isCameraActive by remember { mutableStateOf(true) }
@@ -79,8 +81,10 @@ fun CameraContent(
     val previewView = remember { PreviewView(context) }
     val imageCapture = remember { ImageCapture.Builder().build() }
     var cameraProvider: ProcessCameraProvider? by remember { mutableStateOf(null) }
+    var flashStatus by remember { mutableStateOf(false) }
 
     val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
+    lateinit var camera: Camera
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -97,13 +101,19 @@ fun CameraContent(
         }
     }
 
-    LaunchedEffect(hasCameraPermission, lensFacing) {
+    LaunchedEffect(hasCameraPermission, lensFacing,cameraSelector) {
         if (hasCameraPermission) {
             cameraProvider = context.getCameraProvider()
             cameraProvider?.unbindAll()
-            cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
+           camera = cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)!!
+            camera.cameraInfo.hasFlashUnit()
             preview.setSurfaceProvider(previewView.surfaceProvider)
         }
+    }
+
+    fun toggleFlash() {
+        flashStatus = !flashStatus
+      camera.cameraControl.enableTorch(flashStatus)
     }
 
     Box(
@@ -149,6 +159,15 @@ fun CameraContent(
                     onClick = {
                         lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) CameraSelector.LENS_FACING_FRONT
                         else CameraSelector.LENS_FACING_BACK
+                    },
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+
+                CircleShapeButton(
+                    image = ImageVector.vectorResource(id = if (flashStatus) R.drawable.ic_lightning else R.drawable.ic_lightningslash),
+                    contentDesc = "Flash",
+                    onClick = {
+                        toggleFlash()
                     },
                     modifier = Modifier.padding(end = 12.dp)
                 )
@@ -200,7 +219,7 @@ private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
     suspendCoroutine { continuation ->
         ProcessCameraProvider.getInstance(this).also { cameraProvider ->
             cameraProvider.addListener({
-                continuation.resume(cameraProvider.get())
+                continuation.resume(with(cameraProvider) { get() })
             }, ContextCompat.getMainExecutor(this))
         }
     }

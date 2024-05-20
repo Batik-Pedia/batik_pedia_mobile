@@ -42,6 +42,7 @@ object Utils {
         Screen.DetailKursus.route,
         Screen.VideoEdukasi.route,
         Screen.Camera.route,
+        Screen.DetailBerita.route
     )
 
     val wilayah = listOf("Bali", "Cirebon", "Jawa Barat", "Jawa Tengah", "Jawa Timur", "Nusa Tenggara Barat", "Solo", "Sumatera", "Sulawesi Selatan", "Surakarta", "Yogyakarta")

@@ -43,6 +43,7 @@ object FakeSourceBatik {
     val listBerita = listOf(
         Berita(
             1,
+            "https://www.detik.com/jateng/wisata/d-7277135/melihat-proses-pembuatan-batik-tulis-dan-cap-di-kauman-solo",
             "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
             R.drawable.fake_berita_image,
             "04 Apr 2024 08.00",
@@ -50,6 +51,7 @@ object FakeSourceBatik {
         ),
         Berita(
             2,
+            "https://www.detik.com/jateng/wisata/d-7277135/melihat-proses-pembuatan-batik-tulis-dan-cap-di-kauman-solo",
             "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
             R.drawable.fake_berita_image,
             "04 Apr 2024 08.00",
@@ -57,6 +59,7 @@ object FakeSourceBatik {
         ),
         Berita(
             3,
+            "https://www.detik.com/jateng/wisata/d-7277135/melihat-proses-pembuatan-batik-tulis-dan-cap-di-kauman-solo",
             "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
             R.drawable.fake_berita_image,
             "04 Apr 2024 08.00",
@@ -64,6 +67,7 @@ object FakeSourceBatik {
         ),
         Berita(
             4,
+            "https://www.detik.com/jateng/wisata/d-7277135/melihat-proses-pembuatan-batik-tulis-dan-cap-di-kauman-solo",
             "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
             R.drawable.fake_berita_image,
             "04 Apr 2024 08.00",
@@ -71,6 +75,7 @@ object FakeSourceBatik {
         ),
         Berita(
             5,
+            "https://www.detik.com/jateng/wisata/d-7277135/melihat-proses-pembuatan-batik-tulis-dan-cap-di-kauman-solo",
             "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
             R.drawable.fake_berita_image,
             "04 Apr 2024 08.00",
@@ -78,6 +83,7 @@ object FakeSourceBatik {
         ),
         Berita(
             6,
+            "https://www.detik.com/jateng/wisata/d-7277135/melihat-proses-pembuatan-batik-tulis-dan-cap-di-kauman-solo",
             "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
             R.drawable.fake_berita_image,
             "04 Apr 2024 08.00",

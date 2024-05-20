@@ -17,6 +17,10 @@ class BeritaViewModel(private val repository: BatikRepository) : ViewModel() {
         MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState<List<Berita>>> get() = _uiState
 
+    private val _uiStateDetail: MutableStateFlow<UiState<Berita>> =
+        MutableStateFlow(UiState.Loading)
+    val uiStateDetail: StateFlow<UiState<Berita>> get() = _uiStateDetail
+
     fun getAllBerita() {
         viewModelScope.launch {
             repository.getAllBerita()
@@ -26,6 +30,14 @@ class BeritaViewModel(private val repository: BatikRepository) : ViewModel() {
                 .collect { berita ->
                     _uiState.value = UiState.Success(berita)
                 }
+        }
+    }
+
+    fun getDetailBerita(idBerita : Long) {
+        viewModelScope.launch {
+            val data = repository.getBeritaById(idBerita)
+            _uiStateDetail.value = UiState.Loading
+            _uiStateDetail.value = UiState.Success(data)
         }
     }
 
