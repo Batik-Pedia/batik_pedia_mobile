@@ -84,7 +84,7 @@ fun CameraContent(
     var flashStatus by remember { mutableStateOf(false) }
 
     val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
-    lateinit var camera: Camera
+    var camera: Camera? by remember { mutableStateOf(null) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -101,19 +101,19 @@ fun CameraContent(
         }
     }
 
-    LaunchedEffect(hasCameraPermission, lensFacing,cameraSelector) {
+    LaunchedEffect(hasCameraPermission, lensFacing) {
         if (hasCameraPermission) {
             cameraProvider = context.getCameraProvider()
             cameraProvider?.unbindAll()
            camera = cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)!!
-            camera.cameraInfo.hasFlashUnit()
+            camera!!.cameraInfo.hasFlashUnit()
             preview.setSurfaceProvider(previewView.surfaceProvider)
         }
     }
 
     fun toggleFlash() {
         flashStatus = !flashStatus
-      camera.cameraControl.enableTorch(flashStatus)
+      camera?.cameraControl?.enableTorch(flashStatus)
     }
 
     Box(
@@ -205,10 +205,12 @@ fun CameraContent(
             modifier = modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 12.dp, vertical = 16.dp)
-                .clickable { Utils.captureImage(imageCapture, context) { capturedBitmap ->
-                    capturedImage = capturedBitmap
-                    isCameraActive = false
-                } }
+                .clickable {
+                    Utils.captureImage(imageCapture, context) { capturedBitmap ->
+                        capturedImage = capturedBitmap
+                        isCameraActive = false
+                    }
+                }
         )
     }
 }

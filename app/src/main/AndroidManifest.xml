@@ -19,10 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BatikPedia"
         tools:targetApi="31">
+        <activity android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.BatikPedia"
+            />
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashScreen"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.BatikPedia">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

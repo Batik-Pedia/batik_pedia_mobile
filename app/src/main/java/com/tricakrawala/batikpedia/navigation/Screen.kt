@@ -1,6 +1,7 @@
 package com.tricakrawala.batikpedia.navigation
 
 sealed class Screen(val route : String) {
+    object MainSplash : Screen("mainsplash")
     object Home : Screen("home")
     object SplashFirst : Screen("splashfirst")
     object SplashSecond : Screen("splashsecond")
