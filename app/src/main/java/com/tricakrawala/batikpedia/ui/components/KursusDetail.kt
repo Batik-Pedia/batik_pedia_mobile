@@ -2,22 +2,17 @@ package com.tricakrawala.batikpedia.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.ui.theme.poppinsFontFamily
+import com.tricakrawala.batikpedia.ui.theme.primary
 import com.tricakrawala.batikpedia.ui.theme.textColor
 import com.tricakrawala.batikpedia.ui.theme.textSecondary
 
@@ -128,27 +124,40 @@ fun TextInfoKursus(
                 fontWeight = FontWeight.Medium,
                 color = textColor,
                 fontSize = 16.sp,
-                modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             )
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
 
-            var rating1 by remember {
-                mutableDoubleStateOf(3.5)
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp)
+            ){
+                Text(
+                    text = "Rp100.000 - 200.000",
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    color = primary,
+                    fontSize = 20.sp,
+                )
+
+                Text(
+                    text = "/ Jam",
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight.Normal,
+                    color = textColor,
+                    fontSize = 14.sp,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
             }
-            RatingBar(
-                modifier = Modifier
-                    .size(25.dp),
-                rating = rating1,
-                onRatingChanged = {
-                    rating1 = it
-                },
-                starsColor = Color.Yellow
-            )
 
-            Spacer(modifier = Modifier.height(30.dp))
-
+            Row(
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+            ) {
+                CardReview(text = "E-Certificate")
+                Spacer(modifier = Modifier.width(14.dp))
+                CardReview(text = "Batik")
+            }
 
         }
 
