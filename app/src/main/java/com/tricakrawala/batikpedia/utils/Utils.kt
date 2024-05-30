@@ -16,7 +16,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.tricakrawala.batikpedia.BuildConfig
-import com.tricakrawala.batikpedia.navigation.Screen
+import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

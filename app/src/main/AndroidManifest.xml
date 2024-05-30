@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="MyApplication"
+        android:name=".presentation.ui.screen.main.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,12 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BatikPedia"
         tools:targetApi="31">
-        <activity android:name=".MainActivity"
+        <activity android:name=".presentation.ui.screen.main.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.BatikPedia"
             />
         <activity
-            android:name=".SplashScreen"
+            android:name=".presentation.ui.screen.mainsplash.SplashScreen"
             android:exported="true"
             android:theme="@style/Theme.BatikPedia">
             <intent-filter>
