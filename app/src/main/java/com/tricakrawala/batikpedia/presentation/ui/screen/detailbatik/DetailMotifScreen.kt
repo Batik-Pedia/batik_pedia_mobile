@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
@@ -49,13 +50,11 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailMotifScreen(
-    modifier: Modifier = Modifier,
     idBatik: Long,
-    viewModel: DetailBatikViewModel = koinViewModel(),
+    viewModel: DetailBatikViewModel = hiltViewModel(),
     navToBatikFullDetail: (Long) -> Unit,
     navController: NavHostController,
 ) {

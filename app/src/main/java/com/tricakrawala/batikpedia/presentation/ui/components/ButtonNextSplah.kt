@@ -24,7 +24,6 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 
 @Composable
 fun ButtonNextSplah(
-    modifier: Modifier = Modifier,
     color: Color,
     text: String,
     textColor: Color,

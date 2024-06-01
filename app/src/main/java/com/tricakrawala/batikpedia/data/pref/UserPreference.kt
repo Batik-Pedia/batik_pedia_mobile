@@ -13,7 +13,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 class UserPreference(private val dataStore: DataStore<Preferences>) {
 
-    suspend fun saveSession(user: UserModel) {
+    suspend fun saveSession() {
         dataStore.edit { preferences ->
             preferences[NOT_NEW_USER] = true
         }

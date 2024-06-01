@@ -58,7 +58,6 @@ import com.tricakrawala.batikpedia.utils.Utils
 
 @Composable
 fun FilterScreen(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
     FilterContent(navController = navController)

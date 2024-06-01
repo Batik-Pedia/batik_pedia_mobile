@@ -35,10 +35,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.VideoMembatik
+import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.VideoColumn
@@ -46,12 +47,10 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ListVideoScreen(
-    modifier: Modifier = Modifier,
-    viewModel: EdukasiViewModel = koinViewModel(),
+    viewModel: EdukasiViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
     val uiStateVideoMembatik by viewModel.uiStateVideoMembatik.collectAsState(initial = UiState.Loading)
@@ -82,7 +81,6 @@ fun ListVideoScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoListContent(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     listVideoMembatik: List<VideoMembatik>,
 ) {

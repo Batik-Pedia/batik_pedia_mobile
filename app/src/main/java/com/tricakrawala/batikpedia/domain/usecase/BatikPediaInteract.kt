@@ -1,0 +1,45 @@
+package com.tricakrawala.batikpedia.domain.usecase
+
+import com.tricakrawala.batikpedia.data.pref.UserModel
+import com.tricakrawala.batikpedia.domain.model.Berita
+import com.tricakrawala.batikpedia.domain.model.KatalogBatik
+import com.tricakrawala.batikpedia.domain.model.KursusBatik
+import com.tricakrawala.batikpedia.domain.model.Nusantara
+import com.tricakrawala.batikpedia.domain.model.Rekomendasi
+import com.tricakrawala.batikpedia.domain.model.VideoMembatik
+import com.tricakrawala.batikpedia.domain.model.Wisata
+import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class BatikPediaInteract @Inject constructor(private val repository: BatikRepository) : BatikPediaUseCase {
+    override suspend fun saveSession(user: UserModel) =  repository.saveSession(user)
+
+    override fun getSession(): Flow<UserModel> = repository.getSession()
+
+    override fun getAllNusantara(): Flow<List<Nusantara>> = repository.getAllNusantara()
+
+    override fun getAllRekomendasi(): Flow<List<Rekomendasi>> = repository.getAllRekomendasi()
+
+    override fun getAllBatik(): Flow<List<KatalogBatik>> = repository.getAllBatik()
+
+    override suspend fun getBatikById(idBatik: Long): KatalogBatik = repository.getBatikById(idBatik)
+
+    override fun getAllWisata(): Flow<List<Wisata>> = repository.getAllWisata()
+
+    override suspend fun getWisataById(idWisata: Long): Wisata = repository.getWisataById(idWisata)
+
+    override fun getAllBerita(): Flow<List<Berita>> = repository.getAllBerita()
+
+    override suspend fun getBeritaById(idBerita: Long): Berita = repository.getBeritaById(idBerita)
+
+    override suspend fun getProvinsiById(idProvinsi: Long): Nusantara = repository.getProvinsiById(idProvinsi)
+
+    override fun getAllKursus(): Flow<List<KursusBatik>> = repository.getAllKursus()
+
+    override suspend fun getKursusById(idKursus: Long): KursusBatik = repository.getKursusById(idKursus)
+
+    override fun getAllVideo(): Flow<List<VideoMembatik>> = repository.getAllVideo()
+}

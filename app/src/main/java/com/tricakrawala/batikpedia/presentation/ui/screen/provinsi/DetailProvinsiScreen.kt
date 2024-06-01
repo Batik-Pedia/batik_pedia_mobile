@@ -40,12 +40,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.KatalogBatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Wisata
+import com.tricakrawala.batikpedia.domain.model.KatalogBatik
+import com.tricakrawala.batikpedia.domain.model.Wisata
 import com.tricakrawala.batikpedia.presentation.model.provinsi.ProvinsiViewModel
+import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.ImgDetailBig
 import com.tricakrawala.batikpedia.presentation.ui.components.ImgRowDetail
 import com.tricakrawala.batikpedia.presentation.ui.components.TextWithCard
@@ -53,45 +55,43 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailProvinsiScreen(
-    modifier: Modifier = Modifier,
     idProvinsi: Long,
-    viewModel: ProvinsiViewModel = koinViewModel(),
+    viewModel: ProvinsiViewModel = hiltViewModel(),
     navigateToWisata: (Long) -> Unit,
     navController: NavHostController,
 ) {
 
-    val uiState by viewModel.uiStateDetail.collectAsState(initial = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
-    val uiStateBatik by viewModel.uiStateBatik.collectAsState(initial = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
-    val uiStateWisata by viewModel.uiStateWisata.collectAsState(initial = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
+    val uiState by viewModel.uiStateDetail.collectAsState(initial = UiState.Loading)
+    val uiStateBatik by viewModel.uiStateBatik.collectAsState(initial = UiState.Loading)
+    val uiStateWisata by viewModel.uiStateWisata.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (uiState is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading) {
+        if (uiState is UiState.Loading) {
             viewModel.getProvinsiById(idProvinsi)
         }
 
-        if (uiStateBatik is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading) {
+        if (uiStateBatik is UiState.Loading) {
             viewModel.getAllBatik()
         }
 
-        if (uiStateWisata is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading) {
+        if (uiStateWisata is UiState.Loading) {
             viewModel.getAllWisata()
         }
 
     }
 
     when (val provinsi = uiState) {
-        is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success -> {
+        is UiState.Success -> {
             when (val batik = uiStateBatik) {
-                is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Error -> {}
-                is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success -> {
+                is UiState.Error -> {}
+                is UiState.Success -> {
                     when (val wisata = uiStateWisata) {
 
-                        is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Error -> {}
-                        is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success -> {
+                        is UiState.Error -> {}
+                        is UiState.Success -> {
                             DetailProvinsiContent(
                                 navController = navController,
                                 image = provinsi.data.image,
@@ -112,7 +112,7 @@ fun DetailProvinsiScreen(
 
         }
 
-        is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Error -> {}
+        is UiState.Error -> {}
         else -> {
 
         }

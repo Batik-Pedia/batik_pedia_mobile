@@ -2,16 +2,19 @@ package com.tricakrawala.batikpedia.presentation.model.edukasi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.KursusBatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.VideoMembatik
-import com.tricakrawala.batikpedia.domain.usecase.CourseUseCase
+import com.tricakrawala.batikpedia.domain.model.KursusBatik
+import com.tricakrawala.batikpedia.domain.model.VideoMembatik
+import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EdukasiViewModel(private val edukasi : CourseUseCase) : ViewModel() {
+@HiltViewModel
+class EdukasiViewModel @Inject constructor(private val edukasi : BatikPediaUseCase) : ViewModel() {
 
     private val _uiStateKursus: MutableStateFlow<UiState<List<KursusBatik>>> =
         MutableStateFlow(UiState.Loading)

@@ -35,10 +35,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Wisata
+import com.tricakrawala.batikpedia.domain.model.Wisata
 import com.tricakrawala.batikpedia.presentation.model.wisata.WisataViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.ProvinsiItemRow
@@ -47,14 +47,12 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun WisataScreen(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     navigateToDetail : (Long) -> Unit,
-    viewModel: WisataViewModel = koinViewModel()
+    viewModel: WisataViewModel = hiltViewModel()
 ){
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
     LaunchedEffect(true) {
@@ -65,7 +63,7 @@ fun WisataScreen(
 
     when (val wisata = uiState) {
         is UiState.Success -> {
-            WisataContent( navController = navController , listWisata = wisata.data, navigateToDetail = navigateToDetail)
+            WisataContent(listWisata = wisata.data, navigateToDetail = navigateToDetail)
         }
 
         is UiState.Error -> {}
@@ -79,7 +77,6 @@ fun WisataScreen(
 @Composable
 fun WisataContent(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
     listWisata : List<Wisata>,
     navigateToDetail : (Long) -> Unit,
 
@@ -158,8 +155,8 @@ private fun preview(){
         Wisata(2, R.drawable.wisata1, "Kampung Batik Laweyan"),
 
     )
-    BatikPediaTheme() {
-        WisataContent(navController = rememberNavController(), listWisata = listWisata) {
+    BatikPediaTheme {
+        WisataContent(listWisata = listWisata) {
 
         }
     }

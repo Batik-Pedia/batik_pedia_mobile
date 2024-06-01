@@ -38,7 +38,6 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 
 @Composable
 fun SplashScreenFirst(
-    modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
     Column(

@@ -110,8 +110,7 @@ fun TextWithoutCard(
 @Composable
 fun TextInfoKursus(
     modifier: Modifier = Modifier,
-    title : String = "",
-    text : String
+    title : String = ""
 ) {
     Column(
         modifier = modifier

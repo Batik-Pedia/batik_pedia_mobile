@@ -1,4 +1,4 @@
-package com.tricakrawala.batikpedia.domain.repositories
+package com.tricakrawala.batikpedia.domain.usecase
 
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.domain.model.Berita
@@ -10,7 +10,7 @@ import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.model.Wisata
 import kotlinx.coroutines.flow.Flow
 
-interface BatikRepository {
+interface BatikPediaUseCase {
     suspend fun saveSession(user : UserModel)
     fun getSession(): Flow<UserModel>
     fun getAllNusantara(): Flow<List<Nusantara>>

@@ -2,19 +2,20 @@ package com.tricakrawala.batikpedia.presentation.model.provinsi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.KatalogBatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Nusantara
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Wisata
-import com.tricakrawala.batikpedia.domain.usecase.BatikUseCase
-import com.tricakrawala.batikpedia.domain.usecase.NusantaraUseCase
-import com.tricakrawala.batikpedia.domain.usecase.WisataUseCase
+import com.tricakrawala.batikpedia.domain.model.KatalogBatik
+import com.tricakrawala.batikpedia.domain.model.Nusantara
+import com.tricakrawala.batikpedia.domain.model.Wisata
+import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProvinsiViewModel(private val provinsi : NusantaraUseCase, private val batik : BatikUseCase, private val wisata : WisataUseCase) : ViewModel() {
+@HiltViewModel
+class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseCase) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState<List<Nusantara>>> =
         MutableStateFlow(UiState.Loading)
@@ -40,7 +41,7 @@ class ProvinsiViewModel(private val provinsi : NusantaraUseCase, private val bat
 
     fun getAllNusantara() {
         viewModelScope.launch {
-            provinsi.getAllNusantara()
+            useCase.getAllNusantara()
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())
                 }
@@ -53,13 +54,13 @@ class ProvinsiViewModel(private val provinsi : NusantaraUseCase, private val bat
     fun getProvinsiById(idProvinsi : Long){
         viewModelScope.launch {
             _uiStateDetail.value = UiState.Loading
-            _uiStateDetail.value = UiState.Success(provinsi.getNusantaraById(idProvinsi))
+            _uiStateDetail.value = UiState.Success(useCase.getProvinsiById(idProvinsi))
         }
     }
 
     fun getAllBatik() {
         viewModelScope.launch {
-            batik.getAllBatik()
+            useCase.getAllBatik()
                 .catch {
                     _uiStateBatik.value = UiState.Error(it.message.toString())
                 }
@@ -71,7 +72,7 @@ class ProvinsiViewModel(private val provinsi : NusantaraUseCase, private val bat
 
     fun getAllWisata() {
         viewModelScope.launch {
-            wisata.getAllWisata()
+            useCase.getAllWisata()
                 .catch {
                     _uiStateWisata.value = UiState.Error(it.message.toString())
                 }
@@ -84,7 +85,7 @@ class ProvinsiViewModel(private val provinsi : NusantaraUseCase, private val bat
     fun getWisataById(idWisata : Long){
         viewModelScope.launch {
             _uiStateWisataById.value = UiState.Loading
-            _uiStateWisataById.value = UiState.Success(wisata.getWisataById(idWisata))
+            _uiStateWisataById.value = UiState.Success(useCase.getWisataById(idWisata))
         }
     }
 

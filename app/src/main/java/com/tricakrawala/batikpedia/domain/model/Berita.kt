@@ -1,4 +1,4 @@
-package com.tricakrawala.batikpedia.data.resource.local.datamodel
+package com.tricakrawala.batikpedia.domain.model
 
 data class Berita(
     val idBerita : Long,

@@ -1,7 +1,6 @@
 package com.tricakrawala.batikpedia.presentation.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,7 +11,6 @@ import com.tricakrawala.batikpedia.presentation.ui.screen.splash.SplashScreenThi
 
 @Composable
 fun SplashApp(
-    modifier: Modifier = Modifier,
 ){
     val navController = rememberNavController()
     NavHost(
@@ -26,7 +24,7 @@ fun SplashApp(
             SplashScreenSecond(navController = navController)
         }
         composable(Screen.SplashThird.route){
-            SplashScreenThird(navController = navController)
+            SplashScreenThird()
         }
     }
 }

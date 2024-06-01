@@ -5,18 +5,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.pref.UserModel
-import com.tricakrawala.batikpedia.domain.usecase.AuthPrefUseCase
+import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(private  val auth : AuthPrefUseCase): ViewModel(){
+
+@HiltViewModel
+class MainViewModel @Inject constructor(private val useCase : BatikPediaUseCase): ViewModel(){
 
     fun getSession(): LiveData<UserModel> {
-        return auth.getSession().asLiveData()
+        return useCase.getSession().asLiveData()
     }
 
     fun saveSession(user: UserModel) {
         viewModelScope.launch {
-            auth.saveSession(user)
+            useCase.saveSession(user)
         }
     }
 

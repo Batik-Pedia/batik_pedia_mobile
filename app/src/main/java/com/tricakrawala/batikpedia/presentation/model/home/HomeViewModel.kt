@@ -2,18 +2,19 @@ package com.tricakrawala.batikpedia.presentation.model.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tricakrawala.batikpedia.data.repositories.BatikRepositoryImpl
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Nusantara
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Rekomendasi
-import com.tricakrawala.batikpedia.domain.usecase.NusantaraUseCase
-import com.tricakrawala.batikpedia.domain.usecase.RecomendUseCase
+import com.tricakrawala.batikpedia.domain.model.Nusantara
+import com.tricakrawala.batikpedia.domain.model.Rekomendasi
+import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(private val nusantara : NusantaraUseCase, private val rekomendasi: RecomendUseCase) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val useCase : BatikPediaUseCase) : ViewModel() {
 
     private val _uiStateNusantara: MutableStateFlow<UiState<List<Nusantara>>> =
         MutableStateFlow(UiState.Loading)
@@ -26,7 +27,7 @@ class HomeViewModel(private val nusantara : NusantaraUseCase, private val rekome
 
     fun getAllNusantara() {
         viewModelScope.launch {
-            nusantara.getAllNusantara()
+            useCase.getAllNusantara()
                 .catch {
                     _uiStateNusantara.value = UiState.Error(it.message.toString())
                 }
@@ -39,7 +40,7 @@ class HomeViewModel(private val nusantara : NusantaraUseCase, private val rekome
 
     fun getAllRekomendasi() {
         viewModelScope.launch {
-            rekomendasi.getAllRekomendasi()
+            useCase.getAllRekomendasi()
                 .catch {
                     _uiStateRekomendasi.value = UiState.Error(it.message.toString())
                 }

@@ -3,18 +3,21 @@ package com.tricakrawala.batikpedia.data.repositories
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.pref.UserPreference
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Berita
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.FakeSourceBatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.KatalogBatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.KursusBatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Nusantara
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Rekomendasi
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.VideoMembatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Wisata
+import com.tricakrawala.batikpedia.domain.model.Berita
+import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
+import com.tricakrawala.batikpedia.domain.model.KatalogBatik
+import com.tricakrawala.batikpedia.domain.model.KursusBatik
+import com.tricakrawala.batikpedia.domain.model.Nusantara
+import com.tricakrawala.batikpedia.domain.model.Rekomendasi
+import com.tricakrawala.batikpedia.domain.model.VideoMembatik
+import com.tricakrawala.batikpedia.domain.model.Wisata
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BatikRepositoryImpl(private val preference: UserPreference) : BatikRepository {
+@Singleton
+class BatikRepositoryImpl @Inject constructor(private val preference: UserPreference) : BatikRepository {
 
     private val nusantaraList = mutableListOf<Nusantara>()
     private val rekomendasiList = mutableListOf<Rekomendasi>()
@@ -67,7 +70,7 @@ class BatikRepositoryImpl(private val preference: UserPreference) : BatikReposit
     }
 
     override suspend fun saveSession(user: UserModel) {
-        preference.saveSession(user)
+        preference.saveSession()
     }
 
     override fun getSession(): Flow<UserModel> {

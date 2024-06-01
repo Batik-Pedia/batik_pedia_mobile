@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
@@ -49,25 +50,23 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailKursusScreen(
-    modifier: Modifier = Modifier,
     idKursus: Long,
-    viewModel: DetailKursusViewModel = koinViewModel(),
+    viewModel: DetailKursusViewModel = hiltViewModel(),
     navToBatikFullDetail: (Long) -> Unit,
     navController: NavHostController,
 ) {
-    val _uiStateKursus by viewModel._uiStateKursus.collectAsState(initial = UiState.Loading)
+    val uiStateKursus by viewModel.uiState.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (_uiStateKursus is UiState.Loading) {
+        if (uiStateKursus is UiState.Loading) {
             viewModel.getAllKursusDetail(idKursus)
         }
     }
 
-    when (val kursus = _uiStateKursus) {
+    when (val kursus = uiStateKursus) {
 
         is UiState.Error -> {}
         is UiState.Success -> {
@@ -157,8 +156,7 @@ fun DetailKursusContent(
 
             Box {
                 TextInfoKursus(
-                    title = titleKursus,
-                    text = stringResource(id = R.string.tentang_motif)
+                    title = titleKursus
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))

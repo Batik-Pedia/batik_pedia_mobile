@@ -13,14 +13,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.tricakrawala.batikpedia.presentation.model.berita.BeritaViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailBeritaScreen(
-    modifier: Modifier = Modifier,
-    viewModel: BeritaViewModel = koinViewModel(),
+    viewModel: BeritaViewModel = hiltViewModel(),
     idBerita : Long,
 ){
     val uiState by viewModel.uiStateDetail.collectAsState(initial = UiState.Loading)

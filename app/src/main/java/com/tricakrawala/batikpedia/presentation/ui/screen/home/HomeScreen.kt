@@ -34,11 +34,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Nusantara
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Rekomendasi
+import com.tricakrawala.batikpedia.domain.model.Nusantara
+import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.presentation.model.home.HomeViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.components.CardBerita
@@ -47,14 +48,13 @@ import com.tricakrawala.batikpedia.presentation.ui.components.NusantaraItemRow
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
-import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navigateToNusantara: (Long) -> Unit,
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
     val uiStateNusantara by viewModel.uiStateNusantara.collectAsState(initial = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)

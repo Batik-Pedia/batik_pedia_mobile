@@ -2,31 +2,35 @@ package com.tricakrawala.batikpedia.presentation.model.berita
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Berita
-import com.tricakrawala.batikpedia.domain.usecase.BeritaUseCase
+import com.tricakrawala.batikpedia.domain.model.Berita
+import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
+import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BeritaViewModel(private val berita : BeritaUseCase) : ViewModel() {
+@HiltViewModel
+class BeritaViewModel @Inject constructor(private val berita : BatikPediaUseCase) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<com.tricakrawala.batikpedia.presentation.ui.common.UiState<List<Berita>>> =
-        MutableStateFlow(com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
-    val uiState: StateFlow<com.tricakrawala.batikpedia.presentation.ui.common.UiState<List<Berita>>> get() = _uiState
+    private val _uiState: MutableStateFlow<UiState<List<Berita>>> =
+        MutableStateFlow(UiState.Loading)
+    val uiState: StateFlow<UiState<List<Berita>>> get() = _uiState
 
-    private val _uiStateDetail: MutableStateFlow<com.tricakrawala.batikpedia.presentation.ui.common.UiState<Berita>> =
-        MutableStateFlow(com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
-    val uiStateDetail: StateFlow<com.tricakrawala.batikpedia.presentation.ui.common.UiState<Berita>> get() = _uiStateDetail
+    private val _uiStateDetail: MutableStateFlow<UiState<Berita>> =
+        MutableStateFlow(UiState.Loading)
+    val uiStateDetail: StateFlow<UiState<Berita>> get() = _uiStateDetail
 
     fun getAllBerita() {
         viewModelScope.launch {
             berita.getAllBerita()
                 .catch {
-                    _uiState.value = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Error(it.message.toString())
+                    _uiState.value = UiState.Error(it.message.toString())
                 }
                 .collect { berita ->
-                    _uiState.value = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success(berita)
+                    _uiState.value = UiState.Success(berita)
                 }
         }
     }
@@ -34,8 +38,8 @@ class BeritaViewModel(private val berita : BeritaUseCase) : ViewModel() {
     fun getDetailBerita(idBerita : Long) {
         viewModelScope.launch {
             val data = berita.getBeritaById(idBerita)
-            _uiStateDetail.value = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading
-            _uiStateDetail.value = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success(data)
+            _uiStateDetail.value = UiState.Loading
+            _uiStateDetail.value = UiState.Success(data)
         }
     }
 

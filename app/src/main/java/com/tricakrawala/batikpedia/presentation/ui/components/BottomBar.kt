@@ -149,9 +149,6 @@ fun BottomBar(
 
 @Preview(showBackground = true)
 @Composable
-private fun preview(
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
-) {
-    BottomBar(navController = navController, modifier = Modifier.background(Color.White))
+private fun Preview() {
+    BottomBar(navController = rememberNavController(), modifier = Modifier.background(Color.White))
 }

@@ -39,50 +39,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.KursusBatik
+import com.tricakrawala.batikpedia.domain.model.KursusBatik
 import com.tricakrawala.batikpedia.presentation.model.detailedukasi.DetailKursusViewModel
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
+import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.KursusBox
 import com.tricakrawala.batikpedia.presentation.ui.components.SearchBarKatalog
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ListKursusScreen(
-    modifier: Modifier = Modifier,
-    viewModel: EdukasiViewModel = koinViewModel(),
+    viewModel: EdukasiViewModel = hiltViewModel(),
     navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
 ) {
-    val uiStateKursus by viewModel.uiStateKursus.collectAsState(initial = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
+    val uiStateKursus by viewModel.uiStateKursus.collectAsState(initial = UiState.Loading)
     LaunchedEffect(true) {
-        if (uiStateKursus is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading) {
+        if (uiStateKursus is UiState.Loading) {
             viewModel.getAllKursus()
         }
     }
 
-    when(val kursus = uiStateKursus){
-        is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success -> {
-                    ListKursusContent(
-                        navigateToDetail = navigateToDetail,
-                        listKursus = kursus.data,
-                        navController = navController
-                    )
+    when (val kursus = uiStateKursus) {
+        is UiState.Success -> {
+            ListKursusContent(
+                navigateToDetail = navigateToDetail,
+                listKursus = kursus.data,
+                navController = navController,
+            )
 
-                }
-
-                is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Error -> {}
-                else -> {}
-            }
         }
 
-
+        is UiState.Error -> {}
+        else -> {}
+    }
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,9 +90,8 @@ fun ListKursusContent(
     navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
     listKursus: List<KursusBatik>,
-    viewmodel: DetailKursusViewModel = koinViewModel(),
 ) {
-    var query by remember { mutableStateOf("")}
+    var query by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -163,7 +160,7 @@ fun ListKursusContent(
                     .padding(top = 8.dp)
                     .navigationBarsPadding(),
 
-            ) {
+                ) {
                 items(listKursus) { data ->
                     KursusBox(
                         image = data.image,
@@ -174,8 +171,6 @@ fun ListKursusContent(
         }
     }
 }
-
-
 
 
 @Preview
@@ -193,7 +188,7 @@ private fun preview() {
     BatikPediaTheme {
         ListKursusContent(
             navController = rememberNavController(),
-            navigateToDetail = {  },
+            navigateToDetail = { },
             listKursus = fakeKursusBatikList
         )
     }

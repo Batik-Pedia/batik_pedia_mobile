@@ -51,7 +51,6 @@ import com.tricakrawala.batikpedia.utils.Utils
 
 @Composable
 fun BatikPediaApp(
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
     val navBackStack by navController.currentBackStackEntryAsState()
@@ -132,7 +131,6 @@ fun BatikPediaApp(
             ) {
                 val id = it.arguments?.getLong("idBatikFull") ?: -1L
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
-                Log.d("IdBatikFull", "BatikPediaApp: $id")
             }
 
             composable(
@@ -211,7 +209,6 @@ fun BatikPediaApp(
             ) {
                 val id = it.arguments?.getLong("idBatikFull") ?: -1L
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
-                Log.d("IdBatikFull", "BatikPediaApp: $id")
             }
 
             composable(Screen.Edukasi.route) {

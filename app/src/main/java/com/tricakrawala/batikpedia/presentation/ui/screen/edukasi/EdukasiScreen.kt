@@ -36,11 +36,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.KursusBatik
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.VideoMembatik
+import com.tricakrawala.batikpedia.domain.model.KursusBatik
+import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
@@ -51,12 +52,10 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EdukasiScreen(
-    modifier: Modifier = Modifier,
-    viewModel: EdukasiViewModel = koinViewModel(),
+    viewModel: EdukasiViewModel = hiltViewModel(),
     navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
 ) {

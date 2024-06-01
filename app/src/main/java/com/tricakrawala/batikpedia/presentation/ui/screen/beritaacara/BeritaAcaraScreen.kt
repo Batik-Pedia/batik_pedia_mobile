@@ -37,11 +37,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.Berita
-import com.tricakrawala.batikpedia.data.resource.local.datamodel.FakeSourceBatik
+import com.tricakrawala.batikpedia.domain.model.Berita
+import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.presentation.model.berita.BeritaViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.BeritaRow
@@ -49,12 +50,10 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BeritaAcaraScreen(
-    modifier: Modifier = Modifier,
-    viewModel: BeritaViewModel = koinViewModel(),
+    viewModel: BeritaViewModel = hiltViewModel(),
     navigateToDetail : (Long) -> Unit,
     navController : NavHostController,
 
