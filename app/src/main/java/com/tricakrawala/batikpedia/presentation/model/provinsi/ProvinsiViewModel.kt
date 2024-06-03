@@ -3,6 +3,7 @@ package com.tricakrawala.batikpedia.presentation.model.provinsi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.model.Nusantara
@@ -36,9 +37,9 @@ class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseC
     val uiStateWisata: StateFlow<UiState<List<WisataItem>>> get() = _uiStateWisata
 
 
-    private val _uiStateWisataById: MutableStateFlow<UiState<Wisata>> = MutableStateFlow(
+    private val _uiStateWisataById: MutableStateFlow<UiState<WisataId>> = MutableStateFlow(
         UiState.Loading)
-    val uiStateWisataById: StateFlow<UiState<Wisata>> get() = _uiStateWisataById
+    val uiStateWisataById: StateFlow<UiState<WisataId>> get() = _uiStateWisataById
 
 
     fun getAllNusantara() {
@@ -86,8 +87,13 @@ class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseC
 
     fun getWisataById(idWisata : Long){
         viewModelScope.launch {
-            _uiStateWisataById.value = UiState.Loading
-            _uiStateWisataById.value = UiState.Success(useCase.getWisataById(idWisata))
+            useCase.getWisataById(idWisata.toInt())
+                .catch {
+                    _uiStateWisataById.value = UiState.Error(it.message.toString())
+                }
+                .collect { wisata ->
+                    _uiStateWisataById.value = wisata
+                }
         }
     }
 

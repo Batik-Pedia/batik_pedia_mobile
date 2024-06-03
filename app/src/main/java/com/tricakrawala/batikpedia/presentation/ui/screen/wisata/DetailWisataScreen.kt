@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.presentation.model.wisata.WisataViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.AtlasItem
@@ -67,7 +68,7 @@ fun DetailWisataScreen(
         }
 
         is UiState.Success -> {
-            DetailWisataContent(navController = navController, imgWisata = "wisata.data.image", titleWisata = wisata.data.namaWisata)
+            DetailWisataContent(navController = navController, wisata = wisata.data)
         }
 
         else -> {}
@@ -79,8 +80,7 @@ fun DetailWisataScreen(
 fun DetailWisataContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
-    imgWisata : String,
-    titleWisata : String,
+    wisata : WisataId? = null,
 ){
 
     Box(
@@ -134,16 +134,18 @@ fun DetailWisataContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-            ImgDetailBig(image = imgWisata, text = titleWisata, modifier = Modifier)
+                ImgDetailBig(image = wisata?.imageWisata ?: "", text = wisata?.namaWisata ?: "", modifier = Modifier)
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            TextWithCard(
-                title = stringResource(id = R.string.tentang_destinasi),
-                text = stringResource(id = R.string.tentang_destinasi_detail)
-            )
+                TextWithCard(
+                    title = stringResource(id = R.string.tentang_destinasi),
+                    text = wisata?.detailWisata ?:""
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+
+
 
             AtlasItem(
                 image = R.drawable.peta1,
@@ -161,6 +163,6 @@ fun DetailWisataContent(
 @Preview(showBackground = true)
 private fun Preview(){
     BatikPediaTheme {
-        DetailWisataContent(navController = rememberNavController(), imgWisata =" R.drawable.wisata1", titleWisata = "Kampung batik laweyan")
+        DetailWisataContent(navController = rememberNavController())
     }
 }

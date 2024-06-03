@@ -4,6 +4,7 @@ import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.KatalogBatik
@@ -35,7 +36,7 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getAllWisata(): Flow<UiState<List<WisataItem>>> = repository.getAllWisata()
 
-    override suspend fun getWisataById(idWisata: Long): Wisata = repository.getWisataById(idWisata)
+    override fun getWisataById(idWisata: Int): Flow<UiState<WisataId>> = repository.getWisataById(idWisata)
     override fun getAllBerita(): Flow<UiState<List<BeritaItem>>> = repository.getAllBerita()
 
     override fun getBeritaById(idBerita: Int): Flow<UiState<BeritaId>> = repository.getBeritaById(idBerita)
