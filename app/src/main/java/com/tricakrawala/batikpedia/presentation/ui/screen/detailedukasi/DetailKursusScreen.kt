@@ -78,8 +78,7 @@ fun DetailKursusScreen(
                 titleKursus = kursus.data.namaKursus,
                 detailKursus = kursus.data.deskripsi,
                 kursusUrl = kursus.data.urlKursus,
-                navController = navController,
-                idKursus = idKursus
+                navController = navController
             )
         }
 
@@ -92,7 +91,6 @@ fun DetailKursusScreen(
 @Composable
 fun DetailKursusContent(
     modifier: Modifier = Modifier,
-    idKursus: Long,
     kursusUrl : String = "",
     imageKursus: String,
     detailKursus : String = "",
@@ -204,7 +202,6 @@ private fun Preview() {
     DetailKursusContent(
         imageKursus = "R.drawable.batik1",
         titleKursus = "Motif kawung",
-        navController = rememberNavController(),
-        idKursus =0
+        navController = rememberNavController()
     )
 }

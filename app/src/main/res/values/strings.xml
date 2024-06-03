@@ -21,7 +21,6 @@
     <string name="motif_batik">Motif Batik</string>
     <string name="destinasi_wisata">Destinasi Wisata</string>
     <string name="berita_acara">Berita dan Acara</string>
-    <string name="tentang_motif">Motif batik kawung adalah motif tradisional Jawa yang terdiri dari pola bundar teratur, sering dikaitkan dengan simbol \"kawung\" yang merupakan buah pohon aren. Kawung memiliki makna kemakmuran dan kelimpahan, serta sering dianggap sebagai simbol kekuasaan dan keadilan. Motif ini dipakai oleh bangsawan dan raja sebagai lambang kebesaran. Saat ini, batik kawung tetap digunakan dalam berbagai karya tekstil dan dihargai sebagai bagian dari warisan budaya batik Indonesia…</string>
     <string name="tentang_motif_batik">Tentang motif batik ini</string>
     <string name="tentang_wisata_batik">Tentang wisata batik ini</string>
     <string name="tentang_wisata">Kampung Batik Ngasem adalah sebuah kampung yang terletak di pusat Kota Yogyakarta, Indonesia. Kampung ini merupakan pusat produksi batik yang terkenal sejak zaman kerajaan Mataram. Di Kampung Batik Ngasem, pengunjung dapat melihat secara langsung proses pembuatan batik tradisional oleh para pengrajin batik lokal. Selain itu, kampung ini juga menyajikan berbagai produk batik yang berkualitas tinggi dan beragam desain. Wisatawan sering mengunjungi kampung ini untuk mempelajari lebih lanjut tentang sejarah dan proses pembuatan batik serta untuk berbelanja batik asli Yogyakarta. Selain sebagai pusat produksi dan wisata, Kampung Batik Ngasem juga berperan dalam melestarikan seni dan budaya tradisional Indonesia.</string>
@@ -30,13 +29,9 @@
     <string name="video_membatik">Video Membatik</string>
     <string name="selengkapnya">Selengkapnya</string>
     <string name="sejarah">Sejarah</string>
-    <string name="sejarah_detail">Motif kawung bermakna kesempurnaan, kemurnian dan kesucian. Motif batik Kawung diyakini diciptakan oleh salah satu Sultan kerajaan Mataram. Motif batik ini pertama kali dikenal pada abad ke 13 tepatnya di pulau Jawa. Pada awalnya motif ini muncul pada ukiran dinding di beberapa candi di Jawa seperti Prambanan.</string>
     <string name="penggunaan">Penggunaan</string>
-    <string name="penggunaan_detail"><![CDATA[Di lingkungan keraton, batik Kawung adalah salah satu batik larangan yang memiliki aturan ketat tentang siapa dan kapan corak ini boleh digunakan. Pada masyarakat umum, batik Kawung digunakan dengan luwes dan bervariasi pada berbagai acara, mulai dari turun tanah. pernikahan hingga pemakaman. Batik Kawung juga banyak digunakan untuk kemeja kantor.Corak Kawung dengan warna sogan (merah-cokelat) tergolong batik klasik dan banyak digunakan dalam lingkungan profesional karena memiliki kesan berwibawa dan elegan.]]></string>
     <string name="makna">Makna</string>
-    <string name="makna_detail"><![CDATA[Motif kawung bermakna kesempurnaan, kemurnian dan kesucian. Dalam kaitannya dengan kata suwung yang berarti kosong, motif kawung menyimbolkan kekosongan nafsu dan hasrat duniawi, sehingga menghasilkan pengendalian diri yang sempurna. Kekosongan ini menjadikan seseorang netral, tidak berpihak, tidak ingin menonjolkan diri, mengikuti arus kehidupan, membiarkan segala yang ada disekitarnya berjalan sesuai kehendak alam. Semar, manusia titisan dewa yang berakhlak sangat baik dan bijaksana, selalu mengenakan motif kawung ini.]]></string>
     <string name="tentang_destinasi">Tentang destinasi ini</string>
-    <string name="tentang_destinasi_detail">Industri batik tulis warna alami di Laweyan mulai berkembang pada abad 14 M semasa pemerintahan keraton Pajang. Berikutnya ketika teknik batik cap ditemukan pada tahun 1900an sehingga melahirkan juragan-juragan batik yang melegenda dengan kekayaannya.</string>
     <string name="filter">Filter</string>
     <string name="urutan">Urutan</string>
     <string name="jenis_batik">Jenis Batik</string>

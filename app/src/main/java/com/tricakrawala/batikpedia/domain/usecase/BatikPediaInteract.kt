@@ -9,7 +9,6 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
-import com.tricakrawala.batikpedia.domain.model.KursusBatik
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository

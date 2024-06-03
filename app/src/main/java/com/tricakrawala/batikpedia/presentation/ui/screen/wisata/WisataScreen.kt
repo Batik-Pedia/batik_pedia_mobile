@@ -50,7 +50,6 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
 @Composable
 fun WisataScreen(
-    navController: NavHostController,
     navigateToDetail : (Long) -> Unit,
     viewModel: WisataViewModel = hiltViewModel()
 ){
