@@ -20,7 +20,7 @@ import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 @Composable
 fun DetailBeritaScreen(
     viewModel: BeritaViewModel = hiltViewModel(),
-    idBerita : Long,
+    idBerita : Int,
 ){
     val uiState by viewModel.uiStateDetail.collectAsState(initial = UiState.Loading)
 
@@ -33,7 +33,7 @@ fun DetailBeritaScreen(
     when(val berita = uiState){
         is UiState.Error -> {}
         is UiState.Success -> {
-            DetailBeritaContent(url = berita.data.url)
+            DetailBeritaContent(url = berita.data.urlBerita)
         }
 
         else -> {}

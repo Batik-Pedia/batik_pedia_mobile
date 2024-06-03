@@ -41,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.presentation.model.berita.BeritaViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
@@ -50,11 +49,12 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
+import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
 
 @Composable
 fun BeritaAcaraScreen(
     viewModel: BeritaViewModel = hiltViewModel(),
-    navigateToDetail : (Long) -> Unit,
+    navigateToDetail : (Int) -> Unit,
     navController : NavHostController,
 
     ){
@@ -81,8 +81,8 @@ fun BeritaAcaraScreen(
 @Composable
 fun BeritaAcaraContent(
     modifier: Modifier = Modifier,
-    listBerita: List<Berita>,
-    navigateToDetail : (Long) -> Unit,
+    listBerita: List<BeritaItem>,
+    navigateToDetail : (Int) -> Unit,
     navController : NavHostController,
 ){
 
@@ -146,7 +146,7 @@ fun BeritaAcaraContent(
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
                 items(listBerita){data ->
-                    BeritaRow(image = data.image, title = data.title, time = data.time, lokasi = data.lokasi, modifier = modifier.clickable { navigateToDetail(data.idBerita) })
+                    BeritaRow(image = data.imageBerita, title = data.namaBerita, time = data.tglBerita, lokasi = data.lokasiBerita, modifier = modifier.clickable { navigateToDetail(data.idBerita) })
                 }
             }
 
@@ -157,11 +157,8 @@ fun BeritaAcaraContent(
 @Composable
 @Preview(showBackground = true)
 private fun preview(){
-
-
-
     BatikPediaTheme {
-        BeritaAcaraContent(listBerita = FakeSourceBatik.listBerita, navigateToDetail = {}, navController = rememberNavController())
+        BeritaAcaraContent(listBerita = emptyList(), navigateToDetail = {}, navController = rememberNavController())
     }
 }
 

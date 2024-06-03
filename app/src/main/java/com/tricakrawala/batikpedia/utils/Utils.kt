@@ -27,6 +27,7 @@ import java.util.Locale
 
 object Utils {
 
+    const val BASE_URL = "https://forradi.sga.dom.my.id/"
 
     val listScreenWithoutBottomBar = listOf(
         Screen.MainSplash.route,

@@ -1,6 +1,7 @@
 package com.tricakrawala.batikpedia.domain.usecase
 
 import com.tricakrawala.batikpedia.data.pref.UserModel
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.model.KursusBatik
@@ -9,6 +10,8 @@ import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.model.Wisata
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
+import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,10 +33,9 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
     override fun getAllWisata(): Flow<List<Wisata>> = repository.getAllWisata()
 
     override suspend fun getWisataById(idWisata: Long): Wisata = repository.getWisataById(idWisata)
+    override fun getAllBerita(): Flow<UiState<List<BeritaItem>>> = repository.getAllBerita()
 
-    override fun getAllBerita(): Flow<List<Berita>> = repository.getAllBerita()
-
-    override suspend fun getBeritaById(idBerita: Long): Berita = repository.getBeritaById(idBerita)
+    override fun getBeritaById(idBerita: Int): Flow<UiState<BeritaId>> = repository.getBeritaById(idBerita)
 
     override suspend fun getProvinsiById(idProvinsi: Long): Nusantara = repository.getProvinsiById(idProvinsi)
 

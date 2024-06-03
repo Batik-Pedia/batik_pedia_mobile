@@ -17,12 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
@@ -31,7 +33,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun BeritaRow(
     modifier: Modifier = Modifier,
-    image: Int,
+    image: String,
     title: String,
     time: String,
     lokasi: String
@@ -41,8 +43,11 @@ fun BeritaRow(
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
     ) {
-        Image(
-            painter = painterResource(id = image),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(image)
+                .crossfade(true)
+                .build(),
             contentDescription = "gambar berita",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -103,7 +108,7 @@ fun BeritaRow(
 private fun Preview() {
     BatikPediaTheme {
         BeritaRow(
-            image = R.drawable.fake_berita_image,
+            image = "R.drawable.fake_berita_image",
             title = "Melihat Proses Pembuatan Batik Tulis dan Cap di Kauman Solo",
             time = "04 Apr 2024 08.00",
             lokasi = "Solo, Indonesia"

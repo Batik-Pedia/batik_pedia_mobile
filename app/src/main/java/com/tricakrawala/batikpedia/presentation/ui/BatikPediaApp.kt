@@ -234,9 +234,9 @@ fun BatikPediaApp(
 
             composable(
                 Screen.DetailBerita.route,
-                arguments = listOf(navArgument("idBerita") { type = NavType.LongType }),
+                arguments = listOf(navArgument("idBerita") { type = NavType.IntType }),
             ) {
-                val id = it.arguments?.getLong("idBerita") ?: -1L
+                val id = it.arguments?.getInt("idBerita") ?: 0
                 DetailBeritaScreen(idBerita = id)
             }
 

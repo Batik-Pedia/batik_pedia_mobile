@@ -2,6 +2,8 @@ package com.tricakrawala.batikpedia.data.repositories
 
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.pref.UserPreference
+import com.tricakrawala.batikpedia.data.resource.remote.RemoteDataSource
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
@@ -11,19 +13,23 @@ import com.tricakrawala.batikpedia.domain.model.Nusantara
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.model.Wisata
+import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BatikRepositoryImpl @Inject constructor(private val preference: UserPreference) : BatikRepository {
+class BatikRepositoryImpl @Inject constructor(private val preference: UserPreference, private val remoteDataSource: RemoteDataSource) : BatikRepository {
 
     private val nusantaraList = mutableListOf<Nusantara>()
     private val rekomendasiList = mutableListOf<Rekomendasi>()
     private val batikList = mutableListOf<KatalogBatik>()
     private val wisataList = mutableListOf<Wisata>()
-    private val beritaList = mutableListOf<Berita>()
     private val kursusList = mutableListOf<KursusBatik>()
     private val videoList = mutableListOf<VideoMembatik>()
 
@@ -52,11 +58,6 @@ class BatikRepositoryImpl @Inject constructor(private val preference: UserPrefer
             }
         }
 
-        if(beritaList.isEmpty()){
-            FakeSourceBatik.listBerita.forEach {
-                beritaList.add(it)
-            }
-        }
         if (kursusList.isEmpty()){
             FakeSourceBatik.listKursus.forEach {
                 kursusList.add(it)
@@ -101,13 +102,28 @@ class BatikRepositoryImpl @Inject constructor(private val preference: UserPrefer
         return wisataList.first{it.idWisata == idWisata}
     }
 
-    override fun getAllBerita(): Flow<List<Berita>> {
-        return flowOf(beritaList)
-    }
+    override fun getAllBerita(): Flow<UiState<List<BeritaItem>>> = flow {
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getAllBerita()
+            val result = response.values.berita
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
 
-    override suspend fun getBeritaById(idBerita: Long): Berita {
-        return beritaList.first { it.idBerita == idBerita }
-    }
+    override fun getBeritaById(idBerita: Int): Flow<UiState<BeritaId>> = flow {
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getDetailBerita(idBerita)
+            val result = response.values
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
+
 
     override suspend fun getProvinsiById(idProvinsi: Long): Nusantara {
         return nusantaraList.first { it.idNusantara == idProvinsi }
