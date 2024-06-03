@@ -67,7 +67,7 @@ fun DetailWisataScreen(
         }
 
         is UiState.Success -> {
-            DetailWisataContent(navController = navController, imgWisata = wisata.data.image, titleWisata = wisata.data.namaWisata)
+            DetailWisataContent(navController = navController, imgWisata = "wisata.data.image", titleWisata = wisata.data.namaWisata)
         }
 
         else -> {}
@@ -79,7 +79,7 @@ fun DetailWisataScreen(
 fun DetailWisataContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
-    imgWisata : Int,
+    imgWisata : String,
     titleWisata : String,
 ){
 
@@ -161,6 +161,6 @@ fun DetailWisataContent(
 @Preview(showBackground = true)
 private fun Preview(){
     BatikPediaTheme {
-        DetailWisataContent(navController = rememberNavController(), imgWisata = R.drawable.wisata1, titleWisata = "Kampung batik laweyan")
+        DetailWisataContent(navController = rememberNavController(), imgWisata =" R.drawable.wisata1", titleWisata = "Kampung batik laweyan")
     }
 }

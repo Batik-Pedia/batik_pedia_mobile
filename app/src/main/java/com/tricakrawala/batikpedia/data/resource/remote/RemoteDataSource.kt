@@ -10,4 +10,6 @@ class RemoteDataSource @Inject constructor(
 ) {
     suspend fun getAllBerita() = apiService.getAllBerita()
     suspend fun getDetailBerita(idBerita : Int) = apiService.getDetailBerita(idBerita)
+    suspend fun getAllBatik() = apiService.getKatalogBatik()
+    suspend fun getDetailBatik(idBatik : Int) = apiService.getDetailBatik(idBatik)
 }

@@ -2,6 +2,8 @@ package com.tricakrawala.batikpedia.domain.usecase
 
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
 import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.model.KursusBatik
@@ -18,8 +20,8 @@ interface BatikPediaUseCase {
     fun getSession(): Flow<UserModel>
     fun getAllNusantara(): Flow<List<Nusantara>>
     fun getAllRekomendasi(): Flow<List<Rekomendasi>>
-    fun getAllBatik(): Flow<List<KatalogBatik>>
-    suspend fun getBatikById(idBatik : Long) : KatalogBatik
+    fun getAllBatik(): Flow<UiState<List<KatalogBatikItem>>>
+    fun getBatikById(idBatik : Int) : Flow<UiState<KatalogId>>
     fun getAllWisata(): Flow<List<Wisata>>
     suspend fun getWisataById(idWisata : Long) : Wisata
     fun getAllBerita() : Flow<UiState<List<BeritaItem>>>

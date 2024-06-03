@@ -4,6 +4,8 @@ import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.pref.UserPreference
 import com.tricakrawala.batikpedia.data.resource.remote.RemoteDataSource
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
@@ -86,13 +88,27 @@ class BatikRepositoryImpl @Inject constructor(private val preference: UserPrefer
         return flowOf(rekomendasiList)
     }
 
-    override fun getAllBatik(): Flow<List<KatalogBatik>> {
-        return flowOf(batikList)
-    }
+    override fun getAllBatik(): Flow<UiState<List<KatalogBatikItem>>> = flow {
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getAllBatik()
+            val result = response.values.katalogBatik
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
 
-    override suspend fun getBatikById(idBatik: Long): KatalogBatik {
-        return batikList.first { it.idBatik == idBatik }
-    }
+    override fun getBatikById(idBatik: Int): Flow<UiState<KatalogId>> = flow{
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getDetailBatik(idBatik)
+            val result = response.values
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
 
     override fun getAllWisata(): Flow<List<Wisata>> {
         return flowOf(wisataList)

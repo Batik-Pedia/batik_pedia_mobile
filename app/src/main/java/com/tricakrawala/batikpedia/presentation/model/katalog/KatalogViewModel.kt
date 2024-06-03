@@ -2,6 +2,7 @@ package com.tricakrawala.batikpedia.presentation.model.katalog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
@@ -15,9 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class KatalogViewModel @Inject constructor(private val useCase : BatikPediaUseCase) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<UiState<List<KatalogBatik>>> =
+    private val _uiState: MutableStateFlow<UiState<List<KatalogBatikItem>>> =
         MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState<List<KatalogBatik>>> get() = _uiState
+    val uiState: StateFlow<UiState<List<KatalogBatikItem>>> get() = _uiState
 
     fun getAllBatik() {
         viewModelScope.launch {
@@ -25,8 +26,8 @@ class KatalogViewModel @Inject constructor(private val useCase : BatikPediaUseCa
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())
                 }
-                .collect { batik ->
-                    _uiState.value = UiState.Success(batik)
+                .collect {
+                    _uiState.value = it
                 }
         }
     }

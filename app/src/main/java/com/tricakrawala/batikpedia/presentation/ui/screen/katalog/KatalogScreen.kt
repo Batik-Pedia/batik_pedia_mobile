@@ -43,7 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.KatalogBatik
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.presentation.model.katalog.KatalogViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
@@ -58,7 +58,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun KatalogScreen(
     viewModel: KatalogViewModel = hiltViewModel(),
-    navToDetail : (Long) -> Unit,
+    navToDetail : (Int) -> Unit,
     navController : NavHostController,
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
@@ -85,8 +85,8 @@ fun KatalogScreen(
 @Composable
 fun KatalogContent(
     modifier: Modifier = Modifier,
-    listBatik: List<KatalogBatik>,
-    navToDetail : (Long) -> Unit,
+    listBatik: List<KatalogBatikItem>,
+    navToDetail : (Int) -> Unit,
     navController : NavHostController,
 ) {
     var query by remember { mutableStateOf("") }
@@ -176,8 +176,8 @@ fun KatalogContent(
                 items(listBatik) { data ->
                     KatalogItemRow(
                         image = data.image,
-                        motif = data.namaMotif,
-                        jenis = data.jenisBatik,
+                        motif = data.namaBatik,
+                        jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
                         modifier = modifier.clickable { navToDetail(data.idBatik) }
                     )
                 }
@@ -192,18 +192,7 @@ fun KatalogContent(
 @Preview
 @Composable
 private fun preview() {
-    val dummyBatik = listOf(
-        KatalogBatik(1, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(2, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(3, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(4, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(5, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(6, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(7, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(8, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-        KatalogBatik(9, R.drawable.batik1, "Mega Mendung", "Batik Tradisional"),
-    )
     BatikPediaTheme {
-        KatalogContent(listBatik = dummyBatik, navToDetail = {}, navController = rememberNavController())
+        KatalogContent(listBatik = emptyList(), navToDetail = {}, navController = rememberNavController())
     }
 }

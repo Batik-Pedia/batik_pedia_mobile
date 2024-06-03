@@ -1,6 +1,5 @@
 package com.tricakrawala.batikpedia.presentation.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,12 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tricakrawala.batikpedia.R
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
@@ -26,7 +26,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun KatalogItemRow(
     modifier: Modifier = Modifier,
-    image: Int,
+    image: String,
     motif: String,
     jenis: String,
 ) {
@@ -36,8 +36,11 @@ fun KatalogItemRow(
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
     ) {
-        Image(
-            painter = painterResource(id = image),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(image)
+                .crossfade(true)
+                .build(),
             contentDescription = "gambar motif batik",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -75,7 +78,7 @@ fun KatalogItemRow(
 private fun preview() {
     BatikPediaTheme {
         KatalogItemRow(
-            image = R.drawable.batik1,
+            image = "R.drawable.batik1",
             motif = "Mega Mendung",
             jenis = "Batik Tradisional"
         )

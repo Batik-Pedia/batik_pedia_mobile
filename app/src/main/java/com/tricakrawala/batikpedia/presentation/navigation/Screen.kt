@@ -25,11 +25,11 @@ sealed class Screen(val route : String) {
     object Katalog : Screen("katalog")
 
     object DetailBatik : Screen("katalog/{idBatik}"){
-        fun createRoute(idBatik : Long) = "katalog/$idBatik"
+        fun createRoute(idBatik : Int) = "katalog/$idBatik"
     }
 
     object DetailBatikFull : Screen("katalog/{idBatik}/{idBatikFull}"){
-        fun createRoute(idBatik : Long, idBatikFull : Long) = "katalog/$idBatik/$idBatikFull"
+        fun createRoute(idBatik : Int, idBatikFull : Int) = "katalog/$idBatik/$idBatikFull"
     }
     object Edukasi : Screen("edukasi")
 

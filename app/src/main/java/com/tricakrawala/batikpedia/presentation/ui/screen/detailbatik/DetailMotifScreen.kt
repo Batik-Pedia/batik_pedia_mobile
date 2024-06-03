@@ -53,16 +53,16 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
 @Composable
 fun DetailMotifScreen(
-    idBatik: Long,
+    idBatik: Int,
     viewModel: DetailBatikViewModel = hiltViewModel(),
-    navToBatikFullDetail: (Long) -> Unit,
+    navToBatikFullDetail: (Int) -> Unit,
     navController: NavHostController,
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
         if (uiState is UiState.Loading) {
-            viewModel.getAllWisata(idBatik)
+            viewModel.getDetailBatik(idBatik)
         }
     }
 
@@ -71,11 +71,12 @@ fun DetailMotifScreen(
         is UiState.Error -> {}
         is UiState.Success -> {
             DetailMotifContent(
-                imageBatik = batik.data.image,
-                titleBatik = batik.data.namaMotif,
+               image = batik.data.image,
+                idBatik = batik.data.idBatik,
+                namaBatik = batik.data.namaBatik,
+                detailBatik = batik.data.detailBatik,
                 navToBatikFullDetail = navToBatikFullDetail,
                 navController = navController,
-                idBatik = batik.data.idBatik
             )
         }
 
@@ -88,10 +89,11 @@ fun DetailMotifScreen(
 @Composable
 fun DetailMotifContent(
     modifier: Modifier = Modifier,
-    idBatik: Long,
-    imageBatik: Int,
-    titleBatik: String,
-    navToBatikFullDetail: (Long) -> Unit,
+    image : String,
+    idBatik: Int,
+    namaBatik: String,
+    detailBatik: String,
+    navToBatikFullDetail: (Int) -> Unit,
     navController: NavHostController,
 ) {
 
@@ -145,29 +147,27 @@ fun DetailMotifContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-            ImgDetailBig(image = imageBatik, text = titleBatik, modifier = Modifier)
+                ImgDetailBig(image =image, text = stringResource(id = R.string.motif_batik_detail, namaBatik), modifier = Modifier)
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Box {
+                    TextWithCard(
+                        title = stringResource(id = R.string.tentang_motif_batik),
+                        text = detailBatik
+                    )
 
-            Box {
-                TextWithCard(
-                    title = stringResource(id = R.string.tentang_motif_batik),
-                    text = stringResource(id = R.string.tentang_motif)
-                )
-
-                Text(
-                    text = stringResource(id = R.string.selengkapnya),
-                    fontFamily = poppinsFontFamily,
-                    fontWeight = FontWeight.Normal,
-                    color = primary,
-                    fontSize = 10.sp,
-                    modifier = modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .align(Alignment.BottomEnd)
-                        .clickable { navToBatikFullDetail(idBatik) }
-                )
-            }
-
+                    Text(
+                        text = stringResource(id = R.string.selengkapnya),
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.Normal,
+                        color = primary,
+                        fontSize = 10.sp,
+                        modifier = modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .align(Alignment.BottomEnd)
+                            .clickable { navToBatikFullDetail(idBatik) }
+                    )
+                }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -185,10 +185,11 @@ fun DetailMotifContent(
 @Preview(showBackground = true)
 private fun Preview() {
     DetailMotifContent(
-        imageBatik = R.drawable.batik1,
-        titleBatik = "Motif kawung",
+        idBatik = 1,
+        image = "",
+        namaBatik = "Batik 1",
+        detailBatik = "Detail Batik 1",
         navController = rememberNavController(),
         navToBatikFullDetail = {},
-        idBatik = 1L
     )
 }

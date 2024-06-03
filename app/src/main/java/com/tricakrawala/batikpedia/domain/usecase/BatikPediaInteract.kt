@@ -2,6 +2,8 @@ package com.tricakrawala.batikpedia.domain.usecase
 
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
 import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.model.KursusBatik
@@ -26,9 +28,9 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getAllRekomendasi(): Flow<List<Rekomendasi>> = repository.getAllRekomendasi()
 
-    override fun getAllBatik(): Flow<List<KatalogBatik>> = repository.getAllBatik()
+    override fun getAllBatik(): Flow<UiState<List<KatalogBatikItem>>> = repository.getAllBatik()
 
-    override suspend fun getBatikById(idBatik: Long): KatalogBatik = repository.getBatikById(idBatik)
+    override  fun getBatikById(idBatik: Int): Flow<UiState<KatalogId>> = repository.getBatikById(idBatik)
 
     override fun getAllWisata(): Flow<List<Wisata>> = repository.getAllWisata()
 

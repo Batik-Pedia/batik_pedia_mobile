@@ -43,4 +43,6 @@
     <string name="wilayah">Wilayah</string>
     <string name="deskrip">Deskripsi</string>
     <string name="identifikasi">Identifikasi</string>
+    <string name="jBatik">Batik %s</string>
+    <string name="motif_batik_detail">Motif Batik %s</string>
 </resources>

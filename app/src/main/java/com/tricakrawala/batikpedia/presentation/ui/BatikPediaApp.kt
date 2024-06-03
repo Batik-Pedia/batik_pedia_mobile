@@ -114,10 +114,10 @@ fun BatikPediaApp(
             }
             composable(
                 Screen.DetailBatik.route,
-                arguments = listOf(navArgument("idBatik") { type = NavType.LongType }),
+                arguments = listOf(navArgument("idBatik") { type = NavType.IntType }),
             )
             {
-                val id = it.arguments?.getLong("idBatik") ?: -1L
+                val id = it.arguments?.getInt("idBatik") ?: 0
                 DetailMotifScreen(
                     idBatik = id,
                     navController = navController,
@@ -127,9 +127,9 @@ fun BatikPediaApp(
             }
             composable(
                 Screen.DetailBatikFull.route,
-                arguments = listOf(navArgument("idBatikFull") { type = NavType.LongType }),
+                arguments = listOf(navArgument("idBatikFull") { type = NavType.IntType }),
             ) {
-                val id = it.arguments?.getLong("idBatikFull") ?: -1L
+                val id = it.arguments?.getInt("idBatikFull") ?: 0
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
             }
 
@@ -195,7 +195,7 @@ fun BatikPediaApp(
                 arguments = listOf(navArgument("idKursus") { type = NavType.LongType }),
             )
             {
-                val id = it.arguments?.getLong("idKursus") ?: -1L
+                val id = it.arguments?.getInt("idKursus") ?: 0
                 DetailKursusScreen(
                     idKursus = id,
                     navController = navController,
@@ -205,9 +205,9 @@ fun BatikPediaApp(
             }
             composable(
                 Screen.DetailBatikFull.route,
-                arguments = listOf(navArgument("idBatikFull") { type = NavType.LongType }),
+                arguments = listOf(navArgument("idBatikFull") { type = NavType.IntType }),
             ) {
-                val id = it.arguments?.getLong("idBatikFull") ?: -1L
+                val id = it.arguments?.getInt("idBatikFull") ?: 0
                 DetailMotifBatikFullScreen(idBatik = id, navController = navController)
             }
 

@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
 import com.tricakrawala.batikpedia.presentation.model.detailbatik.DetailBatikViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.ImgDetailBig
@@ -51,7 +52,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun DetailMotifBatikFullScreen(
     viewModel: DetailBatikViewModel = hiltViewModel(),
-    idBatik : Long,
+    idBatik : Int,
     navController: NavHostController,
 ){
 
@@ -59,7 +60,7 @@ fun DetailMotifBatikFullScreen(
 
     LaunchedEffect(true) {
         if (uiState is UiState.Loading){
-            viewModel.getAllWisata(idBatik)
+            viewModel.getDetailBatik(idBatik)
         }
     }
 
@@ -67,7 +68,7 @@ fun DetailMotifBatikFullScreen(
 
         is UiState.Error -> {}
         is UiState.Success -> {
-            DetailMotifBatikFullContent(imageBatik = batik.data.image, titleBatik = batik.data.namaMotif, navController = navController)
+            DetailMotifBatikFullContent(batik = batik.data, navController = navController)
         }
         else -> {}
     }
@@ -77,8 +78,7 @@ fun DetailMotifBatikFullScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailMotifBatikFullContent(
-    imageBatik : Int,
-    titleBatik : String,
+    batik : KatalogId? = null,
     navController : NavHostController,
 
 ){
@@ -133,20 +133,23 @@ fun DetailMotifBatikFullContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-            ImgDetailBig(image = imageBatik, text = titleBatik, modifier = Modifier)
+            if (batik != null){
+                ImgDetailBig(image = batik.image, text = batik.namaBatik, modifier = Modifier)
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            TextWithCard(title = stringResource(id = R.string.sejarah), text = stringResource(id = R.string.sejarah_detail))
+                TextWithCard(title = stringResource(id = R.string.sejarah), text = batik.sejarahBatik)
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            TextWithCard(title = stringResource(id = R.string.penggunaan), text = stringResource(id = R.string.penggunaan_detail))
+                TextWithCard(title = stringResource(id = R.string.penggunaan), text = batik.penggunaan)
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            TextWithCard(title = stringResource(id = R.string.makna), text = stringResource(id = R.string.makna_detail))
-            
+                TextWithCard(title = stringResource(id = R.string.makna), text = batik.makna)
+
+            }
+
         }
     }
 
@@ -156,6 +159,6 @@ fun DetailMotifBatikFullContent(
 @Preview
 private fun Preview(){
     BatikPediaTheme {
-        DetailMotifBatikFullContent(imageBatik = R.drawable.batik1, titleBatik = "Batik Kawung", navController = rememberNavController())
+        DetailMotifBatikFullContent(navController = rememberNavController())
     }
 }

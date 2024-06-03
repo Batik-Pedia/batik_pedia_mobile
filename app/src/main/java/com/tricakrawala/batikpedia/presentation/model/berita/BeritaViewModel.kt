@@ -37,7 +37,7 @@ class BeritaViewModel @Inject constructor(private val berita: BatikPediaUseCase)
 
     fun getDetailBerita(idBerita: Int) {
         viewModelScope.launch {
-            val data = berita.getBeritaById(idBerita).catch {
+            berita.getBeritaById(idBerita).catch {
                 _uiStateDetail.value = UiState.Error(it.message ?: "Unknown error")
             }
                 .collect {

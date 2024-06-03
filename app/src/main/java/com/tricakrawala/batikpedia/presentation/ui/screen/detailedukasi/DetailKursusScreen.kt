@@ -53,16 +53,16 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
 @Composable
 fun DetailKursusScreen(
-    idKursus: Long,
+    idKursus: Int,
     viewModel: DetailKursusViewModel = hiltViewModel(),
-    navToBatikFullDetail: (Long) -> Unit,
+    navToBatikFullDetail: (Int) -> Unit,
     navController: NavHostController,
 ) {
     val uiStateKursus by viewModel.uiState.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
         if (uiStateKursus is UiState.Loading) {
-            viewModel.getAllKursusDetail(idKursus)
+            viewModel.getAllKursusDetail(idKursus.toLong())
         }
     }
 
@@ -88,10 +88,10 @@ fun DetailKursusScreen(
 @Composable
 fun DetailKursusContent(
     modifier: Modifier = Modifier,
-    idKursus: Long,
+    idKursus: Int,
     imageKursus: Int,
     titleKursus: String,
-    navToBatikFullDetail: (Long) -> Unit,
+    navToBatikFullDetail: (Int) -> Unit,
     navController: NavHostController,
 ) {
 
@@ -191,6 +191,6 @@ private fun Preview() {
         titleKursus = "Motif kawung",
         navController = rememberNavController(),
         navToBatikFullDetail = {},
-        idKursus = 1L
+        idKursus =0
     )
 }
