@@ -4,6 +4,7 @@ import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.domain.model.Berita
@@ -26,7 +27,7 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getSession(): Flow<UserModel> = repository.getSession()
 
-    override fun getAllNusantara(): Flow<List<Nusantara>> = repository.getAllNusantara()
+    override fun getAllNusantara(): Flow<UiState<List<ProvinsiItem>>> = repository.getAllNusantara()
 
     override fun getAllRekomendasi(): Flow<List<Rekomendasi>> = repository.getAllRekomendasi()
 

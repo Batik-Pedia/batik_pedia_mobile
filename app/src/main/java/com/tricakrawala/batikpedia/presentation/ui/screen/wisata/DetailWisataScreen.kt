@@ -71,7 +71,9 @@ fun DetailWisataScreen(
             DetailWisataContent(navController = navController, wisata = wisata.data)
         }
 
-        else -> {}
+        else -> {
+
+        }
     }
 }
 

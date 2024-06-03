@@ -44,7 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.Nusantara
+import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.presentation.model.provinsi.ProvinsiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.ProvinsiItemRow
@@ -74,6 +74,10 @@ fun ListProvinsiScreen(
         }
 
         is UiState.Error -> {}
+
+        is UiState.Loading -> {
+
+        }
         else -> {
 
         }
@@ -85,7 +89,7 @@ fun ListProvinsiScreen(
 @Composable
 fun ListProvinsiContent(
     modifier: Modifier = Modifier,
-    listProvinsi : List<Nusantara>,
+    listProvinsi : List<ProvinsiItem>,
     navigateToDetail: (Long) -> Unit,
     navController : NavHostController,
 ){
@@ -158,7 +162,7 @@ fun ListProvinsiContent(
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
                 items(listProvinsi){data ->
-                    ProvinsiItemRow(image = "data.image", provinsi = data.provinsi, modifier = modifier.clickable { navigateToDetail(data.idNusantara)})
+                    ProvinsiItemRow(image = data.imgProvinsi, provinsi = data.namaProvinsi, modifier = modifier.clickable { navigateToDetail(data.idProvinsi.toLong())})
                 }
             }
 
@@ -170,15 +174,8 @@ fun ListProvinsiContent(
 @Preview(showBackground = true)
 @Composable
 private fun preview(){
-    val dummyProvinsi = listOf(
-        Nusantara(1, R.drawable.yogyakarta, "Yogyakarta",1,1),
-        Nusantara(2, R.drawable.yogyakarta, "Yogyakarta",2,2),
-        Nusantara(3, R.drawable.yogyakarta, "Yogyakarta",3,3),
-        Nusantara(4, R.drawable.yogyakarta, "Yogyakarta",4,4),
-        Nusantara(5, R.drawable.yogyakarta, "Yogyakarta",5,5),
-    )
     BatikPediaTheme {
 
-        ListProvinsiContent(listProvinsi = dummyProvinsi, navController = rememberNavController(), navigateToDetail = {})
+        ListProvinsiContent(listProvinsi = emptyList(), navController = rememberNavController(), navigateToDetail = {})
     }
 }

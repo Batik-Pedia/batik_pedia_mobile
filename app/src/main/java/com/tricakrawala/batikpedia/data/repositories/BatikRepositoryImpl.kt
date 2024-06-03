@@ -6,10 +6,9 @@ import com.tricakrawala.batikpedia.data.resource.remote.RemoteDataSource
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
-import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
-import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.model.KursusBatik
@@ -17,6 +16,7 @@ import com.tricakrawala.batikpedia.domain.model.Nusantara
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.model.Wisata
+import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
 import kotlinx.coroutines.Dispatchers
@@ -82,9 +82,16 @@ class BatikRepositoryImpl @Inject constructor(private val preference: UserPrefer
         return preference.getSession()
     }
 
-    override fun getAllNusantara(): Flow<List<Nusantara>> {
-        return flowOf(nusantaraList)
-    }
+    override fun getAllNusantara(): Flow<UiState<List<ProvinsiItem>>> = flow<UiState<List<ProvinsiItem>>> {
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getAllProvinsi()
+            val result = response.values
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
 
     override fun getAllRekomendasi(): Flow<List<Rekomendasi>> {
         return flowOf(rekomendasiList)

@@ -3,11 +3,10 @@ package com.tricakrawala.batikpedia.presentation.model.provinsi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
-import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.model.Nusantara
-import com.tricakrawala.batikpedia.domain.model.Wisata
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,9 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseCase) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<UiState<List<Nusantara>>> =
+    private val _uiState: MutableStateFlow<UiState<List<ProvinsiItem>>> =
         MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState<List<Nusantara>>> get() = _uiState
+    val uiState: StateFlow<UiState<List<ProvinsiItem>>> get() = _uiState
 
     private val _uiStateDetail: MutableStateFlow<UiState<Nusantara>> =
         MutableStateFlow(UiState.Loading)
@@ -49,7 +48,7 @@ class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseC
                     _uiState.value = UiState.Error(it.message.toString())
                 }
                 .collect { nusantara ->
-                    _uiState.value = UiState.Success(nusantara)
+                    _uiState.value = nusantara
                 }
         }
     }

@@ -38,10 +38,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.Nusantara
+import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.presentation.model.home.HomeViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
+import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.CardBerita
 import com.tricakrawala.batikpedia.presentation.ui.components.NavbarHome
 import com.tricakrawala.batikpedia.presentation.ui.components.NusantaraItemRow
@@ -57,14 +58,14 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-    val uiStateNusantara by viewModel.uiStateNusantara.collectAsState(initial = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
-    val uiStateRekomendasi by viewModel.uiStateRekomendasi.collectAsState(initial = com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading)
+    val uiStateNusantara by viewModel.uiStateNusantara.collectAsState(initial = UiState.Loading)
+    val uiStateRekomendasi by viewModel.uiStateRekomendasi.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (uiStateNusantara is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading) {
+        if (uiStateNusantara is UiState.Loading) {
             viewModel.getAllNusantara()
         }
-        if (uiStateRekomendasi is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Loading) {
+        if (uiStateRekomendasi is UiState.Loading) {
             viewModel.getAllRekomendasi()
         }
     }
@@ -75,10 +76,10 @@ fun HomeScreen(
             .verticalScroll(rememberScrollState())
     ) {
         when (val nusantaraState = uiStateNusantara) {
-            is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success -> {
+            is UiState.Success -> {
                 val listNusantara = nusantaraState.data
                 when (val rekomendasiState = uiStateRekomendasi) {
-                    is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Success -> {
+                    is UiState.Success -> {
                         val listRekomendasi = rekomendasiState.data
                         HomeContent(
                             navigateToNusantara = navigateToNusantara,
@@ -89,13 +90,13 @@ fun HomeScreen(
                         )
                     }
 
-                    is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Error -> {}
+                    is UiState.Error -> {}
 
                     else -> {}
                 }
             }
 
-            is com.tricakrawala.batikpedia.presentation.ui.common.UiState.Error -> {}
+            is UiState.Error -> {}
 
             else -> {}
         }
@@ -108,7 +109,7 @@ fun HomeScreen(
 fun HomeContent(
     modifier: Modifier = Modifier,
     navigateToNusantara: (Long) -> Unit,
-    listNusantara: List<Nusantara>,
+    listNusantara: List<ProvinsiItem>,
     listRekomendasi: List<Rekomendasi>,
     navController: NavHostController,
 ) {
@@ -172,9 +173,9 @@ fun HomeContent(
             LazyRow {
                 items(listNusantara) { data ->
                     NusantaraItemRow(
-                        provinsi = data.provinsi,
-                        image = data.image,
-                        modifier = modifier.padding(end = 16.dp).clickable { navigateToNusantara(data.idNusantara) }
+                        provinsi = data.namaProvinsi,
+                        image = data.imgProvinsi,
+                        modifier = modifier.clickable { navigateToNusantara(data.idProvinsi.toLong()) }
                     )
                 }
             }
@@ -209,12 +210,7 @@ fun HomeContent(
 
 @Preview
 @Composable
-private fun preview() {
-
-    val fakeNusantaraList = listOf(
-        Nusantara(1, R.drawable.yogyakarta,"Provinsi 1",1,1),
-        Nusantara(2, R.drawable.yogyakarta,"Provinsi 2",2,2),
-    )
+private fun Preview() {
 
     val fakeRekomendasiList = listOf(
         Rekomendasi(1,R.drawable.rekomendasi1),
@@ -224,6 +220,6 @@ private fun preview() {
     )
 
     BatikPediaTheme {
-        HomeContent(navigateToNusantara = {  }, listNusantara = fakeNusantaraList, listRekomendasi =fakeRekomendasiList, navController = rememberNavController() )
+        HomeContent(navigateToNusantara = {  }, listNusantara = emptyList(), listRekomendasi =fakeRekomendasiList, navController = rememberNavController() )
     }
 }

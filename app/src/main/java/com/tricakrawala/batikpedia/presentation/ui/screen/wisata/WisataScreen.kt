@@ -67,6 +67,7 @@ fun WisataScreen(
         }
 
         is UiState.Error -> {}
+
         else -> {
 
         }
@@ -91,6 +92,7 @@ fun WisataContent(
             .statusBarsPadding()
 
     ) {
+        print("WisataContent: ${listWisata[0].imageWisata}")
         Image(
             painter = painterResource(id = R.drawable.ornamen_batik_beranda),
             contentDescription = "",
@@ -139,7 +141,9 @@ fun WisataContent(
             ) {
                 items(listWisata){data ->
                     ProvinsiItemRow(image = data.imageWisata, provinsi = data.namaWisata, modifier = modifier.clickable { navigateToDetail(data.idWisata.toLong()) })
+
                 }
+
             }
 
         }
