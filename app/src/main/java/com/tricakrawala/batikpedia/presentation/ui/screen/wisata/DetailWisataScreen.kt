@@ -64,7 +64,6 @@ fun DetailWisataScreen(
 
     when(val wisata = uiState){
         is UiState.Error -> {
-
         }
 
         is UiState.Success -> {

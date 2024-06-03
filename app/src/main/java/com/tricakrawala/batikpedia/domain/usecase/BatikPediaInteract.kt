@@ -4,16 +4,13 @@ import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
-import com.tricakrawala.batikpedia.domain.model.Berita
-import com.tricakrawala.batikpedia.domain.model.KatalogBatik
 import com.tricakrawala.batikpedia.domain.model.KursusBatik
-import com.tricakrawala.batikpedia.domain.model.Nusantara
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
-import com.tricakrawala.batikpedia.domain.model.Wisata
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
@@ -42,7 +39,7 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getBeritaById(idBerita: Int): Flow<UiState<BeritaId>> = repository.getBeritaById(idBerita)
 
-    override suspend fun getProvinsiById(idProvinsi: Long): Nusantara = repository.getProvinsiById(idProvinsi)
+    override fun getProvinsiById(idProvinsi: Int): Flow<UiState<ProvinsiId>> = repository.getProvinsiById(idProvinsi)
 
     override fun getAllKursus(): Flow<List<KursusBatik>> = repository.getAllKursus()
 

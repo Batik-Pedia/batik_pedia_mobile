@@ -49,6 +49,7 @@ import com.tricakrawala.batikpedia.presentation.ui.components.NusantaraItemRow
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
+import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
 
 
 @Composable
@@ -60,13 +61,13 @@ fun HomeScreen(
 ) {
     val uiStateNusantara by viewModel.uiStateNusantara.collectAsState(initial = UiState.Loading)
     val uiStateRekomendasi by viewModel.uiStateRekomendasi.collectAsState(initial = UiState.Loading)
+    val uiStateBerita by viewModel.uiState.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (uiStateNusantara is UiState.Loading) {
+        if (uiStateNusantara is UiState.Loading || uiStateRekomendasi is UiState.Loading || uiStateBerita is UiState.Loading) {
             viewModel.getAllNusantara()
-        }
-        if (uiStateRekomendasi is UiState.Loading) {
             viewModel.getAllRekomendasi()
+            viewModel.getAllBerita()
         }
     }
 
@@ -81,13 +82,21 @@ fun HomeScreen(
                 when (val rekomendasiState = uiStateRekomendasi) {
                     is UiState.Success -> {
                         val listRekomendasi = rekomendasiState.data
-                        HomeContent(
-                            navigateToNusantara = navigateToNusantara,
-                            listNusantara = listNusantara,
-                            listRekomendasi = listRekomendasi,
-                            modifier = Modifier.fillMaxSize(),
-                            navController = navController
-                        )
+                        when(val beritaState = uiStateBerita) {
+                            is UiState.Error -> {}
+                            UiState.Loading -> {}
+                            is UiState.Success -> { HomeContent(
+                                navigateToNusantara = navigateToNusantara,
+                                listNusantara = listNusantara,
+                                listRekomendasi = listRekomendasi,
+                                berita = beritaState.data,
+                                modifier = Modifier.fillMaxSize(),
+                                navController = navController
+                            )
+                            }
+                        }
+
+
                     }
 
                     is UiState.Error -> {}
@@ -111,8 +120,10 @@ fun HomeContent(
     navigateToNusantara: (Long) -> Unit,
     listNusantara: List<ProvinsiItem>,
     listRekomendasi: List<Rekomendasi>,
+    berita : List<BeritaItem>,
     navController: NavHostController,
 ) {
+    val randomBerita = berita.shuffled().firstOrNull()
 
     Box(
         modifier = Modifier
@@ -160,8 +171,8 @@ fun HomeContent(
 
             ) {
                 CardBerita(
-                    image = R.drawable.fake_berita_image,
-                    text = "Melihat proses pembuatan batik tulis dan cap di kauman solo",
+                    image = randomBerita?.imageBerita ?:"",
+                    text = randomBerita?.namaBerita ?: "",
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(horizontal = 12.dp, vertical = 16.dp)
@@ -220,6 +231,6 @@ private fun Preview() {
     )
 
     BatikPediaTheme {
-        HomeContent(navigateToNusantara = {  }, listNusantara = emptyList(), listRekomendasi =fakeRekomendasiList, navController = rememberNavController() )
+        HomeContent(navigateToNusantara = {  }, listNusantara = emptyList(), listRekomendasi =fakeRekomendasiList, navController = rememberNavController() , berita = emptyList())
     }
 }

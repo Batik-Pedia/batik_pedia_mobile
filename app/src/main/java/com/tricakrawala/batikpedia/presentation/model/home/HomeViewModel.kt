@@ -6,6 +6,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +25,9 @@ class HomeViewModel @Inject constructor(private val useCase : BatikPediaUseCase)
     private val _uiStateRekomendasi: MutableStateFlow<UiState<List<Rekomendasi>>> =
         MutableStateFlow(UiState.Loading)
     val uiStateRekomendasi: StateFlow<UiState<List<Rekomendasi>>> get() = _uiStateRekomendasi
+
+    private val _uiState = MutableStateFlow<UiState<List<BeritaItem>>>(UiState.Loading)
+    val uiState: StateFlow<UiState<List<BeritaItem>>> get() = _uiState
 
     fun getAllNusantara() {
         viewModelScope.launch {
@@ -46,6 +50,18 @@ class HomeViewModel @Inject constructor(private val useCase : BatikPediaUseCase)
                 }
                 .collect { rekomendasi ->
                     _uiStateRekomendasi.value = UiState.Success(rekomendasi)
+                }
+        }
+    }
+
+    fun getAllBerita() {
+        viewModelScope.launch {
+            useCase.getAllBerita()
+                .catch {
+                    _uiState.value = UiState.Error(it.message.toString())
+                }
+                .collect {
+                    _uiState.value = it
                 }
         }
     }

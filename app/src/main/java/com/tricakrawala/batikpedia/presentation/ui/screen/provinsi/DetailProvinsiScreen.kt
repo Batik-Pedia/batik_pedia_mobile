@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -69,15 +70,9 @@ fun DetailProvinsiScreen(
     val uiStateWisata by viewModel.uiStateWisata.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (uiState is UiState.Loading) {
+        if (uiState is UiState.Loading || uiStateWisata is UiState.Loading || uiStateBatik is UiState.Loading) {
             viewModel.getProvinsiById(idProvinsi)
-        }
-
-        if (uiStateBatik is UiState.Loading) {
             viewModel.getAllBatik()
-        }
-
-        if (uiStateWisata is UiState.Loading) {
             viewModel.getAllWisata()
         }
 
@@ -94,11 +89,12 @@ fun DetailProvinsiScreen(
                         is UiState.Success -> {
                             DetailProvinsiContent(
                                 navController = navController,
-                                image = "provinsi.data.image",
-                                textContent = provinsi.data.provinsi,
+                                image = provinsi.data.imgProvinsi,
+                                textContent = provinsi.data.namaProvinsi,
                                 listBatik = batik.data,
                                 listWisata = wisata.data,
-                                navigateToWisata = navigateToWisata
+                                navigateToWisata = navigateToWisata,
+                                detailProv = provinsi.data.detailProvinsi
                             )
 
                         }
@@ -126,6 +122,7 @@ fun DetailProvinsiContent(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     image: String,
+    detailProv : String,
     listBatik: List<KatalogBatikItem>,
     listWisata: List<WisataItem>,
     textContent: String,
@@ -137,6 +134,7 @@ fun DetailProvinsiContent(
             .background(background2)
             .fillMaxSize()
             .statusBarsPadding()
+            .navigationBarsPadding()
             .verticalScroll(rememberScrollState())
 
     ) {
@@ -184,7 +182,7 @@ fun DetailProvinsiContent(
         ) {
             ImgDetailBig(image = image, text = textContent, modifier = Modifier)
             Spacer(modifier = Modifier.height(8.dp))
-            TextWithCard(text = stringResource(id = R.string.tentang_yogya))
+            TextWithCard(text = detailProv)
 
             Spacer(modifier = Modifier.height(8.dp))
             Column(
@@ -231,7 +229,7 @@ fun DetailProvinsiContent(
                 ) {
 
                     items(listWisata){wisata ->
-                        ImgRowDetail(image = "wisata.image", modifier = modifier.padding(end = 16.dp).clickable { navigateToWisata(wisata.idWisata.toLong()) })
+                        ImgRowDetail(image = wisata.imageWisata, modifier = modifier.padding(end = 16.dp).clickable { navigateToWisata(wisata.idWisata.toLong()) })
                     }
                 }
 
@@ -244,7 +242,7 @@ fun DetailProvinsiContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun preview() {
+private fun Preview() {
 
 
     BatikPediaTheme {
@@ -254,7 +252,8 @@ private fun preview() {
             textContent = "Yogyakarta",
             listBatik = emptyList(),
             listWisata = emptyList(),
-            navigateToWisata = {}
+            navigateToWisata = {},
+            detailProv = ""
         )
     }
 }
