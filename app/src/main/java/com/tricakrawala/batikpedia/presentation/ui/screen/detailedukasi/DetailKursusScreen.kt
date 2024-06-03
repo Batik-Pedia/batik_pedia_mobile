@@ -53,9 +53,8 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
 @Composable
 fun DetailKursusScreen(
-    idKursus: Int,
+    idKursus: Long,
     viewModel: DetailKursusViewModel = hiltViewModel(),
-    navToBatikFullDetail: (Int) -> Unit,
     navController: NavHostController,
 ) {
     val uiStateKursus by viewModel.uiState.collectAsState(initial = UiState.Loading)
@@ -73,7 +72,6 @@ fun DetailKursusScreen(
             DetailKursusContent(
                 imageKursus = kursus.data.image,
                 titleKursus = kursus.data.kursus,
-                navToBatikFullDetail = navToBatikFullDetail,
                 navController = navController,
                 idKursus = idKursus
             )
@@ -88,10 +86,9 @@ fun DetailKursusScreen(
 @Composable
 fun DetailKursusContent(
     modifier: Modifier = Modifier,
-    idKursus: Int,
+    idKursus: Long,
     imageKursus: Int,
     titleKursus: String,
-    navToBatikFullDetail: (Int) -> Unit,
     navController: NavHostController,
 ) {
 
@@ -176,7 +173,7 @@ fun DetailKursusContent(
                     modifier = modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .align(Alignment.BottomEnd)
-                        .clickable { navToBatikFullDetail(idKursus) }
+                        .clickable {  }
                 )
             }
         }
@@ -190,7 +187,6 @@ private fun Preview() {
         imageKursus = R.drawable.batik1,
         titleKursus = "Motif kawung",
         navController = rememberNavController(),
-        navToBatikFullDetail = {},
         idKursus =0
     )
 }

@@ -2,6 +2,7 @@ package com.tricakrawala.batikpedia.presentation.model.edukasi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.domain.model.KursusBatik
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
@@ -16,9 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class EdukasiViewModel @Inject constructor(private val edukasi : BatikPediaUseCase) : ViewModel() {
 
-    private val _uiStateKursus: MutableStateFlow<UiState<List<KursusBatik>>> =
+    private val _uiStateKursus: MutableStateFlow<UiState<List<KursusItem>>> =
         MutableStateFlow(UiState.Loading)
-    val uiStateKursus: StateFlow<UiState<List<KursusBatik>>> get() = _uiStateKursus
+    val uiStateKursus: StateFlow<UiState<List<KursusItem>>> get() = _uiStateKursus
 
     private val _uiStateVideoMembatik: MutableStateFlow<UiState<List<VideoMembatik>>> =
         MutableStateFlow(UiState.Loading)
@@ -35,7 +36,7 @@ class EdukasiViewModel @Inject constructor(private val edukasi : BatikPediaUseCa
                     _uiStateKursus.value = UiState.Error(it.message.toString())
                 }
                 .collect { kursus ->
-                    _uiStateKursus.value = UiState.Success(kursus)
+                    _uiStateKursus.value = kursus
                 }
         }
     }

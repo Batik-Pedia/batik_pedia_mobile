@@ -40,7 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.KursusBatik
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
@@ -63,10 +63,8 @@ fun EdukasiScreen(
     val uiStateVideoMembatik by viewModel.uiStateVideoMembatik.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (uiStateKursus is UiState.Loading) {
+        if (uiStateKursus is UiState.Loading || uiStateVideoMembatik is UiState.Loading) {
             viewModel.getAllKursus()
-        }
-        if (uiStateVideoMembatik is UiState.Loading) {
             viewModel.getAllVideo()
         }
     }
@@ -103,7 +101,7 @@ fun EdukasiContent(
     navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
     listVideoMembatik: List<VideoMembatik>,
-    listKursus: List<KursusBatik>,
+    listKursus: List<KursusItem> = emptyList(),
 ) {
 
     Box(
@@ -166,8 +164,8 @@ fun EdukasiContent(
                 items(listKursus) { data ->
                     KursusBox(
                         image = data.image,
-                        kursus = data.kursus,
-                        modifier = modifier.clickable { navigateToDetail(data.idKursus) })
+                        kursus = data.namaKursus,
+                        modifier = modifier.clickable { navigateToDetail(data.idKursus.toLong()) })
                 }
             }}
 
@@ -200,12 +198,6 @@ fun EdukasiContent(
 @Preview
 @Composable
 private fun preview() {
-    val fakeKursusBatikList = listOf(
-        KursusBatik(1, R.drawable.kursus1, "Superprof"),
-        KursusBatik(2, R.drawable.kursus1, "Citra Alam"),
-        KursusBatik(3, R.drawable.kursus1, "Udemy"),
-        KursusBatik(4, R.drawable.kursus2, "Superprof")
-    )
     val fakeVideoMembatik = listOf(
         VideoMembatik(1, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
         VideoMembatik(2, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
@@ -219,7 +211,6 @@ private fun preview() {
         EdukasiContent(
             navController = rememberNavController(),
             navigateToDetail = {  },
-            listKursus = fakeKursusBatikList,
             listVideoMembatik = fakeVideoMembatik
         )
     }

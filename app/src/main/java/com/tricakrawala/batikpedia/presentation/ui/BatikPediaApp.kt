@@ -195,13 +195,10 @@ fun BatikPediaApp(
                 arguments = listOf(navArgument("idKursus") { type = NavType.LongType }),
             )
             {
-                val id = it.arguments?.getInt("idKursus") ?: 0
+                val id = it.arguments?.getLong("idKursus") ?: 0L
                 DetailKursusScreen(
                     idKursus = id,
-                    navController = navController,
-                    navToBatikFullDetail = { idBatikFull ->
-                        navController.navigate(Screen.DetailBatikFull.createRoute(id, idBatikFull))
-                    })
+                    navController = navController,)
             }
             composable(
                 Screen.DetailBatikFull.route,

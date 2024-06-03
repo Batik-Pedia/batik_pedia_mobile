@@ -3,10 +3,9 @@ package com.tricakrawala.batikpedia.presentation.model.berita
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
-import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
-import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

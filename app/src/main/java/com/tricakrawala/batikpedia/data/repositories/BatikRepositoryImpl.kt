@@ -4,8 +4,10 @@ import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.pref.UserPreference
 import com.tricakrawala.batikpedia.data.resource.remote.RemoteDataSource
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
@@ -19,7 +21,6 @@ import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.model.Wisata
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
-import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -177,9 +178,17 @@ class BatikRepositoryImpl @Inject constructor(private val preference: UserPrefer
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getAllKursus(): Flow<List<KursusBatik>> {
-        return flowOf(kursusList)
-    }
+    override fun getAllKursus(): Flow<UiState<List<KursusItem>>> = flow{
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getAllKursus()
+            val result = response.values.kursus
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun getKursusById(idKursus: Long): KursusBatik {
         return kursusList.first { it.idKursus == idKursus }

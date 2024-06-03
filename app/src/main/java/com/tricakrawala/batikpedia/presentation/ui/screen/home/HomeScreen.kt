@@ -49,7 +49,7 @@ import com.tricakrawala.batikpedia.presentation.ui.components.NusantaraItemRow
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
-import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 
 
 @Composable

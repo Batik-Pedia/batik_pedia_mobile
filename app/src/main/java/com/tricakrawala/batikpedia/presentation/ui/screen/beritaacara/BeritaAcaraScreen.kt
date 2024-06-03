@@ -41,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.presentation.model.berita.BeritaViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.BeritaRow
@@ -49,7 +48,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
-import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 
 @Composable
 fun BeritaAcaraScreen(

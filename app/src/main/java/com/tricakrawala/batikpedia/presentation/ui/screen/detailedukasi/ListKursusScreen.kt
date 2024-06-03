@@ -43,8 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.KursusBatik
-import com.tricakrawala.batikpedia.presentation.model.detailedukasi.DetailKursusViewModel
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.KursusBox
@@ -89,7 +88,7 @@ fun ListKursusContent(
     modifier: Modifier = Modifier,
     navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
-    listKursus: List<KursusBatik>,
+    listKursus: List<KursusItem> = emptyList(),
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -164,8 +163,8 @@ fun ListKursusContent(
                 items(listKursus) { data ->
                     KursusBox(
                         image = data.image,
-                        kursus = data.kursus,
-                        modifier = modifier.clickable { navigateToDetail(data.idKursus) })
+                        kursus = data.namaKursus,
+                        modifier = modifier.clickable { navigateToDetail(data.idKursus.toLong()) })
                 }
             }
         }
@@ -176,20 +175,10 @@ fun ListKursusContent(
 @Preview
 @Composable
 private fun preview() {
-    val fakeKursusBatikList = listOf(
-        KursusBatik(1, R.drawable.kursus1, "Superprof"),
-        KursusBatik(2, R.drawable.kursus1, "Citra Alam"),
-        KursusBatik(3, R.drawable.kursus1, "Udemy"),
-        KursusBatik(4, R.drawable.kursus2, "Superprof")
-    )
-
-
-
     BatikPediaTheme {
         ListKursusContent(
             navController = rememberNavController(),
             navigateToDetail = { },
-            listKursus = fakeKursusBatikList
         )
     }
 }

@@ -4,6 +4,7 @@ import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
@@ -13,7 +14,7 @@ import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
-import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,7 +42,7 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getProvinsiById(idProvinsi: Int): Flow<UiState<ProvinsiId>> = repository.getProvinsiById(idProvinsi)
 
-    override fun getAllKursus(): Flow<List<KursusBatik>> = repository.getAllKursus()
+    override fun getAllKursus(): Flow<UiState<List<KursusItem>>> = repository.getAllKursus()
 
     override suspend fun getKursusById(idKursus: Long): KursusBatik = repository.getKursusById(idKursus)
 

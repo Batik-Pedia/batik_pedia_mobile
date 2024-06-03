@@ -3,11 +3,12 @@ package com.tricakrawala.batikpedia.data.resource.remote.retrofit
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaIdResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogIdResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogResponse
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiIdResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataIdResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataResponse
-import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaResponse
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -35,4 +36,7 @@ interface ApiService {
     suspend fun getAllProvinsi() : ProvinsiResponse
     @GET("provinsi/{idProvinsi}")
     suspend fun getDetailProvinsi(@Path("idProvinsi")idProvinsi : Int) : ProvinsiIdResponse
+
+    @GET("kursus")
+    suspend fun getAllKursus() : KursusResponse
 }

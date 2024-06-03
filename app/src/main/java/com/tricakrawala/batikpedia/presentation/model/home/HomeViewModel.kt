@@ -6,7 +6,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
-import com.tricakrawala.restapibatikpedia.data.remote.response.BeritaItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

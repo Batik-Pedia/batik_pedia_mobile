@@ -1,22 +1,22 @@
-package com.tricakrawala.restapibatikpedia.data.remote.response
+package com.tricakrawala.batikpedia.data.resource.remote.response
 
 import com.google.gson.annotations.SerializedName
 
 data class BeritaResponse(
 
 	@field:SerializedName("values")
-	val values: Values
+	val values: ListBerita
 )
 
-data class Values(
+data class ListBerita(
 
-    @field:SerializedName("author")
+	@field:SerializedName("author")
 	val author: String,
 
-    @field:SerializedName("berita")
+	@field:SerializedName("berita")
 	val berita: List<BeritaItem>,
 
-    @field:SerializedName("status")
+	@field:SerializedName("status")
 	val status: Int
 )
 
