@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.Wisata
+import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.presentation.model.wisata.WisataViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.ProvinsiItemRow
@@ -77,7 +77,7 @@ fun WisataScreen(
 @Composable
 fun WisataContent(
     modifier: Modifier = Modifier,
-    listWisata : List<Wisata>,
+    listWisata : List<WisataItem>,
     navigateToDetail : (Long) -> Unit,
 
     ){
@@ -138,7 +138,7 @@ fun WisataContent(
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
                 items(listWisata){data ->
-                    ProvinsiItemRow(image = data.image, provinsi = data.namaWisata, modifier = modifier.clickable { navigateToDetail(data.idWisata) })
+                    ProvinsiItemRow(image = data.imageWisata, provinsi = data.namaWisata, modifier = modifier.clickable { navigateToDetail(data.idWisata.toLong()) })
                 }
             }
 
@@ -149,14 +149,9 @@ fun WisataContent(
 
 @Preview
 @Composable
-private fun preview(){
-    val listWisata = listOf(
-        Wisata(1, R.drawable.wisata1, "Kampung Batik Laweyan"),
-        Wisata(2, R.drawable.wisata1, "Kampung Batik Laweyan"),
-
-    )
+private fun Preview(){
     BatikPediaTheme {
-        WisataContent(listWisata = listWisata) {
+        WisataContent(listWisata = emptyList()) {
 
         }
     }

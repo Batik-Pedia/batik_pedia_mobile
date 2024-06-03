@@ -6,6 +6,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.RemoteDataSource
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.domain.model.Berita
 import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
@@ -110,9 +111,16 @@ class BatikRepositoryImpl @Inject constructor(private val preference: UserPrefer
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getAllWisata(): Flow<List<Wisata>> {
-        return flowOf(wisataList)
-    }
+    override fun getAllWisata(): Flow<UiState<List<WisataItem>>> = flow{
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getAllWisata()
+            val result = response.values.wisata
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun getWisataById(idWisata: Long): Wisata {
         return wisataList.first{it.idWisata == idWisata}

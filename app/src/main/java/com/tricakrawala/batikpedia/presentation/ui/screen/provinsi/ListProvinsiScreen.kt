@@ -158,7 +158,7 @@ fun ListProvinsiContent(
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
                 items(listProvinsi){data ->
-                    ProvinsiItemRow(image = data.image, provinsi = data.provinsi, modifier = modifier.clickable { navigateToDetail(data.idNusantara)})
+                    ProvinsiItemRow(image = "data.image", provinsi = data.provinsi, modifier = modifier.clickable { navigateToDetail(data.idNusantara)})
                 }
             }
 

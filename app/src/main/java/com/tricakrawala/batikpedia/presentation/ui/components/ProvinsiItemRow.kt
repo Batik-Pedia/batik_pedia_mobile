@@ -14,11 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
@@ -27,7 +30,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun ProvinsiItemRow(
     modifier: Modifier = Modifier,
-    image: Int,
+    image: String,
     provinsi: String
 ) {
     Column(
@@ -35,8 +38,11 @@ fun ProvinsiItemRow(
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
     ) {
-        Image(
-            painter = painterResource(id = image),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(image)
+                .crossfade(true)
+                .build(),
             contentDescription = "gambar provinsi",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -64,6 +70,6 @@ fun ProvinsiItemRow(
 @Composable
 private fun Preview(){
     BatikPediaTheme {
-        ProvinsiItemRow(image = R.drawable.yogyakarta, provinsi = "Yogyakarta")
+        ProvinsiItemRow(image = "R.drawable.yogyakarta", provinsi = "Yogyakarta")
     }
 }

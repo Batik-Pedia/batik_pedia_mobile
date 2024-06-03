@@ -45,7 +45,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
-import com.tricakrawala.batikpedia.domain.model.Wisata
+import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.presentation.model.provinsi.ProvinsiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.ImgDetailBig
@@ -127,7 +127,7 @@ fun DetailProvinsiContent(
     navController: NavHostController,
     image: String,
     listBatik: List<KatalogBatikItem>,
-    listWisata: List<Wisata>,
+    listWisata: List<WisataItem>,
     textContent: String,
     navigateToWisata: (Long) -> Unit,
 ) {
@@ -231,7 +231,7 @@ fun DetailProvinsiContent(
                 ) {
 
                     items(listWisata){wisata ->
-                        ImgRowDetail(image = "wisata.image", modifier = modifier.padding(end = 16.dp).clickable { navigateToWisata(wisata.idWisata) })
+                        ImgRowDetail(image = "wisata.image", modifier = modifier.padding(end = 16.dp).clickable { navigateToWisata(wisata.idWisata.toLong()) })
                     }
                 }
 
@@ -245,11 +245,7 @@ fun DetailProvinsiContent(
 @Preview(showBackground = true)
 @Composable
 private fun preview() {
-    val listWisata = listOf(
-        Wisata(1, R.drawable.wisata1, "Kampung Batik Laweyan"),
-        Wisata(2, R.drawable.wisata1, "Kampung Batik Laweyan"),
 
-        )
 
     BatikPediaTheme {
         DetailProvinsiContent(
@@ -257,7 +253,7 @@ private fun preview() {
             image = "R.drawable.yogyakarta",
             textContent = "Yogyakarta",
             listBatik = emptyList(),
-            listWisata = listWisata,
+            listWisata = emptyList(),
             navigateToWisata = {}
         )
     }
