@@ -14,6 +14,7 @@ import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
 import kotlinx.coroutines.flow.Flow
 
 interface BatikPediaUseCase {
@@ -29,6 +30,6 @@ interface BatikPediaUseCase {
     fun getAllBerita() : Flow<UiState<List<BeritaItem>>>
     fun getBeritaById(idBerita : Int) : Flow<UiState<BeritaId>>
     fun getAllKursus(): Flow<UiState<List<KursusItem>>>
-    suspend fun getKursusById(idKursus : Long) : KursusBatik
+    fun getKursusById(idKursus : Int) : Flow<UiState<KursusId>>
     fun getAllVideo(): Flow<List<VideoMembatik>>
 }

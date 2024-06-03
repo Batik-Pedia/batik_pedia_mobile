@@ -7,6 +7,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
@@ -190,9 +191,16 @@ class BatikRepositoryImpl @Inject constructor(private val preference: UserPrefer
 
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun getKursusById(idKursus: Long): KursusBatik {
-        return kursusList.first { it.idKursus == idKursus }
-    }
+    override fun getKursusById(idKursus: Int): Flow<UiState<KursusId>> = flow<UiState<KursusId>> {
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getDetailKursus(idKursus)
+            val result = response.values
+            emit(UiState.Success(result))
+        }catch (e : Exception){
+            emit(UiState.Error(e.message ?:"Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
 
     override fun getAllVideo(): Flow<List<VideoMembatik>> {
         return flowOf(videoList)

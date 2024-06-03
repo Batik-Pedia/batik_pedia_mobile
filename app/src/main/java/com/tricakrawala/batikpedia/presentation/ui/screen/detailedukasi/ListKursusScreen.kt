@@ -174,7 +174,7 @@ fun ListKursusContent(
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     BatikPediaTheme {
         ListKursusContent(
             navController = rememberNavController(),

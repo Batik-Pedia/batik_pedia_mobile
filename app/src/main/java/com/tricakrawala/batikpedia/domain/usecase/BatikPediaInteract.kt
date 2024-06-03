@@ -15,6 +15,7 @@ import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,7 +45,7 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getAllKursus(): Flow<UiState<List<KursusItem>>> = repository.getAllKursus()
 
-    override suspend fun getKursusById(idKursus: Long): KursusBatik = repository.getKursusById(idKursus)
+    override  fun getKursusById(idKursus: Int): Flow<UiState<KursusId>> = repository.getKursusById(idKursus)
 
     override fun getAllVideo(): Flow<List<VideoMembatik>> = repository.getAllVideo()
 }

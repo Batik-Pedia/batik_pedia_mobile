@@ -9,6 +9,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiRespons
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataIdResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaResponse
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusIdResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -39,4 +40,8 @@ interface ApiService {
 
     @GET("kursus")
     suspend fun getAllKursus() : KursusResponse
+
+    @GET("kursus/{idKursus}")
+    suspend fun getDetailKursus(@Path("idKursus")idKursus : Int) : KursusIdResponse
+
 }

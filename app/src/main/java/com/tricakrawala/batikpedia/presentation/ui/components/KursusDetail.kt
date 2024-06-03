@@ -1,6 +1,5 @@
 package com.tricakrawala.batikpedia.presentation.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tricakrawala.batikpedia.R
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
@@ -34,15 +34,18 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textSecondary
 @Composable
 fun KursusDetail(
     modifier: Modifier = Modifier,
-    image: Int,
+    image: String,
     ) {
         Column(
             modifier = modifier
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.White)
         ) {
-            Image(
-                painter = painterResource(id = image),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(image)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "gambar provinsi",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -50,15 +53,6 @@ fun KursusDetail(
                     .padding(8.dp)
                     .height(140.dp)
                     .clip(RoundedCornerShape(10.dp))
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.splash_indicator_1),
-                contentDescription = "indicator",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 16.dp)
             )
 
         }
@@ -168,6 +162,6 @@ fun TextInfoKursus(
 @Composable
 private fun Preview(){
     BatikPediaTheme {
-        KursusDetail(image = R.drawable.yogyakarta)
+        KursusDetail(image = "R.drawable.yogyakarta")
     }
 }

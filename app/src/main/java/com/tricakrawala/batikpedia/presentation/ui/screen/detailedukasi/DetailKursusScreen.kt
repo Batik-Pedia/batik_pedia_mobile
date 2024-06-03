@@ -1,6 +1,8 @@
 package com.tricakrawala.batikpedia.presentation.ui.screen.detailedukasi
 
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +46,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.presentation.model.detailedukasi.DetailKursusViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import com.tricakrawala.batikpedia.presentation.ui.components.ButtonLongGray
 import com.tricakrawala.batikpedia.presentation.ui.components.KursusDetail
 import com.tricakrawala.batikpedia.presentation.ui.components.TextInfoKursus
 import com.tricakrawala.batikpedia.presentation.ui.components.TextWithoutCard
@@ -61,7 +65,7 @@ fun DetailKursusScreen(
 
     LaunchedEffect(true) {
         if (uiStateKursus is UiState.Loading) {
-            viewModel.getAllKursusDetail(idKursus.toLong())
+            viewModel.getAllKursusDetail(idKursus)
         }
     }
 
@@ -71,7 +75,9 @@ fun DetailKursusScreen(
         is UiState.Success -> {
             DetailKursusContent(
                 imageKursus = kursus.data.image,
-                titleKursus = kursus.data.kursus,
+                titleKursus = kursus.data.namaKursus,
+                detailKursus = kursus.data.deskripsi,
+                kursusUrl = kursus.data.urlKursus,
                 navController = navController,
                 idKursus = idKursus
             )
@@ -87,10 +93,13 @@ fun DetailKursusScreen(
 fun DetailKursusContent(
     modifier: Modifier = Modifier,
     idKursus: Long,
-    imageKursus: Int,
+    kursusUrl : String = "",
+    imageKursus: String,
+    detailKursus : String = "",
     titleKursus: String,
     navController: NavHostController,
 ) {
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -161,7 +170,7 @@ fun DetailKursusContent(
             Box {
                 TextWithoutCard(
                     title = stringResource(id = R.string.deskrip),
-                    text = stringResource(id = R.string.tentang_motif)
+                    text = detailKursus
                 )
 
                 Text(
@@ -171,12 +180,21 @@ fun DetailKursusContent(
                     color = primary,
                     fontSize = 10.sp,
                     modifier = modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .padding(top = 36.dp)
                         .align(Alignment.BottomEnd)
-                        .clickable {  }
+                        .clickable { }
                 )
+
             }
+            ButtonLongGray(text = stringResource(id = R.string.ikuti_kursus), modifier = modifier.padding(top = 36.dp).clickable {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(kursusUrl)
+                }
+                context.startActivity(intent)
+            })
         }
+
+
     }
 }
 
@@ -184,7 +202,7 @@ fun DetailKursusContent(
 @Preview(showBackground = true)
 private fun Preview() {
     DetailKursusContent(
-        imageKursus = R.drawable.batik1,
+        imageKursus = "R.drawable.batik1",
         titleKursus = "Motif kawung",
         navController = rememberNavController(),
         idKursus =0
