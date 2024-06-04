@@ -83,6 +83,15 @@ fun WisataContent(
     ){
 
     var query by remember { mutableStateOf("") }
+    val filteredList = remember(query, listWisata) {
+        if (query.isEmpty()) {
+            listWisata
+        } else {
+            listWisata.filter {
+                it.namaWisata.contains(query, ignoreCase = true)
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -138,7 +147,7 @@ fun WisataContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
-                items(listWisata){data ->
+                items(filteredList){data ->
                     ProvinsiItemRow(image = data.imageWisata, provinsi = data.namaWisata, modifier = modifier.clickable { navigateToDetail(data.idWisata.toLong()) })
 
                 }

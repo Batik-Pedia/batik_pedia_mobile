@@ -90,6 +90,16 @@ fun KatalogContent(
     navController : NavHostController,
 ) {
     var query by remember { mutableStateOf("") }
+    val filteredList = remember(query, listBatik) {
+        if (query.isEmpty()) {
+            listBatik
+        } else {
+            listBatik.filter {
+                it.namaBatik.contains(query, ignoreCase = true)
+                it.jenisBatik.contains(query, ignoreCase = true)
+            }
+        }
+    }
 
 
     Box(
@@ -173,7 +183,7 @@ fun KatalogContent(
                     .padding(top = 8.dp)
 
             ) {
-                items(listBatik) { data ->
+                items(filteredList) { data ->
                     KatalogItemRow(
                         image = data.image,
                         motif = data.namaBatik,

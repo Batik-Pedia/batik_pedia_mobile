@@ -62,6 +62,7 @@ fun ListProvinsiScreen(
 ){
 
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
+
     LaunchedEffect(true) {
         if (uiState is UiState.Loading) {
             viewModel.getAllNusantara()
@@ -94,6 +95,15 @@ fun ListProvinsiContent(
     navController : NavHostController,
 ){
     var query by remember { mutableStateOf("") }
+    val filteredList = remember(query, listProvinsi) {
+        if (query.isEmpty()) {
+            listProvinsi
+        } else {
+            listProvinsi.filter {
+                it.namaProvinsi.contains(query, ignoreCase = true)
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -161,7 +171,7 @@ fun ListProvinsiContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
-                items(listProvinsi){data ->
+                items(filteredList){data ->
                     ProvinsiItemRow(image = data.imgProvinsi, provinsi = data.namaProvinsi, modifier = modifier.clickable { navigateToDetail(data.idProvinsi.toLong())})
                 }
             }
@@ -173,7 +183,7 @@ fun ListProvinsiContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun preview(){
+private fun Preview(){
     BatikPediaTheme {
 
         ListProvinsiContent(listProvinsi = emptyList(), navController = rememberNavController(), navigateToDetail = {})
