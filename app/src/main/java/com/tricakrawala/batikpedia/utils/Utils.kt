@@ -184,4 +184,20 @@ object Utils {
         )
     }
 
+    val labels = listOf(
+        "Batik Geblek Renteng",
+                "Batik Kawung",
+                "Batik Gentongan",
+                "Batik Simbut",
+               " Batik Megamemendung",
+                "Batik Dayak",
+                "Batik Pring Sedapur",
+                "Batik Parang",
+                "Batik Tujuh Rupa",
+                "Batik Kraton",
+                "Batik Ikat Celup",
+                "Batik Corak Insang"
+
+    )
+
 }
