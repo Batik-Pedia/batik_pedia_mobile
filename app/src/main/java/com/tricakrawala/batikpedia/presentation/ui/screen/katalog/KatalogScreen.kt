@@ -73,7 +73,6 @@ fun KatalogScreen(
             KatalogContent(listBatik = batik.data, navToDetail = navToDetail, navController = navController)
         }
 
-        is UiState.Error -> {}
         else -> {
 
         }

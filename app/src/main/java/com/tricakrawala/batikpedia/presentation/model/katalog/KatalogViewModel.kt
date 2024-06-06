@@ -6,6 +6,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikIte
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -19,8 +20,11 @@ class KatalogViewModel @Inject constructor(private val useCase : BatikPediaUseCa
         MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState<List<KatalogBatikItem>>> get() = _uiState
 
+    init {
+        getAllBatik()
+    }
     fun getAllBatik() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.getAllBatik()
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())

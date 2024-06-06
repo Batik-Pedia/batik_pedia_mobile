@@ -7,6 +7,7 @@ import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -26,7 +27,7 @@ class EdukasiViewModel @Inject constructor(private val edukasi : BatikPediaUseCa
 
 
     fun getAllKursus() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             edukasi.getAllKursus()
                 .catch {
                     _uiStateKursus.value = UiState.Error(it.message.toString())

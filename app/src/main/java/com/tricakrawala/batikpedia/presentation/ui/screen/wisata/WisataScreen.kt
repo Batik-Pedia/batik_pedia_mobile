@@ -65,8 +65,6 @@ fun WisataScreen(
             WisataContent(listWisata = wisata.data, navigateToDetail = navigateToDetail)
         }
 
-        is UiState.Error -> {}
-
         else -> {
 
         }

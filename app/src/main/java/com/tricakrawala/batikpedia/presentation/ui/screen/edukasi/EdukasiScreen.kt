@@ -41,6 +41,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
+import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
@@ -197,21 +198,12 @@ fun EdukasiContent(
 
 @Preview
 @Composable
-private fun preview() {
-    val fakeVideoMembatik = listOf(
-        VideoMembatik(1, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
-        VideoMembatik(2, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
-        VideoMembatik(3, R.drawable.kursus1, "Udemy"),
-        VideoMembatik(4, R.drawable.kursus2, "Superprof")
-    )
-
-
-
+private fun Preview() {
     BatikPediaTheme {
         EdukasiContent(
             navController = rememberNavController(),
             navigateToDetail = {  },
-            listVideoMembatik = fakeVideoMembatik
+            listVideoMembatik = FakeSourceBatik.listVideoMembatik
         )
     }
 }

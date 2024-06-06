@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.presentation.model.home.HomeViewModel
@@ -49,7 +50,6 @@ import com.tricakrawala.batikpedia.presentation.ui.components.NusantaraItemRow
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
-import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 
 
 @Composable
@@ -82,36 +82,36 @@ fun HomeScreen(
                 when (val rekomendasiState = uiStateRekomendasi) {
                     is UiState.Success -> {
                         val listRekomendasi = rekomendasiState.data
-                        when(val beritaState = uiStateBerita) {
+                        when (val beritaState = uiStateBerita) {
                             is UiState.Error -> {}
-                            UiState.Loading -> {}
-                            is UiState.Success -> { HomeContent(
-                                navigateToNusantara = navigateToNusantara,
-                                listNusantara = listNusantara,
-                                listRekomendasi = listRekomendasi,
-                                berita = beritaState.data,
-                                modifier = Modifier.fillMaxSize(),
-                                navController = navController
-                            )
+                            UiState.Loading -> {
+
+                            }
+
+                            is UiState.Success -> {
+                                HomeContent(
+                                    navigateToNusantara = navigateToNusantara,
+                                    listNusantara = listNusantara,
+                                    listRekomendasi = listRekomendasi,
+                                    berita = beritaState.data,
+                                    modifier = Modifier.fillMaxSize(),
+                                    navController = navController,
+                                )
                             }
                         }
 
 
                     }
 
-                    is UiState.Error -> {}
 
                     else -> {}
                 }
             }
 
-            is UiState.Error -> {}
-
             else -> {}
         }
     }
 }
-
 
 
 @Composable
@@ -120,7 +120,7 @@ fun HomeContent(
     navigateToNusantara: (Long) -> Unit,
     listNusantara: List<ProvinsiItem>,
     listRekomendasi: List<Rekomendasi>,
-    berita : List<BeritaItem>,
+    berita: List<BeritaItem>,
     navController: NavHostController,
 ) {
     val randomBerita = berita.shuffled().firstOrNull()
@@ -171,15 +171,20 @@ fun HomeContent(
 
             ) {
                 CardBerita(
-                    image = randomBerita?.imageBerita ?:"",
+                    image = randomBerita?.imageBerita ?: "",
                     text = randomBerita?.namaBerita ?: "",
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(horizontal = 12.dp, vertical = 16.dp)
                 )
             }
-            NavbarHome(textContent = stringResource(id = R.string.jelajahi_nusantara), modifier = Modifier.clickable { navController.navigate(
-                Screen.ToListProvinsi.route)})
+            NavbarHome(
+                textContent = stringResource(id = R.string.jelajahi_nusantara),
+                modifier = Modifier.clickable {
+                    navController.navigate(
+                        Screen.ToListProvinsi.route
+                    )
+                })
 
             LazyRow {
                 items(listNusantara) { data ->
@@ -194,7 +199,7 @@ fun HomeContent(
             NavbarHome(textContent = stringResource(id = R.string.rekomendasi_untuk_anda))
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(count =2),
+                columns = GridCells.Fixed(count = 2),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
@@ -224,13 +229,19 @@ fun HomeContent(
 private fun Preview() {
 
     val fakeRekomendasiList = listOf(
-        Rekomendasi(1,R.drawable.rekomendasi1),
-        Rekomendasi(2,R.drawable.rekomendasi2),
-        Rekomendasi(2,R.drawable.rekomendasi2),
-        Rekomendasi(2,R.drawable.rekomendasi2),
+        Rekomendasi(1, R.drawable.rekomendasi1),
+        Rekomendasi(2, R.drawable.rekomendasi2),
+        Rekomendasi(2, R.drawable.rekomendasi2),
+        Rekomendasi(2, R.drawable.rekomendasi2),
     )
 
     BatikPediaTheme {
-        HomeContent(navigateToNusantara = {  }, listNusantara = emptyList(), listRekomendasi =fakeRekomendasiList, navController = rememberNavController() , berita = emptyList())
+        HomeContent(
+            navigateToNusantara = { },
+            listNusantara = emptyList(),
+            listRekomendasi = fakeRekomendasiList,
+            navController = rememberNavController(),
+            berita = emptyList()
+        )
     }
 }

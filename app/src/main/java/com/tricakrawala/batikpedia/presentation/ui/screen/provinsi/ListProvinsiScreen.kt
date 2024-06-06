@@ -73,15 +73,7 @@ fun ListProvinsiScreen(
         is UiState.Success -> {
             ListProvinsiContent( navigateToDetail = navigateToDetail, listProvinsi = nusantara.data, navController = navController)
         }
-
-        is UiState.Error -> {}
-
-        is UiState.Loading -> {
-
-        }
-        else -> {
-
-        }
+        else -> Unit
     }
 
 }

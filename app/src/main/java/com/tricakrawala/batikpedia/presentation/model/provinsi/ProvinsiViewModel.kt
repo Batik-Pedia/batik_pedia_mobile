@@ -10,6 +10,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -40,9 +41,13 @@ class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseC
         UiState.Loading)
     val uiStateWisataById: StateFlow<UiState<WisataId>> get() = _uiStateWisataById
 
-
+init {
+    getAllNusantara()
+    getAllWisata()
+    getAllBatik()
+}
     fun getAllNusantara() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.getAllNusantara()
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())
@@ -66,7 +71,7 @@ class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseC
     }
 
     fun getAllBatik() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.getAllBatik()
                 .catch {
                     _uiStateBatik.value = UiState.Error(it.message.toString())
@@ -78,7 +83,7 @@ class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseC
     }
 
     fun getAllWisata() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.getAllWisata()
                 .catch {
                     _uiStateWisata.value = UiState.Error(it.message.toString())

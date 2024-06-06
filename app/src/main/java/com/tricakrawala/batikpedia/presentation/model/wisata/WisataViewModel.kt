@@ -7,6 +7,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -24,8 +25,12 @@ class WisataViewModel @Inject constructor(private val useCase : BatikPediaUseCas
         UiState.Loading)
     val uiStateWisataById: StateFlow<UiState<WisataId>> get() = _uiStateWisataById
 
+    init {
+        getAllWisata()
+    }
+
     fun getAllWisata() {
-        viewModelScope.launch {
+        viewModelScope.launch((Dispatchers.IO)) {
             useCase.getAllWisata()
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())

@@ -91,6 +91,15 @@ fun ListKursusContent(
     listKursus: List<KursusItem> = emptyList(),
 ) {
     var query by remember { mutableStateOf("") }
+    val filteredList = remember(query, listKursus) {
+        if (query.isEmpty()) {
+            listKursus
+        } else {
+            listKursus.filter {
+                it.namaKursus.contains(query, ignoreCase = true)
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -160,7 +169,7 @@ fun ListKursusContent(
                     .navigationBarsPadding(),
 
                 ) {
-                items(listKursus) { data ->
+                items(filteredList) { data ->
                     KursusBox(
                         image = data.image,
                         kursus = data.namaKursus,
