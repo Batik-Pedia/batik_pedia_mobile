@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,12 +47,14 @@ import com.tricakrawala.batikpedia.presentation.model.wisata.WisataViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.AtlasItem
 import com.tricakrawala.batikpedia.presentation.ui.components.ImgDetailBig
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.TextWithCard
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailWisataScreen(
     idWisata : Long,
@@ -63,7 +68,17 @@ fun DetailWisataScreen(
     }
 
     when(val wisata = uiState){
-        is UiState.Error -> {
+        is UiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+                }
+            }
         }
 
         is UiState.Success -> {

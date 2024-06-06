@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -51,12 +52,14 @@ import com.tricakrawala.batikpedia.presentation.model.provinsi.ProvinsiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.ImgDetailBig
 import com.tricakrawala.batikpedia.presentation.ui.components.ImgRowDetail
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.TextWithCard
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailProvinsiScreen(
     idProvinsi: Long,
@@ -78,41 +81,38 @@ fun DetailProvinsiScreen(
 
     }
 
-    when (val provinsi = uiState) {
-        is UiState.Success -> {
-            when (val batik = uiStateBatik) {
-                is UiState.Error -> {}
-                is UiState.Success -> {
-                    when (val wisata = uiStateWisata) {
+    val provinsiState = uiState
+    val batikState = uiStateBatik
+    val wisataState = uiStateWisata
 
-                        is UiState.Error -> {}
-                        is UiState.Success -> {
-                            DetailProvinsiContent(
-                                navController = navController,
-                                image = provinsi.data.imgProvinsi,
-                                textContent = provinsi.data.namaProvinsi,
-                                listBatik = batik.data,
-                                listWisata = wisata.data,
-                                navigateToWisata = navigateToWisata,
-                                detailProv = provinsi.data.detailProvinsi
-                            )
-
-                        }
-
-                        else -> {}
-                    }
+    when {
+        provinsiState is UiState.Success && batikState is UiState.Success && wisataState is UiState.Success -> {
+            DetailProvinsiContent(
+                navController = navController,
+                image = provinsiState.data.imgProvinsi,
+                textContent = provinsiState.data.namaProvinsi,
+                listBatik = batikState.data,
+                listWisata = wisataState.data,
+                navigateToWisata = navigateToWisata,
+                detailProv = provinsiState.data.detailProvinsi
+            )
+        }
+        provinsiState is UiState.Loading || batikState is UiState.Loading || wisataState is UiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
                 }
-
-                else -> {}
             }
 
         }
-
-        is UiState.Error -> {}
-        else -> {
-
-        }
+        else -> { }
     }
+
 
 }
 
@@ -229,7 +229,9 @@ fun DetailProvinsiContent(
                 ) {
 
                     items(listWisata){wisata ->
-                        ImgRowDetail(image = wisata.imageWisata, modifier = modifier.padding(end = 16.dp).clickable { navigateToWisata(wisata.idWisata.toLong()) })
+                        ImgRowDetail(image = wisata.imageWisata, modifier = modifier
+                            .padding(end = 16.dp)
+                            .clickable { navigateToWisata(wisata.idWisata.toLong()) })
                     }
                 }
 

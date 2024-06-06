@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -29,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +50,7 @@ import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.KursusBox
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.NavbarHome
 import com.tricakrawala.batikpedia.presentation.ui.components.VideoColumn
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
@@ -54,6 +58,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EdukasiScreen(
     viewModel: EdukasiViewModel = hiltViewModel(),
@@ -70,25 +75,32 @@ fun EdukasiScreen(
         }
     }
 
-    when(val kursus = uiStateKursus){
-        is UiState.Success -> {
-            when (val video = uiStateVideoMembatik) {
-                is UiState.Success -> {
-                    EdukasiContent(
-                        navigateToDetail = navigateToDetail,
-                        listKursus = kursus.data,
-                        listVideoMembatik = video.data,
-                        navController = navController
-                    )
+    val kursus = uiStateKursus
+    val video = uiStateVideoMembatik
 
+
+    when{
+        kursus is UiState.Success && video is UiState.Success -> {
+            EdukasiContent(
+                navigateToDetail = navigateToDetail,
+                listKursus = kursus.data,
+                listVideoMembatik = video.data,
+                navController = navController
+            )
+        }
+
+        kursus is UiState.Loading && video is UiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
                 }
-
-                is UiState.Error -> {}
-                else -> {}
             }
         }
-        is UiState.Error -> {}
-        else -> {}
     }
 }
 

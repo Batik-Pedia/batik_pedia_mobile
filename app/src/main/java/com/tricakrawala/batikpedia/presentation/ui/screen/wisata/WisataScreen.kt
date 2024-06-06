@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -28,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,6 +44,7 @@ import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.presentation.model.wisata.WisataViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.ProvinsiItemRow
 import com.tricakrawala.batikpedia.presentation.ui.components.SearchBarKatalog
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
@@ -48,6 +52,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WisataScreen(
     navigateToDetail : (Long) -> Unit,
@@ -63,6 +68,18 @@ fun WisataScreen(
     when (val wisata = uiState) {
         is UiState.Success -> {
             WisataContent(listWisata = wisata.data, navigateToDetail = navigateToDetail)
+        }
+        is UiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+                }
+            }
         }
 
         else -> {

@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -48,6 +49,7 @@ import com.tricakrawala.batikpedia.presentation.model.katalog.KatalogViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.KatalogItemRow
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.SearchBarKatalog
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
@@ -55,6 +57,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KatalogScreen(
     viewModel: KatalogViewModel = hiltViewModel(),
@@ -71,6 +74,18 @@ fun KatalogScreen(
     when (val batik = uiState) {
         is UiState.Success -> {
             KatalogContent(listBatik = batik.data, navToDetail = navToDetail, navController = navController)
+        }
+        is UiState.Loading ->{
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+                }
+            }
         }
 
         else -> {

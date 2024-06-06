@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,12 +45,14 @@ import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.VideoColumn
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListVideoScreen(
     viewModel: EdukasiViewModel = hiltViewModel(),
@@ -70,7 +75,18 @@ fun ListVideoScreen(
 
                 }
 
-                is UiState.Error -> {}
+                is UiState.Loading -> {
+                    Box(Modifier.fillMaxSize()) {
+                        AlertDialog(
+                            onDismissRequest = {},
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color.Transparent),
+                        ) {
+                            LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+                        }
+                    }
+                }
                 else -> {}
             }
         }

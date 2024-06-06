@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +50,7 @@ import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.presentation.model.provinsi.ProvinsiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.ProvinsiItemRow
 import com.tricakrawala.batikpedia.presentation.ui.components.SearchBarKatalog
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
@@ -54,12 +58,13 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListProvinsiScreen(
     viewModel: ProvinsiViewModel = hiltViewModel(),
-    navigateToDetail : (Long) -> Unit,
+    navigateToDetail: (Long) -> Unit,
     navController: NavHostController
-){
+) {
 
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
 
@@ -71,9 +76,30 @@ fun ListProvinsiScreen(
 
     when (val nusantara = uiState) {
         is UiState.Success -> {
-            ListProvinsiContent( navigateToDetail = navigateToDetail, listProvinsi = nusantara.data, navController = navController)
+            ListProvinsiContent(
+                navigateToDetail = navigateToDetail,
+                listProvinsi = nusantara.data,
+                navController = navController
+            )
         }
-        else -> Unit
+
+        is UiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+                }
+            }
+
+        }
+
+        else -> {
+            Unit
+        }
     }
 
 }
@@ -82,10 +108,10 @@ fun ListProvinsiScreen(
 @Composable
 fun ListProvinsiContent(
     modifier: Modifier = Modifier,
-    listProvinsi : List<ProvinsiItem>,
+    listProvinsi: List<ProvinsiItem>,
     navigateToDetail: (Long) -> Unit,
-    navController : NavHostController,
-){
+    navController: NavHostController,
+) {
     var query by remember { mutableStateOf("") }
     val filteredList = remember(query, listProvinsi) {
         if (query.isEmpty()) {
@@ -115,13 +141,13 @@ fun ListProvinsiContent(
 
         CenterAlignedTopAppBar(
             title = {
-                    Text(
-                        text = stringResource(id = R.string.menu_provinsi),
-                        fontFamily = poppinsFontFamily,
-                        fontWeight = FontWeight.SemiBold,
-                        color = textColor,
-                        fontSize = 16.sp
-                    )
+                Text(
+                    text = stringResource(id = R.string.menu_provinsi),
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    color = textColor,
+                    fontSize = 16.sp
+                )
             },
             navigationIcon = {
                 IconButton(
@@ -163,8 +189,11 @@ fun ListProvinsiContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
-                items(filteredList){data ->
-                    ProvinsiItemRow(image = data.imgProvinsi, provinsi = data.namaProvinsi, modifier = modifier.clickable { navigateToDetail(data.idProvinsi.toLong())})
+                items(filteredList) { data ->
+                    ProvinsiItemRow(
+                        image = data.imgProvinsi,
+                        provinsi = data.namaProvinsi,
+                        modifier = modifier.clickable { navigateToDetail(data.idProvinsi.toLong()) })
                 }
             }
 
@@ -175,9 +204,12 @@ fun ListProvinsiContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun Preview(){
+private fun Preview() {
     BatikPediaTheme {
 
-        ListProvinsiContent(listProvinsi = emptyList(), navController = rememberNavController(), navigateToDetail = {})
+        ListProvinsiContent(
+            listProvinsi = emptyList(),
+            navController = rememberNavController(),
+            navigateToDetail = {})
     }
 }
