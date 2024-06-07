@@ -1,15 +1,22 @@
 package com.tricakrawala.batikpedia.presentation.ui.screen.camera
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
+import android.net.Uri
+import android.provider.MediaStore
 import android.view.View
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -35,23 +42,31 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.ml.ModelUnquant
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.components.ButtonLongGray
 import com.tricakrawala.batikpedia.presentation.ui.components.CircleShapeButton
+import com.tricakrawala.batikpedia.presentation.ui.components.ImageResult
+import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
-import com.tricakrawala.batikpedia.utils.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -66,13 +81,15 @@ fun CameraScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraContent(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
-
     var capturedImage by remember { mutableStateOf<Bitmap?>(null) }
+    var predictionResult by remember { mutableStateOf("") }
     var hasCameraPermission by remember { mutableStateOf(false) }
     var isCameraActive by remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(false) }
+    var isProcessing by remember { mutableStateOf(false) } // State untuk memantau proses identifikasi
 
     var lensFacing by remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
     val context = LocalContext.current
@@ -82,6 +99,8 @@ fun CameraContent(
     val imageCapture = remember { ImageCapture.Builder().build() }
     var cameraProvider: ProcessCameraProvider? by remember { mutableStateOf(null) }
     var flashStatus by remember { mutableStateOf(false) }
+
+    var buttonText by remember { mutableStateOf("Identifikasi") }
 
     val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
     var camera: Camera? by remember { mutableStateOf(null) }
@@ -105,15 +124,23 @@ fun CameraContent(
         if (hasCameraPermission) {
             cameraProvider = context.getCameraProvider()
             cameraProvider?.unbindAll()
-           camera = cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)!!
+            camera = cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)!!
             camera!!.cameraInfo.hasFlashUnit()
             preview.setSurfaceProvider(previewView.surfaceProvider)
         }
     }
 
+    LaunchedEffect(isProcessing) {
+        if (isProcessing) {
+            delay(3000) // Delay 3 detik
+            isLoading = false
+            isProcessing = false
+        }
+    }
+
     fun toggleFlash() {
         flashStatus = !flashStatus
-      camera?.cameraControl?.enableTorch(flashStatus)
+        camera?.cameraControl?.enableTorch(flashStatus)
     }
 
     Box(
@@ -127,7 +154,6 @@ fun CameraContent(
             factory = { previewView },
             modifier = Modifier.fillMaxSize(),
             update = { view ->
-
                 view.visibility = if (isCameraActive) View.VISIBLE else View.INVISIBLE
             }
         )
@@ -185,36 +211,170 @@ fun CameraContent(
                 .padding(horizontal = 12.dp),
             contentAlignment = Alignment.Center
         ) {
-            capturedImage?.let { image ->
-                Image(
-                    bitmap = image.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } ?: run {
-                Image(
-                    painter = painterResource(id = R.drawable.scan_border),
-                    contentDescription = "",
-                    Modifier.fillMaxSize()
-                )
+            if (isLoading) {
+                LoadingData(message = "Mengindentifikasi batik..")
+            } else {
+                capturedImage?.let { image ->
+                    ImageResult(image = image, result = predictionResult)
+                } ?: run {
+                    Image(
+                        painter = painterResource(id = R.drawable.scan_border),
+                        contentDescription = "",
+                        Modifier.fillMaxSize()
+                    )
+                }
             }
         }
 
         ButtonLongGray(
-            text = stringResource(id = R.string.identifikasi),
+            text = buttonText,
             modifier = modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 12.dp, vertical = 16.dp)
                 .clickable {
-                    Utils.captureImage(imageCapture, context) { capturedBitmap ->
-                        capturedImage = capturedBitmap
-                        isCameraActive = false
+                    if (isCameraActive) {
+                        isLoading = true // Menampilkan loading indicator
+                        isProcessing = true
+                        captureImage(
+                            imageCapture,
+                            context,
+                            onImageCaptured = { capturedBitmap, result ->
+                                capturedImage = capturedBitmap
+                                predictionResult = result
+                                isCameraActive = false
+                                buttonText = "Identifikasi Kembali"
+                            },
+                        )
+                    } else {
+                        capturedImage = null
+                        predictionResult = ""
+                        isCameraActive = true
+                        buttonText = "Identifikasi"
                     }
                 }
         )
     }
 }
 
+
+fun captureImage(
+    imageCapture: ImageCapture,
+    context: Context,
+    onImageCaptured: (Bitmap, String) -> Unit,
+) {
+    val outputOptions = ImageCapture.OutputFileOptions.Builder(
+        context.contentResolver,
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+        }
+    ).build()
+
+    imageCapture.takePicture(
+        outputOptions,
+        ContextCompat.getMainExecutor(context),
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                val savedUri = outputFileResults.savedUri ?: return
+
+                // Run the image processing and model inference in a background coroutine
+                CoroutineScope(Dispatchers.IO).launch {
+                    val bitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(savedUri))
+                    val rotatedBitmap = correctImageOrientation(context, savedUri, bitmap)
+                    val croppedBitmap = cropToSquare(rotatedBitmap)
+                    val predictionResult = runModelInference(croppedBitmap, context)
+
+                    withContext(Dispatchers.Main) {
+                        onImageCaptured(croppedBitmap, predictionResult)
+                    }
+                }
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                println("Failed to save image: ${exception.message}")
+            }
+        }
+    )
+}
+
+
+fun runModelInference(bitmap: Bitmap, context: Context): String {
+    val model = ModelUnquant.newInstance(context)
+
+    // Resize the bitmap to match the expected input shape of the model
+    val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true)
+
+    // Creates inputs for reference.
+    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
+    val tensorImage = TensorImage(DataType.FLOAT32)
+    tensorImage.load(resizedBitmap)
+    inputFeature0.loadBuffer(tensorImage.buffer)
+
+    // Runs model inference and gets result.
+    val outputs = model.process(inputFeature0)
+    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
+
+    val labels = context.assets.open("labels.txt").bufferedReader().readLines()
+
+    val outputArray = outputFeature0.floatArray
+    var maxIdx = 0
+    outputArray.forEachIndexed{ index, fl ->
+        if(fl > outputArray[maxIdx]){
+            maxIdx = index
+        }
+
+    }
+    val result = labels[maxIdx]
+    return result
+}
+
+fun correctImageOrientation(context: Context, imageUri: Uri, bitmap: Bitmap): Bitmap {
+    val inputStream = context.contentResolver.openInputStream(imageUri)
+    val exifInterface = ExifInterface(inputStream!!)
+    val orientation = exifInterface.getAttributeInt(
+        ExifInterface.TAG_ORIENTATION,
+        ExifInterface.ORIENTATION_UNDEFINED
+    )
+    return when (orientation) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(bitmap, 90f)
+        ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(bitmap, 180f)
+        ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(bitmap, 270f)
+        ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flipImage(bitmap, horizontal = true, vertical = false)
+        ExifInterface.ORIENTATION_FLIP_VERTICAL -> flipImage(bitmap, horizontal = false, vertical = true)
+        else -> bitmap
+    }
+}
+
+fun rotateImage(bitmap: Bitmap, degree: Float): Bitmap {
+    val matrix = Matrix().apply { postRotate(degree) }
+    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+}
+
+fun flipImage(bitmap: Bitmap, horizontal: Boolean, vertical: Boolean): Bitmap {
+    val matrix = Matrix().apply {
+        postScale(
+            if (horizontal) -1f else 1f,
+            if (vertical) -1f else 1f,
+            bitmap.width / 2f,
+            bitmap.height / 2f
+        )
+    }
+    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+}
+
+fun cropToSquare(bitmap: Bitmap): Bitmap {
+    val width = bitmap.width
+    val height = bitmap.height
+    val newWidth = if (width > height) height else width
+    val newHeight = if (width > height) height else width
+
+    val cropW = (width - newWidth) / 2
+    val cropH = (height - newHeight) / 2
+
+    return Bitmap.createBitmap(bitmap, cropW, cropH, newWidth, newHeight)
+}
 
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
