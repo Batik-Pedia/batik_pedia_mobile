@@ -11,10 +11,4 @@ object FakeSourceBatik {
         Rekomendasi(4, R.drawable.dummyrekom2),
     )
 
-    val listVideoMembatik= listOf(
-        VideoMembatik(1, R.drawable.videomembatik, "Tutorial Membatik Teknik Counting tulis-PART 1"),
-        VideoMembatik(2, R.drawable.videomembatik2, "Tutorial Membatik Teknik Counting tulis-PART 2"),
-
-    )
-
 }

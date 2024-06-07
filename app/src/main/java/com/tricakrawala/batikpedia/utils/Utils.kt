@@ -99,10 +99,8 @@ object Utils {
         )
     }
 
-    fun extractYoutubeVideoId(url: String): String {
-        val regex = "(?:https?://)?(?:www\\.)?(?:youtube\\.com(?:[^\\w\\-]+\\w+\\-?\\w+)|(?:\\w+\\.)?youtube(?:-nocookie)?\\.com\\S*(?:(?:/e(?:mbed)?)|(?:/v/?)|(?:/watch(?:\\?v=|\\?.+&v=))|(?:/)))?([\\w\\-]+)".toRegex()
-        val matchResult = regex.find(url)
-        return matchResult?.groups?.get(1)?.value ?: ""
+    fun extractYoutubeVideoId(url: String): String? {
+        return Uri.parse(url)?.getQueryParameter("v")
     }
 
 

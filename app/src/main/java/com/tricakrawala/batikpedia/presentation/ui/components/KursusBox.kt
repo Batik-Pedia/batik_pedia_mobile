@@ -10,6 +10,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +32,8 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 import com.tricakrawala.batikpedia.utils.Utils.extractYoutubeVideoId
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -85,7 +93,14 @@ fun VideoColumn(
 
     ) {
 
-    val videoId = extractYoutubeVideoId(image)
+    var videoId by remember { mutableStateOf<String?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(image) {
+        coroutineScope.launch(Dispatchers.IO) {
+            videoId = extractYoutubeVideoId(image)
+        }
+    }
     val thumbnailUrl = "https://img.youtube.com/vi/$videoId/0.jpg"
 
     Column(
@@ -124,7 +139,7 @@ fun VideoColumn(
 
 @Composable
 @Preview(showBackground = true)
-private fun preview() {
+private fun Preview() {
     BatikPediaTheme {
         KursusBox(kursus = "SuperProf", image = "R.drawable.kursus2")
     }
