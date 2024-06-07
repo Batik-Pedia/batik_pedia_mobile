@@ -44,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.data.pref.FilterState
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.presentation.model.katalog.KatalogViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
@@ -58,164 +59,170 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun KatalogScreen(
-    viewModel: KatalogViewModel = hiltViewModel(),
-    navToDetail : (Int) -> Unit,
-    navController : NavHostController,
-) {
-    val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
-    LaunchedEffect(true) {
-        if (uiState is UiState.Loading) {
-            viewModel.getAllBatik()
+    @Composable
+    fun KatalogScreen(
+        viewModel: KatalogViewModel = hiltViewModel(),
+        navToDetail: (Int) -> Unit,
+        navController: NavHostController,
+    ) {
+        val uiState by viewModel.uiState.collectAsState()
+        val filterUiState by viewModel.filterUiState.collectAsState()
+
+        LaunchedEffect(Unit) {
+            if (filterUiState is UiState.Success) {
+                val filter = (filterUiState as UiState.Success<FilterState>).data
+                viewModel.getAllBatik(filter)
+            } else {
+                viewModel.getAllBatik(FilterState())
+            }
+        }
+
+        when {
+            uiState is UiState.Loading -> {
+                Box(Modifier.fillMaxSize()) {
+                    AlertDialog(
+                        onDismissRequest = {},
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.Transparent),
+                    ) {
+                        LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+                    }
+                }
+            }
+            uiState is UiState.Success -> {
+                KatalogContent(
+                    listBatik = (uiState as UiState.Success<List<KatalogBatikItem>>).data,
+                    navToDetail = navToDetail,
+                    navController = navController
+                )
+            }
         }
     }
 
-    when (val batik = uiState) {
-        is UiState.Success -> {
-            KatalogContent(listBatik = batik.data, navToDetail = navToDetail, navController = navController)
-        }
-        is UiState.Loading ->{
-            Box(Modifier.fillMaxSize()) {
-                AlertDialog(
-                    onDismissRequest = {},
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color.Transparent),
-                ) {
-                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun KatalogContent(
+        modifier: Modifier = Modifier,
+        listBatik: List<KatalogBatikItem>,
+        navToDetail : (Int) -> Unit,
+        navController : NavHostController,
+    ) {
+        var query by remember { mutableStateOf("") }
+        val filteredList = remember(query, listBatik) {
+            if (query.isEmpty()) {
+                listBatik
+            } else {
+                listBatik.filter {
+                    it.namaBatik.contains(query, ignoreCase = true) ||
+                            it.jenisBatik.contains(query, ignoreCase = true)
                 }
             }
         }
 
-        else -> {
 
-        }
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun KatalogContent(
-    modifier: Modifier = Modifier,
-    listBatik: List<KatalogBatikItem>,
-    navToDetail : (Int) -> Unit,
-    navController : NavHostController,
-) {
-    var query by remember { mutableStateOf("") }
-    val filteredList = remember(query, listBatik) {
-        if (query.isEmpty()) {
-            listBatik
-        } else {
-            listBatik.filter {
-                it.namaBatik.contains(query, ignoreCase = true)
-                it.jenisBatik.contains(query, ignoreCase = true)
-            }
-        }
-    }
-
-
-    Box(
-        modifier = Modifier
-            .background(background2)
-            .fillMaxSize()
-            .statusBarsPadding()
-
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ornamen_batik_beranda),
-            contentDescription = "",
+        Box(
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(180.dp)
-
-        )
-
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    text = stringResource(id = R.string.menu_katalog),
-                    fontFamily = poppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = textColor,
-                    fontSize = 16.sp
-                )
-            },
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 16.dp),
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent)
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = 88.dp, start = 24.dp, end = 24.dp)
-
+                .background(background2)
+                .fillMaxSize()
+                .statusBarsPadding()
 
         ) {
-            Row(
+            Image(
+                painter = painterResource(id = R.drawable.ornamen_batik_beranda),
+                contentDescription = "",
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.TopEnd)
+                    .size(180.dp)
+
+            )
+
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.menu_katalog),
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        color = textColor,
+                        fontSize = 16.sp
+                    )
+                },
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 16.dp),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent)
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(top = 88.dp, start = 24.dp, end = 24.dp)
+
+
             ) {
-                SearchBarKatalog(
-                    query = query,
-                    onQueryChange = { newQuery -> query = newQuery },
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 16.dp)
-                )
-
-
-                Box(
-                    modifier = modifier
-                        .align(Alignment.CenterVertically)
-                        .clip(RoundedCornerShape(10.dp))
-                        .size(56.dp)
-                        .background(primary)
-                        .clickable { navController.navigate(Screen.Filter.route) },
+                        .fillMaxWidth()
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_filter_catalog),
-                        contentDescription = "Filter",
-                        tint = Color.White,
-                        modifier = Modifier.align(
-                            Alignment.Center
+                    SearchBarKatalog(
+                        query = query,
+                        onQueryChange = { newQuery -> query = newQuery },
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 16.dp)
+                    )
+
+
+                    Box(
+                        modifier = modifier
+                            .align(Alignment.CenterVertically)
+                            .clip(RoundedCornerShape(10.dp))
+                            .size(56.dp)
+                            .background(primary)
+                            .clickable { navController.navigate(Screen.Filter.route){
+                                restoreState = true } },
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_filter_catalog),
+                            contentDescription = "Filter",
+                            tint = Color.White,
+                            modifier = Modifier.align(
+                                Alignment.Center
+                            )
                         )
-                    )
+                    }
+
+                }
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(count = 2),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 8.dp)
+
+                ) {
+                    items(filteredList) { data ->
+                        KatalogItemRow(
+                            image = data.image,
+                            motif = data.namaBatik,
+                            jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
+                            modifier = modifier.clickable { navToDetail(data.idBatik) }
+                        )
+                    }
+
                 }
 
             }
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(count = 2),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 8.dp)
-
-            ) {
-                items(filteredList) { data ->
-                    KatalogItemRow(
-                        image = data.image,
-                        motif = data.namaBatik,
-                        jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
-                        modifier = modifier.clickable { navToDetail(data.idBatik) }
-                    )
-                }
-
-            }
-
         }
-    }
 
 }
 
 @Preview
 @Composable
-private fun preview() {
+private fun Preview() {
     BatikPediaTheme {
         KatalogContent(listBatik = emptyList(), navToDetail = {}, navController = rememberNavController())
     }

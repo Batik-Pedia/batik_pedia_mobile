@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.presentation.model.main.MainViewModel
+import com.tricakrawala.batikpedia.presentation.ui.BatikPediaApp
 import com.tricakrawala.batikpedia.presentation.ui.components.ButtonNextSplah
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2

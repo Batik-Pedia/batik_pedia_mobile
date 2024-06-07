@@ -1,20 +1,21 @@
 package com.tricakrawala.batikpedia.domain.usecase
 
+import com.tricakrawala.batikpedia.data.pref.FilterState
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
+import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogBatikItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
+import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.ValuesItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.domain.model.Rekomendasi
-import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
-import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
-import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,7 +30,11 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getAllRekomendasi(): Flow<List<Rekomendasi>> = repository.getAllRekomendasi()
 
-    override fun getAllBatik(): Flow<UiState<List<KatalogBatikItem>>> = repository.getAllBatik()
+    override fun getAllBatik(
+        order: String?,
+        filterWilayah: String?,
+        filterJenisBatik: String?
+    ): Flow<UiState<List<KatalogBatikItem>>> = repository.getAllBatik(order = order, filterWilayah= filterWilayah, filterJenisBatik = filterJenisBatik)
 
     override  fun getBatikById(idBatik: Int): Flow<UiState<KatalogId>> = repository.getBatikById(idBatik)
 
@@ -46,5 +51,10 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override  fun getKursusById(idKursus: Int): Flow<UiState<KursusId>> = repository.getKursusById(idKursus)
 
-    override fun getAllVideo(): Flow<List<VideoMembatik>> = repository.getAllVideo()
+    override fun getAllVideo(): Flow<UiState<List<ValuesItem>>> = repository.getAllVideo()
+    override suspend fun saveFilter(filterState: FilterState) {
+        repository.saveFilter(filterState)
+    }
+
+    override fun getFilter(): Flow<UiState<FilterState>> = repository.getFilter()
 }

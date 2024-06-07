@@ -47,7 +47,7 @@ object Utils {
         Screen.DetailBerita.route
     )
 
-    val wilayah = listOf("Bali", "Cirebon", "Jawa Barat", "Jawa Tengah", "Jawa Timur", "Nusa Tenggara Barat", "Solo", "Sumatera", "Sulawesi Selatan", "Surakarta", "Yogyakarta")
+    val wilayah = listOf("Semua","Bali", "Cirebon", "Jawa Barat", "Jawa Tengah", "Jawa Timur", "Nusa Tenggara Barat", "Solo", "Sumatera", "Sulawesi Selatan", "Surakarta", "Yogyakarta")
 
 
     private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
@@ -97,6 +97,12 @@ object Utils {
                 }
             }
         )
+    }
+
+    fun extractYoutubeVideoId(url: String): String {
+        val regex = "(?:https?://)?(?:www\\.)?(?:youtube\\.com(?:[^\\w\\-]+\\w+\\-?\\w+)|(?:\\w+\\.)?youtube(?:-nocookie)?\\.com\\S*(?:(?:/e(?:mbed)?)|(?:/v/?)|(?:/watch(?:\\?v=|\\?.+&v=))|(?:/)))?([\\w\\-]+)".toRegex()
+        val matchResult = regex.find(url)
+        return matchResult?.groups?.get(1)?.value ?: ""
     }
 
 

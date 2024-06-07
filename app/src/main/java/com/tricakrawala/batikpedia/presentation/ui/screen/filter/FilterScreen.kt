@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -21,6 +22,8 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,6 +32,8 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,18 +41,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.data.pref.FilterState
+import com.tricakrawala.batikpedia.presentation.model.katalog.KatalogViewModel
+import com.tricakrawala.batikpedia.presentation.navigation.Screen
+import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.PopupFilter
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
@@ -68,20 +76,37 @@ fun FilterScreen(
 fun FilterContent(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    viewModel: KatalogViewModel = hiltViewModel()
 ) {
 
+    val filterUiState by viewModel.filterUiState.collectAsState()
+
     val urutan = listOf("Urutkan dari atau ke bawah", "Urutkan dari bawah ke atas")
+    val jenis = listOf("Semua","Batik Tradisional", "Batik Modern")
+    val areas = Utils.wilayah
     var selectedOption by remember {
         mutableStateOf(urutan[0])
     }
 
-    var isTraditional by remember { mutableStateOf(false) }
-    var isModern by remember { mutableStateOf(false) }
-
-    var selectedArea by remember { mutableStateOf("Pilih Wilayah") }
-    val areas = Utils.wilayah
+    var jenisBatik by remember { mutableStateOf(jenis[0]) }
+    var selectedArea by remember { mutableStateOf(areas[0]) }
 
     var dropdownExpanded by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(filterUiState) {
+        if (filterUiState is UiState.Success) {
+            val filter = (filterUiState as UiState.Success<FilterState>).data
+
+            jenisBatik = when (filter.jenisBatik) {
+                "Semua" -> jenis[0]
+                "Tradisional" -> jenis[1]
+                "Modern" -> jenis[2]
+                else -> jenis[0]
+            }
+            selectedOption = if (filter.sort == "asc") urutan[0] else urutan[1]
+        }
+    }
 
     fun showPopup() {
         dropdownExpanded = true
@@ -96,7 +121,6 @@ fun FilterContent(
             .background(background2)
             .fillMaxSize()
             .statusBarsPadding()
-
     ) {
         Image(
             painter = painterResource(id = R.drawable.ornamen_batik_beranda),
@@ -104,7 +128,6 @@ fun FilterContent(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .size(180.dp)
-
         )
 
         CenterAlignedTopAppBar(
@@ -138,8 +161,6 @@ fun FilterContent(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
-
-
         ) {
             Text(
                 text = stringResource(id = R.string.urutan),
@@ -191,7 +212,6 @@ fun FilterContent(
                 color = textColor
             )
 
-
             OutlinedTextField(
                 value = selectedArea,
                 onValueChange = { newValue -> selectedArea = newValue },
@@ -217,7 +237,6 @@ fun FilterContent(
                     textColor = textColor
                 ),
                 shape = RoundedCornerShape(16.dp),
-
             )
 
             if (dropdownExpanded) {
@@ -232,10 +251,7 @@ fun FilterContent(
                 )
             }
 
-
-
             Spacer(modifier = modifier.height(16.dp))
-
 
             Text(
                 text = stringResource(id = R.string.jenis_batik),
@@ -245,68 +261,78 @@ fun FilterContent(
                 color = textColor
             )
 
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .selectable(
-                        selected = isTraditional,
-                        onClick = { isTraditional = !isTraditional }
-                    )
-            ) {
-                IconToggleButton(
-                    checked = isTraditional,
-                    onCheckedChange = { isTraditional = it },
-                    modifier = Modifier.padding(end = 8.dp)
+            jenis.forEach { sortJenis ->
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .selectable(
+                            selected = jenisBatik == sortJenis,
+                            onClick = { jenisBatik = sortJenis },
+                            role = Role.RadioButton
+                        )
                 ) {
-                    Icon(
-                        imageVector = if (isTraditional) ImageVector.vectorResource(id = R.drawable.ic_checked) else ImageVector.vectorResource(id = R.drawable.ic_check),
-                        contentDescription = "Checkbox icon",
-                        tint = primary
+                    IconToggleButton(
+                        checked = jenisBatik == sortJenis,
+                        onCheckedChange = { jenisBatik = sortJenis },
+                        content = {
+                            Icon(
+                                painter = painterResource(if (jenisBatik == sortJenis) R.drawable.ic_checked else R.drawable.ic_check),
+                                contentDescription = "Radio button icon",
+                                tint = primary
+                            )
+                        }
+                    )
+                    Text(
+                        text = sortJenis,
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        color = textColor,
+                        modifier = modifier
+                            .align(Alignment.CenterVertically)
                     )
                 }
-                Text(
-                    text = "Batik Tradisional",
-                    fontFamily = poppinsFontFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    color = textColor,
-                    modifier = modifier.align(Alignment.CenterVertically)
-                )
             }
 
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .selectable(
-                        selected = isModern,
-                        onClick = { isModern = !isModern }
+            Spacer(modifier = modifier.weight(1f))
+
+            Button(
+                onClick = {
+                    val filterState = FilterState(
+                        sort = if (selectedOption == urutan[0]) "asc" else "desc",
+                        wilayah = selectedArea,
+                        jenisBatik = when(jenisBatik){
+                             jenis[0] -> "Semua"
+                            jenis[1] -> "Tradisional"
+                                jenis[2] -> "Modern"
+                            else -> {jenisBatik}
+                        }
                     )
+                    viewModel.saveFilter(filterState)
+                    navController.navigate(Screen.Katalog.route){
+                        restoreState = true
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 48.dp)
+                    .navigationBarsPadding(),
+                colors = ButtonDefaults.buttonColors(primary)
             ) {
-                IconToggleButton(
-                    checked = isModern,
-                    onCheckedChange = { isModern = it },
-                    modifier = Modifier.padding(end = 8.dp)
-                ) {
-                    Icon(
-                        imageVector = if (isModern) ImageVector.vectorResource(id = R.drawable.ic_checked) else ImageVector.vectorResource(id = R.drawable.ic_check),
-                        contentDescription = "Checkbox icon",
-                        tint = primary
-                    )
-                }
                 Text(
-                    text = "Batik Modern",
+                    text = "Terapkan",
                     fontFamily = poppinsFontFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    color = textColor,
-                    modifier = modifier.align(Alignment.CenterVertically)
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(start = 8.dp)
                 )
             }
-
-
         }
     }
 }
+
 
 
 @Preview(showBackground = true)

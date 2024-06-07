@@ -44,8 +44,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
-import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
-import com.tricakrawala.batikpedia.domain.model.VideoMembatik
+import com.tricakrawala.batikpedia.data.resource.remote.response.ValuesItem
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
@@ -113,7 +112,7 @@ fun EdukasiContent(
     modifier: Modifier = Modifier,
     navigateToDetail: (Long) -> Unit,
     navController: NavHostController,
-    listVideoMembatik: List<VideoMembatik>,
+    listVideoMembatik: List<ValuesItem>,
     listKursus: List<KursusItem> = emptyList(),
 ) {
 
@@ -196,8 +195,8 @@ fun EdukasiContent(
             ) {
                 items(listVideoMembatik) { data ->
                     VideoColumn(
-                        image = data.image,
-                        deskripsi = data.deskripsi
+                        image = data.imgVideo,
+                        deskripsi = data.judulVideo
                     )
                 }
             }
@@ -215,7 +214,7 @@ private fun Preview() {
         EdukasiContent(
             navController = rememberNavController(),
             navigateToDetail = {  },
-            listVideoMembatik = FakeSourceBatik.listVideoMembatik
+            listVideoMembatik = emptyList()
         )
     }
 }

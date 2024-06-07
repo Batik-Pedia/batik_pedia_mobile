@@ -42,7 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.domain.model.VideoMembatik
+import com.tricakrawala.batikpedia.data.resource.remote.response.ValuesItem
 import com.tricakrawala.batikpedia.presentation.model.edukasi.EdukasiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
@@ -66,39 +66,38 @@ fun ListVideoScreen(
         }
     }
 
-            when (val video = uiStateVideoMembatik) {
-                is UiState.Success -> {
-                    VideoListContent(
-                        listVideoMembatik = video.data,
-                        navController = navController
-                    )
+    when (val video = uiStateVideoMembatik) {
+        is UiState.Success -> {
+            VideoListContent(
+                listVideoMembatik = video.data,
+                navController = navController
+            )
 
-                }
+        }
 
-                is UiState.Loading -> {
-                    Box(Modifier.fillMaxSize()) {
-                        AlertDialog(
-                            onDismissRequest = {},
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(Color.Transparent),
-                        ) {
-                            LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
-                        }
-                    }
+        is UiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
                 }
-                else -> {}
             }
         }
 
-
+        else -> {}
+    }
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoListContent(
     navController: NavHostController,
-    listVideoMembatik: List<VideoMembatik>,
+    listVideoMembatik: List<ValuesItem>,
 ) {
 
     Box(
@@ -165,8 +164,8 @@ fun VideoListContent(
             ) {
                 items(listVideoMembatik) { data ->
                     VideoColumn(
-                        image = data.image,
-                        deskripsi = data.deskripsi,
+                        image = data.imgVideo,
+                        deskripsi = data.judulVideo,
                     )
                 }
             }
@@ -176,23 +175,13 @@ fun VideoListContent(
 }
 
 
-
 @Preview
 @Composable
-private fun preview() {
-    val fakeVideoMembatik = listOf(
-        VideoMembatik(1, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
-        VideoMembatik(2, R.drawable.videomembatik, "Tutorial Membatik Teknik Canting Tulis - PART 1"),
-        VideoMembatik(3, R.drawable.kursus1, "Udemy"),
-        VideoMembatik(4, R.drawable.kursus2, "Superprof")
-    )
-
-
-
+private fun Preview() {
     BatikPediaTheme {
-       VideoListContent(
+        VideoListContent(
             navController = rememberNavController(),
-            listVideoMembatik = fakeVideoMembatik
+            listVideoMembatik = emptyList()
         )
     }
 }

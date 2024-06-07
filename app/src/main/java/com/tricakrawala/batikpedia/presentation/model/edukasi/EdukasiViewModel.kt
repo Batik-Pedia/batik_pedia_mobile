@@ -3,6 +3,7 @@ package com.tricakrawala.batikpedia.presentation.model.edukasi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.ValuesItem
 import com.tricakrawala.batikpedia.domain.model.VideoMembatik
 import com.tricakrawala.batikpedia.domain.usecase.BatikPediaUseCase
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
@@ -21,9 +22,9 @@ class EdukasiViewModel @Inject constructor(private val edukasi : BatikPediaUseCa
         MutableStateFlow(UiState.Loading)
     val uiStateKursus: StateFlow<UiState<List<KursusItem>>> get() = _uiStateKursus
 
-    private val _uiStateVideoMembatik: MutableStateFlow<UiState<List<VideoMembatik>>> =
+    private val _uiStateVideoMembatik: MutableStateFlow<UiState<List<ValuesItem>>> =
         MutableStateFlow(UiState.Loading)
-    val uiStateVideoMembatik: StateFlow<UiState<List<VideoMembatik>>> get() = _uiStateVideoMembatik
+    val uiStateVideoMembatik: StateFlow<UiState<List<ValuesItem>>> get() = _uiStateVideoMembatik
 
 
     fun getAllKursus() {
@@ -38,13 +39,13 @@ class EdukasiViewModel @Inject constructor(private val edukasi : BatikPediaUseCa
         }
     }
     fun getAllVideo() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             edukasi.getAllVideo()
                 .catch {
                     _uiStateVideoMembatik.value = UiState.Error(it.message.toString())
                 }
                 .collect { video ->
-                    _uiStateVideoMembatik.value = UiState.Success(video)
+                    _uiStateVideoMembatik.value = video
                 }
         }
     }

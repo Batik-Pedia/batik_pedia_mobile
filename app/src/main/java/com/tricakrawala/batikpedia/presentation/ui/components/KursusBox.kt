@@ -1,6 +1,5 @@
 package com.tricakrawala.batikpedia.presentation.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +25,7 @@ import coil.request.ImageRequest
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
+import com.tricakrawala.batikpedia.utils.Utils.extractYoutubeVideoId
 
 
 @Composable
@@ -81,17 +80,24 @@ fun KursusBox(
 @Composable
 fun VideoColumn(
     modifier: Modifier = Modifier,
-    image: Int,
+    image: String,
     deskripsi: String,
 
     ) {
+
+    val videoId = extractYoutubeVideoId(image)
+    val thumbnailUrl = "https://img.youtube.com/vi/$videoId/0.jpg"
+
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
     ) {
-        Image(
-            painter = painterResource(id = image),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(thumbnailUrl)
+                .crossfade(true)
+                .build(),
             contentDescription = "video membatik",
             contentScale = ContentScale.Crop,
             modifier = Modifier
