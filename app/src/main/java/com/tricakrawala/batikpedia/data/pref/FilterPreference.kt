@@ -24,8 +24,8 @@ class FilterPreference @Inject constructor(@SessionDataStore private val filterS
     suspend fun saveFilter(filter : FilterState) {
         filterStore.edit { preferences ->
             preferences[SORT] = filter.sort
-            preferences[WILAYAH] ?: filter.wilayah
-            preferences[JENIS_BATIK] ?: filter.jenisBatik
+            preferences[WILAYAH] = filter.wilayah
+            preferences[JENIS_BATIK] = filter.jenisBatik
             Log.d(TAG, "saveSession: $filter")
         }
     }

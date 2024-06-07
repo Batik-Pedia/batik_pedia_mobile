@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.presentation.model.katalog
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.pref.FilterState
@@ -25,15 +26,21 @@ class KatalogViewModel @Inject constructor(private val useCase: BatikPediaUseCas
         MutableStateFlow(UiState.Loading)
     val filterUiState: StateFlow<UiState<FilterState>> get() = _filterUiState
 
+    private val _saveState : MutableStateFlow<UiState<Unit>> = MutableStateFlow(UiState.Loading)
+    val saveState : StateFlow<UiState<Unit>> get() = _saveState
+
     init {
         getFilter()
     }
 
     fun saveFilter(filter: FilterState) {
-        viewModelScope.launch {
-            useCase.saveFilter(filter)
-            _filterUiState.value = UiState.Success(filter)
-            getAllBatik(filter)
+        viewModelScope.launch(Dispatchers.IO) {
+            _saveState.value = UiState.Loading
+            try {
+                _saveState.value = UiState.Success(useCase.saveFilter(filter))
+            }catch (e : Exception){
+                _saveState.value = UiState.Error(e.message.toString())
+            }
         }
     }
 
@@ -47,7 +54,9 @@ class KatalogViewModel @Inject constructor(private val useCase: BatikPediaUseCas
                     _filterUiState.value = filterUiState
                     if (filterUiState is UiState.Success) {
                         getAllBatik(filterUiState.data)
+                        Log.d("Katalog Model", "getFilter: ${filterUiState.data}")
                     }
+
                 }
         }
     }

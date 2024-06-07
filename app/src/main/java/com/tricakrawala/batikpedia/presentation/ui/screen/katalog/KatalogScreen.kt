@@ -59,46 +59,50 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
 @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun KatalogScreen(
-        viewModel: KatalogViewModel = hiltViewModel(),
-        navToDetail: (Int) -> Unit,
-        navController: NavHostController,
-    ) {
-        val uiState by viewModel.uiState.collectAsState()
-        val filterUiState by viewModel.filterUiState.collectAsState()
+@Composable
+fun KatalogScreen(
+    viewModel: KatalogViewModel = hiltViewModel(),
+    navToDetail: (Int) -> Unit,
+    navController: NavHostController,
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val filterUiState by viewModel.filterUiState.collectAsState()
 
-        LaunchedEffect(Unit) {
-            if (filterUiState is UiState.Success) {
-                val filter = (filterUiState as UiState.Success<FilterState>).data
-                viewModel.getAllBatik(filter)
-            } else {
-                viewModel.getAllBatik(FilterState())
-            }
-        }
-
-        when {
-            uiState is UiState.Loading -> {
-                Box(Modifier.fillMaxSize()) {
-                    AlertDialog(
-                        onDismissRequest = {},
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(Color.Transparent),
-                    ) {
-                        LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
-                    }
-                }
-            }
-            uiState is UiState.Success -> {
-                KatalogContent(
-                    listBatik = (uiState as UiState.Success<List<KatalogBatikItem>>).data,
-                    navToDetail = navToDetail,
-                    navController = navController
-                )
-            }
+    LaunchedEffect(filterUiState) {
+        if (filterUiState is UiState.Success) {
+            val filter = (filterUiState as UiState.Success<FilterState>).data
+            viewModel.getAllBatik(filter)
+        } else {
+            viewModel.getAllBatik(FilterState())
         }
     }
+
+    when (val dataBatik = uiState) {
+        is UiState.Loading -> {
+            Box(Modifier.fillMaxSize()) {
+                AlertDialog(
+                    onDismissRequest = {},
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
+                ) {
+                    LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
+                }
+            }
+        }
+
+        is UiState.Success -> {
+            KatalogContent(
+                listBatik = dataBatik.data,
+                navToDetail = navToDetail,
+                navController = navController
+            )
+        }
+
+        else -> {}
+    }
+}
+
 
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -180,8 +184,11 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
                             .clip(RoundedCornerShape(10.dp))
                             .size(56.dp)
                             .background(primary)
-                            .clickable { navController.navigate(Screen.Filter.route){
-                                restoreState = true } },
+                            .clickable {
+                                navController.navigate(Screen.Filter.route) {
+                                    restoreState = true
+                                }
+                            },
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_filter_catalog),
@@ -195,29 +202,42 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
                 }
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(count = 2),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 8.dp)
-
-                ) {
-                    items(filteredList) { data ->
-                        KatalogItemRow(
-                            image = data.image,
-                            motif = data.namaBatik,
-                            jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
-                            modifier = modifier.clickable { navToDetail(data.idBatik) }
+                if (filteredList.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.batik_tersedia_kosong),
+                            fontFamily = poppinsFontFamily,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            color = textColor,
                         )
                     }
 
+                } else {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(count = 2),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 8.dp)
+                    ) {
+                        items(filteredList) { data ->
+                            KatalogItemRow(
+                                image = data.image,
+                                motif = data.namaBatik,
+                                jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
+                                modifier = modifier.clickable { navToDetail(data.idBatik) }
+                            )
+                        }
+                    }
                 }
 
             }
         }
-
 }
 
 @Preview

@@ -92,6 +92,7 @@ fun FilterContent(
     var selectedArea by remember { mutableStateOf(areas[0]) }
 
     var dropdownExpanded by remember { mutableStateOf(false) }
+    val saveState by viewModel.saveState.collectAsState()
 
 
     LaunchedEffect(filterUiState) {
@@ -105,6 +106,7 @@ fun FilterContent(
                 else -> jenis[0]
             }
             selectedOption = if (filter.sort == "asc") urutan[0] else urutan[1]
+            selectedArea = filter.wilayah
         }
     }
 
@@ -302,16 +304,14 @@ fun FilterContent(
                         sort = if (selectedOption == urutan[0]) "asc" else "desc",
                         wilayah = selectedArea,
                         jenisBatik = when(jenisBatik){
-                             jenis[0] -> "Semua"
+                            jenis[0] -> "Semua"
                             jenis[1] -> "Tradisional"
-                                jenis[2] -> "Modern"
+                            jenis[2] -> "Modern"
                             else -> {jenisBatik}
                         }
                     )
                     viewModel.saveFilter(filterState)
-                    navController.navigate(Screen.Katalog.route){
-                        restoreState = true
-                    }
+
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -328,6 +328,14 @@ fun FilterContent(
                     modifier = Modifier
                         .padding(start = 8.dp)
                 )
+            }
+
+            when(saveState){
+                is UiState.Error -> {}
+                UiState.Loading -> {}
+                is UiState.Success -> {navController.navigate(Screen.Katalog.route){
+                    popUpTo(Screen.Home.route)
+                }}
             }
         }
     }

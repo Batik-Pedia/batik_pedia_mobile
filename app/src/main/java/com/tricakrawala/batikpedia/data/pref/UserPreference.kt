@@ -34,6 +34,7 @@ class UserPreference @Inject constructor( @SessionDataStore private val dataStor
         return dataStore.data.map { preferences ->
             UserModel(
                 preferences[NOT_NEW_USER] ?: false,
+
             )
         }
     }
