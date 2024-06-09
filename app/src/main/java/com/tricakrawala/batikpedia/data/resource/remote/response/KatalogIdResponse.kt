@@ -23,7 +23,7 @@ data class KatalogId(
 	val makna: String,
 
 	@field:SerializedName("lon")
-	val lon: String,
+	val lon: Double,
 
 	@field:SerializedName("detailBatik")
 	val detailBatik: String,
@@ -38,7 +38,7 @@ data class KatalogId(
 	val sejarahBatik: String,
 
 	@field:SerializedName("lat")
-	val lat: String,
+	val lat: Double,
 
 	@field:SerializedName("jenisBatik")
 	val jenisBatik: String

@@ -8,6 +8,18 @@ data class KatalogResponse(
 	val values: Values
 )
 
+data class Values(
+
+	@field:SerializedName("katalogBatik")
+	val katalogBatik: List<KatalogBatikItem>,
+
+	@field:SerializedName("author")
+	val author: String,
+
+	@field:SerializedName("status")
+	val status: Int
+)
+
 data class KatalogBatikItem(
 
 	@field:SerializedName("image")
@@ -23,7 +35,7 @@ data class KatalogBatikItem(
 	val makna: String,
 
 	@field:SerializedName("lon")
-	val lon: String,
+	val lon: Double,
 
 	@field:SerializedName("detailBatik")
 	val detailBatik: String,
@@ -38,20 +50,8 @@ data class KatalogBatikItem(
 	val sejarahBatik: String,
 
 	@field:SerializedName("lat")
-	val lat: String,
+	val lat: Double,
 
 	@field:SerializedName("jenisBatik")
 	val jenisBatik: String
-)
-
-data class Values(
-
-	@field:SerializedName("katalogBatik")
-	val katalogBatik: List<KatalogBatikItem>,
-
-	@field:SerializedName("author")
-	val author: String,
-
-	@field:SerializedName("status")
-	val status: Int
 )

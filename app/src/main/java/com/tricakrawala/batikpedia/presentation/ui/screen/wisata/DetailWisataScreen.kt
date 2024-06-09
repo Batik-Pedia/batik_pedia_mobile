@@ -164,8 +164,9 @@ fun DetailWisataContent(
 
 
             AtlasItem(
-                image = R.drawable.peta1,
-                nusantara = "Yogyakarta",
+                latitude = wisata?.lat ?: 0.0,
+                longitude = wisata?.lon ?: 0.0,
+                nusantara = wisata?.namaWisata ?: "",
                 modifier = modifier.fillMaxWidth()
             )
 

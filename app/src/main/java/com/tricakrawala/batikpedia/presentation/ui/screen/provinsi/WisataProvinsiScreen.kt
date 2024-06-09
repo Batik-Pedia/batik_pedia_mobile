@@ -42,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.presentation.model.provinsi.ProvinsiViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.AtlasItem
@@ -84,7 +85,7 @@ fun WisataProvinsiScreen(
         }
 
         is UiState.Success -> {
-            WisataProvinsiContent(navController = navController, imgWisata = "wisata.data.image", titleWisata = wisata.data.namaWisata)
+            WisataProvinsiContent(navController = navController, wisataId = wisata.data)
         }
 
         else -> {}
@@ -97,8 +98,7 @@ fun WisataProvinsiScreen(
 fun WisataProvinsiContent(
     modifier: Modifier = Modifier,
     navController : NavHostController,
-    imgWisata : String,
-    titleWisata : String,
+    wisataId : WisataId? =null,
 ) {
 
     Box(
@@ -152,7 +152,7 @@ fun WisataProvinsiContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-            ImgDetailBig(image = imgWisata, text = titleWisata, modifier = Modifier)
+            ImgDetailBig(image = wisataId?.imageWisata ?: "", text = wisataId?.namaWisata ?: "", modifier = Modifier)
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -164,8 +164,9 @@ fun WisataProvinsiContent(
             Spacer(modifier = Modifier.height(8.dp))
 
             AtlasItem(
-                image = R.drawable.peta1,
-                nusantara = "Yogyakarta",
+                latitude = wisataId?.lat ?: 0.0,
+                longitude = wisataId?.lon ?: 0.0,
+                nusantara = wisataId?.namaWisata ?: "",
                 modifier = modifier.fillMaxWidth()
             )
 
@@ -178,6 +179,6 @@ fun WisataProvinsiContent(
 @Preview(showBackground = true)
 private fun Preview(){
     BatikPediaTheme {
-        WisataProvinsiContent(imgWisata = "R.drawable.wisata1", titleWisata = "Kampung batik solo", navController = rememberNavController())
+
     }
 }

@@ -104,8 +104,8 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(libs.coil.compose)
-
-    
-
+    implementation (libs.maps.compose)
+    implementation (libs.play.services.maps)
+    implementation (libs.accompanist.permissions)
 
 }

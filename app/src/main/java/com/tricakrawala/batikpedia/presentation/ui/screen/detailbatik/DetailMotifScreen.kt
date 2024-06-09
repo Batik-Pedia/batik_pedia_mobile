@@ -37,13 +37,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
+import com.tricakrawala.batikpedia.data.resource.remote.response.KatalogId
 import com.tricakrawala.batikpedia.presentation.model.detailbatik.DetailBatikViewModel
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.AtlasItem
@@ -87,10 +86,7 @@ fun DetailMotifScreen(
         }
         is UiState.Success -> {
             DetailMotifContent(
-               image = batik.data.image,
-                idBatik = batik.data.idBatik,
-                namaBatik = batik.data.namaBatik,
-                detailBatik = batik.data.detailBatik,
+              katalogId = batik.data,
                 navToBatikFullDetail = navToBatikFullDetail,
                 navController = navController,
             )
@@ -105,10 +101,7 @@ fun DetailMotifScreen(
 @Composable
 fun DetailMotifContent(
     modifier: Modifier = Modifier,
-    image : String,
-    idBatik: Int,
-    namaBatik: String,
-    detailBatik: String,
+    katalogId : KatalogId,
     navToBatikFullDetail: (Int) -> Unit,
     navController: NavHostController,
 ) {
@@ -163,13 +156,13 @@ fun DetailMotifContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-                ImgDetailBig(image =image, text = stringResource(id = R.string.motif_batik_detail, namaBatik), modifier = Modifier)
+                ImgDetailBig(image =katalogId.image, text = stringResource(id = R.string.motif_batik_detail, katalogId.namaBatik), modifier = Modifier)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Box {
                     TextWithCard(
                         title = stringResource(id = R.string.tentang_motif_batik),
-                        text = detailBatik
+                        text =katalogId.detailBatik
                     )
 
                     Text(
@@ -181,31 +174,18 @@ fun DetailMotifContent(
                         modifier = modifier
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                             .align(Alignment.BottomEnd)
-                            .clickable { navToBatikFullDetail(idBatik) }
+                            .clickable { navToBatikFullDetail(katalogId.idBatik) }
                     )
                 }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             AtlasItem(
-                image = R.drawable.peta1,
-                nusantara = "Yogyakarta",
+                longitude = katalogId.lon,
+                latitude = katalogId.lat,
+                nusantara = katalogId.wilayah,
                 modifier = modifier.fillMaxWidth()
             )
         }
     }
-}
-
-
-@Composable
-@Preview(showBackground = true)
-private fun Preview() {
-    DetailMotifContent(
-        idBatik = 1,
-        image = "",
-        namaBatik = "Batik 1",
-        detailBatik = "Detail Batik 1",
-        navController = rememberNavController(),
-        navToBatikFullDetail = {},
-    )
 }
