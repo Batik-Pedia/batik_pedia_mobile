@@ -32,11 +32,14 @@ data class WisataItem(
 	val imageWisata: String,
 
 	@field:SerializedName("lon")
-	val lon: String,
+	val lon: Any,
+
+	@field:SerializedName("wilayah")
+	val wilayah: String,
 
 	@field:SerializedName("detailWisata")
 	val detailWisata: String,
 
 	@field:SerializedName("lat")
-	val lat: String
+	val lat: Any
 )

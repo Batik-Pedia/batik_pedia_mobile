@@ -41,4 +41,7 @@
     <string name="motif_batik_detail">Motif Batik %s</string>
     <string name="ikuti_kursus">Ikuti Kursus</string>
     <string name="batik_tersedia_kosong">Batik yang di filter belum tersedia</string>
+    <string name="image_failed">Pengklasifikasi gambar gagal melakukan inisialisasi. Lihat log kesalahan untuk detailnya</string>
+    <string name="batik_di_wilayah_ini_belum_tersedia">Batik Di wilayah ini belum tersedia</string>
+    <string name="wisata_di_wilayah_ini_belum_tersedia">Wisata Di wilayah ini belum tersedia</string>
 </resources>

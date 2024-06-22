@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -129,6 +130,18 @@ fun DetailProvinsiContent(
     navigateToWisata: (Long) -> Unit,
 ) {
 
+    val filteredListBatik = remember(textContent, listBatik) {
+        listBatik.filter {
+            it.wilayah.contains(textContent, ignoreCase = true)
+        }
+    }
+
+    val filteredListWisata = remember(textContent, listWisata) {
+        listWisata.filter {
+            it.wilayah.contains(textContent, ignoreCase = true)
+        }
+    }
+
     Box(
         modifier = Modifier
             .background(background2)
@@ -200,18 +213,30 @@ fun DetailProvinsiContent(
                     modifier = Modifier
                         .padding(start = 16.dp, top = 16.dp)
                 )
+                if (filteredListBatik.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.batik_di_wilayah_ini_belum_tersedia),
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        color = textColor,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 16.dp)
+                    )
+                }else{
+                    LazyRow(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 16.dp)
+                    ) {
 
-                LazyRow(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(horizontal = 16.dp)
-                ) {
-
-                    items(listBatik){batik ->
-                        ImgRowDetail(image = batik.image, modifier = Modifier.padding(end = 16.dp) )
+                        items(filteredListBatik){batik ->
+                            ImgRowDetail(image = batik.image, modifier = Modifier.padding(end = 16.dp) )
+                        }
                     }
                 }
-
+                
                 Text(
                     text = stringResource(id = R.string.destinasi_wisata),
                     fontFamily = poppinsFontFamily,
@@ -221,20 +246,31 @@ fun DetailProvinsiContent(
                     modifier = Modifier
                         .padding(start = 16.dp, top = 16.dp)
                 )
+                if (filteredListWisata.isEmpty()){
+                    Text(
+                        text = stringResource(R.string.wisata_di_wilayah_ini_belum_tersedia),
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        color = textColor,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    )
+                }else{
+                    LazyRow(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    ) {
 
-                LazyRow(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                ) {
-
-                    items(listWisata){wisata ->
-                        ImgRowDetail(image = wisata.imageWisata, modifier = modifier
-                            .padding(end = 16.dp)
-                            .clickable { navigateToWisata(wisata.idWisata.toLong()) })
+                        items(filteredListWisata){wisata ->
+                            ImgRowDetail(image = wisata.imageWisata, modifier = modifier
+                                .padding(end = 16.dp)
+                                .clickable { navigateToWisata(wisata.idWisata.toLong()) })
+                        }
                     }
                 }
-
             }
         }
     }
