@@ -21,7 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -66,6 +66,7 @@ fun DetailProvinsiScreen(
     idProvinsi: Long,
     viewModel: ProvinsiViewModel = hiltViewModel(),
     navigateToWisata: (Long) -> Unit,
+    navToDetailBatik : (Int) -> Unit,
     navController: NavHostController,
 ) {
 
@@ -95,16 +96,17 @@ fun DetailProvinsiScreen(
                 listBatik = batikState.data,
                 listWisata = wisataState.data,
                 navigateToWisata = navigateToWisata,
-                detailProv = provinsiState.data.detailProvinsi
+                detailProv = provinsiState.data.detailProvinsi,
+                navToDetailBatik = navToDetailBatik
             )
         }
         provinsiState is UiState.Loading || batikState is UiState.Loading || wisataState is UiState.Loading -> {
             Box(Modifier.fillMaxSize()) {
-                AlertDialog(
+                BasicAlertDialog(
                     onDismissRequest = {},
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color.Transparent),
+                        .background(Color.Transparent)
                 ) {
                     LoadingData(Modifier.align(Alignment.Center), "Sedang Memuat Data..")
                 }
@@ -128,6 +130,7 @@ fun DetailProvinsiContent(
     listWisata: List<WisataItem>,
     textContent: String,
     navigateToWisata: (Long) -> Unit,
+    navToDetailBatik : (Int) -> Unit,
 ) {
 
     val filteredListBatik = remember(textContent, listBatik) {
@@ -232,7 +235,9 @@ fun DetailProvinsiContent(
                     ) {
 
                         items(filteredListBatik){batik ->
-                            ImgRowDetail(image = batik.image, modifier = Modifier.padding(end = 16.dp) )
+                            ImgRowDetail(image = batik.image, modifier = Modifier.padding(end = 16.dp).clickable {
+                                navToDetailBatik(batik.idBatik)
+                            } )
                         }
                     }
                 }
@@ -291,6 +296,7 @@ private fun Preview() {
             listBatik = emptyList(),
             listWisata = emptyList(),
             navigateToWisata = {},
+            navToDetailBatik = {},
             detailProv = ""
         )
     }

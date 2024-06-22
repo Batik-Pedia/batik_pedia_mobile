@@ -148,6 +148,8 @@ fun BatikPediaApp(
                 val id = it.arguments?.getLong("idNusantara") ?: -1L
                 DetailProvinsiScreen(idProvinsi = id, navigateToWisata = { idWisata ->
                     navController.navigate(Screen.DetailWisataByProvinsi.createRoute(id, idWisata))
+                }, navToDetailBatik = {idBatik ->
+                    navController.navigate(Screen.DetailBatik.createRoute(idBatik))
                 }, navController = navController)
             }
 
