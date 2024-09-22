@@ -1,33 +1,14 @@
 package com.tricakrawala.batikpedia.utils
 
-import android.content.ContentValues
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
-import androidx.annotation.RequiresApi
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import com.tricakrawala.batikpedia.BuildConfig
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 object Utils {
 
-    const val BASE_URL = "https://forradi.sga.dom.my.id/"
+    const val BASE_URL = "https://madqiqe.sgp.dom.my.id/"
 
     val listScreenWithoutBottomBar = listOf(
         Screen.MainSplash.route,
