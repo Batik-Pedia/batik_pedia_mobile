@@ -8,7 +8,7 @@ import java.util.Locale
 
 object Utils {
 
-    const val BASE_URL = "#"
+    const val BASE_URL = "https://batikpedia-tricakrawala.domcloud.dev/"
 
     val listScreenWithoutBottomBar = listOf(
         Screen.MainSplash.route,
