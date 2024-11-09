@@ -1,6 +1,7 @@
 package com.tricakrawala.batikpedia.di
 
 import android.content.Context
+import com.tricakrawala.batikpedia.BuildConfig
 import com.tricakrawala.batikpedia.data.resource.remote.retrofit.ApiService
 import com.tricakrawala.batikpedia.utils.Utils
 import dagger.Module
@@ -77,8 +78,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApiService(client: OkHttpClient): ApiService {
+        val baseUrl = BuildConfig.BASE_URL
         return Retrofit.Builder()
-            .baseUrl(Utils.BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
