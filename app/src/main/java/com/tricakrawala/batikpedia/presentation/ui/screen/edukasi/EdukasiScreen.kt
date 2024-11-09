@@ -208,6 +208,10 @@ fun EdukasiContent(
                         }
                     )
                 }
+                
+                item { 
+                    Spacer(modifier = Modifier.height(150.dp))
+                }
             }
         }
 

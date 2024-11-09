@@ -38,7 +38,7 @@ fun KatalogItemRow(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(image)
+                .data("https://batikpedia-tricakrawala.domcloud.dev/images/$image")
                 .crossfade(true)
                 .build(),
             contentDescription = "gambar motif batik",

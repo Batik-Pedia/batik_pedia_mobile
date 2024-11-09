@@ -150,7 +150,7 @@ fun DetailMotifBatikFullContent(
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
             if (batik != null){
-                ImgDetailBig(image = batik.image, text = batik.namaBatik, modifier = Modifier)
+                ImgDetailBig(image = "https://batikpedia-tricakrawala.domcloud.dev/images/${batik.image}", text = batik.namaBatik, modifier = Modifier)
 
                 Spacer(modifier = Modifier.height(8.dp))
 

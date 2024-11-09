@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -97,15 +98,19 @@ fun HomeScreen(
                     navController = navController,
                 )
             }
+
             nusantaraState is UiState.Loading || rekomendasiState is UiState.Loading || beritaState is UiState.Loading -> {
-                AlertDialog(
+                BasicAlertDialog(
                     onDismissRequest = {},
-                    modifier = Modifier.clip(RoundedCornerShape(16.dp)).background(Color.Transparent),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Transparent),
                 ) {
                     LoadingData(modifier.align(Alignment.Center), "Sedang Memuat Data..")
                 }
             }
-            else -> { }
+
+            else -> {}
         }
 
     }
@@ -154,8 +159,6 @@ fun HomeContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
-
-
         ) {
 
             Box(
@@ -211,6 +214,9 @@ fun HomeContent(
                             .clip(RoundedCornerShape(16.dp))
 
                     )
+                }
+                item{
+                    Spacer(modifier = Modifier.height(120.dp))
                 }
 
             }

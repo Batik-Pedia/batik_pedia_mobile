@@ -13,6 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/src/main/java/com/tricakrawala/batikpedia/data/
-app/src/main/java/com/tricakrawala/batikpedia/domain/
-app/src/main/java/com/tricakrawala/batikpedia/utils/
+#app/src/main/java/com/tricakrawala/batikpedia/data/
+#app/src/main/java/com/tricakrawala/batikpedia/domain/
+#app/src/main/java/com/tricakrawala/batikpedia/utils/

@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -18,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -80,7 +83,7 @@ fun KatalogScreen(
     when (val dataBatik = uiState) {
         is UiState.Loading -> {
             Box(Modifier.fillMaxSize()) {
-                AlertDialog(
+                BasicAlertDialog(
                     onDismissRequest = {},
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
@@ -232,6 +235,10 @@ fun KatalogScreen(
                                 jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
                                 modifier = modifier.clickable { navToDetail(data.idBatik) }
                             )
+                        }
+                        
+                        item { 
+                            Spacer(modifier = Modifier.height(150.dp))
                         }
                     }
                 }

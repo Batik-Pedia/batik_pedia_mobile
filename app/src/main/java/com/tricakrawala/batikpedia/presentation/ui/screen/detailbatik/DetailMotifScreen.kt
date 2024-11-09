@@ -156,7 +156,7 @@ fun DetailMotifContent(
                 .fillMaxHeight()
                 .padding(top = 88.dp, start = 24.dp, end = 24.dp)
         ) {
-                ImgDetailBig(image =katalogId.image, text = stringResource(id = R.string.motif_batik_detail, katalogId.namaBatik), modifier = Modifier)
+                ImgDetailBig(image ="https://batikpedia-tricakrawala.domcloud.dev/images/${katalogId.image}", text = stringResource(id = R.string.motif_batik_detail, katalogId.namaBatik), modifier = Modifier)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Box {

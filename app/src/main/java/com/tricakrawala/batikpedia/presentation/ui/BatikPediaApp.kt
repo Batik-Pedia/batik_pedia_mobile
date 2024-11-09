@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.presentation.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
@@ -48,6 +49,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.utils.Utils
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun BatikPediaApp(
     navController: NavHostController = rememberNavController()
@@ -87,11 +89,11 @@ fun BatikPediaApp(
                 BottomBar(navController, modifier = Modifier.navigationBarsPadding())
             }
         },
-    ) { innerPadding ->
+    ) {
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding)
+//            modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
