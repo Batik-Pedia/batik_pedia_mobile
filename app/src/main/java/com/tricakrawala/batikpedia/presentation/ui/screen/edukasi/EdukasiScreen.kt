@@ -210,7 +210,7 @@ fun EdukasiContent(
                 }
                 
                 item { 
-                    Spacer(modifier = Modifier.height(150.dp))
+                    Spacer(modifier = Modifier.height(36.dp))
                 }
             }
         }
