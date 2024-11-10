@@ -20,7 +20,8 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun NavbarHome(
     modifier: Modifier = Modifier,
-    textContent : String
+    textContent : String,
+    isShow : Boolean = true,
 ){
     Row(
         modifier = modifier
@@ -33,13 +34,15 @@ fun NavbarHome(
             color = textColor,
             fontSize = 14.sp
         )
+        if (isShow){
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = "",
+                tint = textColor,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+        }
 
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            contentDescription = "",
-            tint = textColor,
-            modifier = Modifier.align(Alignment.CenterVertically)
-        )
     }
 }
 
