@@ -13,18 +13,16 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.RekomendasiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ValuesItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
-import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
-import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,18 +34,6 @@ class BatikRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : BatikRepository {
 
-
-    private val rekomendasiList = mutableListOf<Rekomendasi>()
-
-    init {
-
-        if (rekomendasiList.isEmpty()) {
-            FakeSourceBatik.listRekomendasi.forEach {
-                rekomendasiList.add(it)
-            }
-        }
-
-    }
 
     override suspend fun saveSession(user: UserModel) {
         preference.saveSession(user)
@@ -69,9 +55,6 @@ class BatikRepositoryImpl @Inject constructor(
             }
         }.flowOn(Dispatchers.IO)
 
-    override fun getAllRekomendasi(): Flow<List<Rekomendasi>> {
-        return flowOf(rekomendasiList)
-    }
 
     override fun getAllBatik(
         order: String?,
@@ -150,6 +133,17 @@ class BatikRepositoryImpl @Inject constructor(
         try {
             val response = remoteDataSource.getProvinsiId(idProvinsi)
             val result = response.values
+            emit(UiState.Success(result))
+        } catch (e: Exception) {
+            emit(UiState.Error(e.message ?: "Unknown Error"))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    override fun getAllRekomendasi(): Flow<UiState<List<RekomendasiItem>>> = flow{
+        emit(UiState.Loading)
+        try {
+            val response = remoteDataSource.getAllRekomendasi()
+            val result = response.values.rekomendasi
             emit(UiState.Success(result))
         } catch (e: Exception) {
             emit(UiState.Error(e.message ?: "Unknown Error"))

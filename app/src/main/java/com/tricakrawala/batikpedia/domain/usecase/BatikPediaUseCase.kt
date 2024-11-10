@@ -10,10 +10,10 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
-import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
+import com.tricakrawala.batikpedia.data.resource.remote.response.RekomendasiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ValuesItem
 import kotlinx.coroutines.flow.Flow
 
@@ -22,7 +22,7 @@ interface BatikPediaUseCase {
     fun getSession(): Flow<UserModel>
     fun getAllNusantara(): Flow<UiState<List<ProvinsiItem>>>
     fun getProvinsiById(idProvinsi : Int) : Flow<UiState<ProvinsiId>>
-    fun getAllRekomendasi(): Flow<List<Rekomendasi>>
+    fun getAllRekomendasi(): Flow<UiState<List<RekomendasiItem>>>
     fun getAllBatik(
         order: String? = null,
         filterWilayah: String? = null,

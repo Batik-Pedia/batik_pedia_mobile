@@ -10,10 +10,10 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.KursusId
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiId
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
+import com.tricakrawala.batikpedia.data.resource.remote.response.RekomendasiItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ValuesItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
-import com.tricakrawala.batikpedia.domain.model.Rekomendasi
 import com.tricakrawala.batikpedia.domain.repositories.BatikRepository
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +28,7 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
 
     override fun getAllNusantara(): Flow<UiState<List<ProvinsiItem>>> = repository.getAllNusantara()
 
-    override fun getAllRekomendasi(): Flow<List<Rekomendasi>> = repository.getAllRekomendasi()
+    override fun getAllRekomendasi(): Flow<UiState<List<RekomendasiItem>>> = repository.getAllRekomendasi()
 
     override fun getAllBatik(
         order: String?,

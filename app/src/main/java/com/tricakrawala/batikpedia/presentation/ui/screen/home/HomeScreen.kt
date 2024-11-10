@@ -1,5 +1,7 @@
 package com.tricakrawala.batikpedia.presentation.ui.screen.home
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -41,11 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
 import com.tricakrawala.batikpedia.data.resource.remote.response.ProvinsiItem
-import com.tricakrawala.batikpedia.domain.model.FakeSourceBatik
-import com.tricakrawala.batikpedia.domain.model.Rekomendasi
+import com.tricakrawala.batikpedia.data.resource.remote.response.RekomendasiItem
 import com.tricakrawala.batikpedia.presentation.model.home.HomeViewModel
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
@@ -113,6 +117,8 @@ fun HomeScreen(
             else -> {}
         }
 
+        Spacer(modifier = Modifier.height(36.dp))
+
     }
 }
 
@@ -122,17 +128,19 @@ fun HomeContent(
     modifier: Modifier = Modifier,
     navigateToNusantara: (Long) -> Unit,
     listNusantara: List<ProvinsiItem>,
-    listRekomendasi: List<Rekomendasi>,
+    listRekomendasi: List<RekomendasiItem>,
     berita: List<BeritaItem>,
     navController: NavHostController,
 ) {
     val randomBerita = berita.shuffled().firstOrNull()
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
             .background(background2)
             .fillMaxSize()
             .statusBarsPadding()
+            .padding(bottom = 56.dp)
 
     ) {
         Image(
@@ -195,7 +203,10 @@ fun HomeContent(
                 }
             }
 
-            NavbarHome(textContent = stringResource(id = R.string.rekomendasi_untuk_anda))
+            NavbarHome(
+                textContent = stringResource(id = R.string.rekomendasi_untuk_anda),
+                isShow = false
+            )
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(count = 2),
@@ -205,18 +216,25 @@ fun HomeContent(
                     .height(300.dp)
             ) {
                 items(listRekomendasi) { data ->
-                    Image(
-                        painter = painterResource(id = data.image),
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(data.image)
+                            .crossfade(true)
+                            .build(),
                         contentDescription = "Rekomendasi",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .height(150.dp)
                             .clip(RoundedCornerShape(16.dp))
+                            .clickable {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.link))
+                                context.startActivity(intent)
+                            }
 
                     )
                 }
-                item{
-                    Spacer(modifier = Modifier.height(120.dp))
+                item {
+                    Spacer(modifier = Modifier.height(100.dp))
                 }
 
             }
@@ -235,7 +253,7 @@ private fun Preview() {
         HomeContent(
             navigateToNusantara = { },
             listNusantara = emptyList(),
-            listRekomendasi = FakeSourceBatik.listRekomendasi,
+            listRekomendasi = emptyList(),
             navController = rememberNavController(),
             berita = emptyList()
         )

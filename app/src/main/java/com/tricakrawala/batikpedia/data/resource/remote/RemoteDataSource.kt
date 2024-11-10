@@ -23,5 +23,6 @@ class RemoteDataSource @Inject constructor(
     suspend fun getAllKursus() = apiService.getAllKursus()
     suspend fun getDetailKursus(idKursus : Int) = apiService.getDetailKursus(idKursus)
     suspend fun getAllVideo() = apiService.getAllVideo()
+    suspend fun getAllRekomendasi() = apiService.getAllRekomendasi()
 
 }

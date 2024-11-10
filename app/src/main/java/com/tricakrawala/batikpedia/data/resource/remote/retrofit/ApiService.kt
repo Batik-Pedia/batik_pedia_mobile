@@ -10,6 +10,7 @@ import com.tricakrawala.batikpedia.data.resource.remote.response.WisataIdRespons
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.KursusIdResponse
+import com.tricakrawala.batikpedia.data.resource.remote.response.RekomendasiResponse
 import com.tricakrawala.batikpedia.data.resource.remote.response.VideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -22,6 +23,9 @@ interface ApiService {
 
     @GET("berita/{idBerita}")
     suspend fun getDetailBerita(@Path("idBerita") idBerita: Int) : BeritaIdResponse
+
+    @GET("rekomendasi")
+    suspend fun getAllRekomendasi() : RekomendasiResponse
 
     @GET("katalog")
     suspend fun getKatalogBatik(
