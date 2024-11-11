@@ -92,10 +92,6 @@ fun HomeScreen(
         val rekomendasiState = uiStateRekomendasi
         val beritaState = uiStateBerita
 
-        Log.d("HomeScreen", "Entering HomeScreen composable")
-        Log.d("HomeScreen", "Nusantara State: $nusantaraState")
-        Log.d("HomeScreen", "Rekomendasi State: $rekomendasiState")
-        Log.d("HomeScreen", "Berita State: $beritaState")
 
         when {
             nusantaraState is UiState.Success && rekomendasiState is UiState.Success && beritaState is UiState.Success -> {
