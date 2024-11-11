@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Retain fields for Gson serialization/deserialization
+-keep class com.tricakrawala.batikpedia.data.resource.remote.response.** { *; }
+-keepclassmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes Signature
+-keepattributes *Annotation*
+
+

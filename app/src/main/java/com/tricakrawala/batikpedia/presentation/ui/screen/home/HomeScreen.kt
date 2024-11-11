@@ -2,6 +2,7 @@ package com.tricakrawala.batikpedia.presentation.ui.screen.home
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -91,6 +92,11 @@ fun HomeScreen(
         val rekomendasiState = uiStateRekomendasi
         val beritaState = uiStateBerita
 
+        Log.d("HomeScreen", "Entering HomeScreen composable")
+        Log.d("HomeScreen", "Nusantara State: $nusantaraState")
+        Log.d("HomeScreen", "Rekomendasi State: $rekomendasiState")
+        Log.d("HomeScreen", "Berita State: $beritaState")
+
         when {
             nusantaraState is UiState.Success && rekomendasiState is UiState.Success && beritaState is UiState.Success -> {
                 HomeContent(
@@ -120,6 +126,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(36.dp))
 
     }
+
 }
 
 
@@ -190,10 +197,10 @@ fun HomeContent(
                 modifier = Modifier
                     .height(48.dp)
                     .clickable {
-                    navController.navigate(
-                        Screen.ToListProvinsi.route
-                    )
-                })
+                        navController.navigate(
+                            Screen.ToListProvinsi.route
+                        )
+                    })
 
             LazyRow {
                 items(listNusantara) { data ->
@@ -202,6 +209,7 @@ fun HomeContent(
                         image = data.imgProvinsi,
                         onClick = { navigateToNusantara(data.idProvinsi.toLong()) }
                     )
+
                 }
             }
 
@@ -209,6 +217,7 @@ fun HomeContent(
                 textContent = stringResource(id = R.string.rekomendasi_untuk_anda),
                 isShow = false
             )
+
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(count = 2),
@@ -243,6 +252,7 @@ fun HomeContent(
 
         }
     }
+
 
 }
 
