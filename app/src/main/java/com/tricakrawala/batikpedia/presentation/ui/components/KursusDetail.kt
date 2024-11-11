@@ -83,8 +83,8 @@ fun TextWithoutCard(
                 text = text,
                 fontFamily = poppinsFontFamily,
                 fontWeight = FontWeight.Normal,
-                color = textSecondary,
-                fontSize = 10.sp,
+                color = textColor,
+                fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 16.dp, start = 8.dp, end = 8.dp, )
             )
         }else{

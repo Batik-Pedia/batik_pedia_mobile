@@ -160,7 +160,8 @@ fun EdukasiContent(
 
 
         )
-        {NavbarHome(textContent = stringResource(id = R.string.kursus_membatik), modifier = Modifier.clickable { navController.navigate(
+        {NavbarHome(textContent = stringResource(id = R.string.kursus_membatik), modifier = Modifier.height(48.dp)
+            .clickable { navController.navigate(
             Screen.ToListKursus.route)})
 
            Box(
@@ -189,7 +190,8 @@ fun EdukasiContent(
             Spacer(modifier = Modifier.height(8.dp))
 
             NavbarHome(textContent = stringResource(id = R.string.video_membatik),
-                modifier = Modifier.clickable { navController.navigate(Screen.VideoEdukasi.route)})
+                modifier = Modifier.height(48.dp)
+                    .clickable { navController.navigate(Screen.VideoEdukasi.route)})
 
             LazyColumn(
                 modifier = Modifier

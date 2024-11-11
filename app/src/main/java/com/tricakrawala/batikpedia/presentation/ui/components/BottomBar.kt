@@ -19,6 +19,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -41,7 +42,8 @@ fun BottomBar(
     BottomAppBar(
         modifier = modifier,
         backgroundColor = backgroundColor,
-        cutoutShape = CircleShape
+        cutoutShape = CircleShape,
+
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -118,6 +120,7 @@ fun BottomBar(
                             color = if (currentRoute == item.screen.route) primary else iconBottom,
                             fontFamily = poppinsFontFamily,
                             fontWeight = FontWeight.Normal,
+                            fontSize = 12.sp,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
                         )

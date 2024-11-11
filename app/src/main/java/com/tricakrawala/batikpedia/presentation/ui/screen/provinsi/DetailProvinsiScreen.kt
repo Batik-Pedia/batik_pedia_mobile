@@ -2,7 +2,6 @@ package com.tricakrawala.batikpedia.presentation.ui.screen.provinsi
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -77,8 +76,14 @@ fun DetailProvinsiScreen(
     LaunchedEffect(true) {
         if (uiState is UiState.Loading || uiStateWisata is UiState.Loading || uiStateBatik is UiState.Loading) {
             viewModel.getProvinsiById(idProvinsi)
-            viewModel.getAllBatik()
             viewModel.getAllWisata()
+            viewModel.uiStateDetail.collect { state ->
+                if (state is UiState.Success) {
+                    val namaProvinsi = state.data.namaProvinsi
+                    viewModel.getAllBatik(wilayah = namaProvinsi)
+                }
+            }
+
         }
 
     }
@@ -133,11 +138,6 @@ fun DetailProvinsiContent(
     navToDetailBatik : (Int) -> Unit,
 ) {
 
-    val filteredListBatik = remember(textContent, listBatik) {
-        listBatik.filter {
-            it.wilayah.contains(textContent, ignoreCase = true)
-        }
-    }
 
     val filteredListWisata = remember(textContent, listWisata) {
         listWisata.filter {
@@ -216,30 +216,29 @@ fun DetailProvinsiContent(
                     modifier = Modifier
                         .padding(start = 16.dp, top = 16.dp)
                 )
-                if (filteredListBatik.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.batik_di_wilayah_ini_belum_tersedia),
-                        fontFamily = poppinsFontFamily,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp,
-                        color = textColor,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(horizontal = 16.dp)
-                    )
-                }else{
+                if (listBatik.isNotEmpty()) {
                     LazyRow(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(horizontal = 16.dp)
                     ) {
 
-                        items(filteredListBatik){batik ->
-                            ImgRowDetail(image = batik.image, modifier = Modifier.padding(end = 16.dp).clickable {
-                                navToDetailBatik(batik.idBatik)
-                            } )
+                        items(listBatik){batik ->
+                            ImgRowDetail(image = "https://batikpedia-tricakrawala.domcloud.dev/images/${batik.image}", modifier = Modifier.padding(end = 16.dp), onClick = {navToDetailBatik(batik.idBatik)} )
                         }
                     }
+
+                }else{
+                    Text(
+                        text = stringResource(R.string.batik_di_wilayah_ini_belum_tersedia),
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 12.sp,
+                        color = textColor,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 16.dp)
+                    )
                 }
                 
                 Text(
@@ -271,8 +270,8 @@ fun DetailProvinsiContent(
 
                         items(filteredListWisata){wisata ->
                             ImgRowDetail(image = wisata.imageWisata, modifier = modifier
-                                .padding(end = 16.dp)
-                                .clickable { navigateToWisata(wisata.idWisata.toLong()) })
+                                .padding(end = 16.dp),
+                                onClick = {navigateToWisata(wisata.idWisata.toLong())})
                         }
                     }
                 }

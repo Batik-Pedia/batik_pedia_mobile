@@ -44,7 +44,6 @@ class ProvinsiViewModel @Inject constructor(private val useCase : BatikPediaUseC
 init {
     getAllNusantara()
     getAllWisata()
-    getAllBatik()
 }
     fun getAllNusantara() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -70,9 +69,9 @@ init {
         }
     }
 
-    fun getAllBatik() {
+    fun getAllBatik(order : String = "asc", wilayah: String? = null, jenis : String = "Semua") {
         viewModelScope.launch(Dispatchers.IO) {
-            useCase.getAllBatik()
+            useCase.getAllBatik(order, wilayah, jenis)
                 .catch {
                     _uiStateBatik.value = UiState.Error(it.message.toString())
                 }

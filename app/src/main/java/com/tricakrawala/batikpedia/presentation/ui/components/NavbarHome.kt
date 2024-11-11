@@ -32,7 +32,8 @@ fun NavbarHome(
             fontFamily = poppinsFontFamily,
             fontWeight = FontWeight.SemiBold,
             color = textColor,
-            fontSize = 14.sp
+            fontSize = 14.sp,
+            modifier = Modifier.align(Alignment.CenterVertically)
         )
         if (isShow){
             Icon(
@@ -48,7 +49,7 @@ fun NavbarHome(
 
 @Preview(showBackground = true)
 @Composable
-private fun preview(){
+private fun Preview(){
     BatikPediaTheme {
         NavbarHome(textContent = "Jelajahi nusantara")
     }

@@ -196,7 +196,12 @@ fun DetailKursusContent(
                     modifier = modifier
                         .padding(top = 36.dp)
                         .align(Alignment.BottomEnd)
-                        .clickable { }
+                        .clickable {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                data = Uri.parse(kursusUrl)
+                            }
+                            context.startActivity(intent)
+                        }
                 )
 
             }

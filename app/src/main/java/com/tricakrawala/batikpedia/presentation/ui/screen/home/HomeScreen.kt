@@ -187,7 +187,9 @@ fun HomeContent(
             }
             NavbarHome(
                 textContent = stringResource(id = R.string.jelajahi_nusantara),
-                modifier = Modifier.clickable {
+                modifier = Modifier
+                    .height(48.dp)
+                    .clickable {
                     navController.navigate(
                         Screen.ToListProvinsi.route
                     )
@@ -198,7 +200,7 @@ fun HomeContent(
                     NusantaraItemRow(
                         provinsi = data.namaProvinsi,
                         image = data.imgProvinsi,
-                        modifier = modifier.clickable { navigateToNusantara(data.idProvinsi.toLong()) }
+                        onClick = { navigateToNusantara(data.idProvinsi.toLong()) }
                     )
                 }
             }

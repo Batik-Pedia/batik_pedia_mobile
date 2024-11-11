@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.presentation.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,7 @@ fun NusantaraItemRow(
     modifier: Modifier = Modifier,
     provinsi: String,
     image: String,
+    onClick : () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -46,6 +48,9 @@ fun NusantaraItemRow(
                 contentDescription = "provinsi",
                 modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
+                    .clickable {
+                        onClick()
+                    }
 
             )
         }
@@ -68,6 +73,6 @@ fun NusantaraItemRow(
 @Preview(showBackground = true)
 private fun preview() {
     BatikPediaTheme {
-        NusantaraItemRow(provinsi = "Yogyakarta", image = "R.drawable.yogyakarta")
+        NusantaraItemRow(provinsi = "Yogyakarta", image = "R.drawable.yogyakarta", onClick = {})
     }
 }

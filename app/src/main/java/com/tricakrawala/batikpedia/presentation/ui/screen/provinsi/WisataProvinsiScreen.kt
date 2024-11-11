@@ -18,7 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataId
 import com.tricakrawala.batikpedia.presentation.model.provinsi.ProvinsiViewModel
@@ -72,7 +71,7 @@ fun WisataProvinsiScreen(
         is UiState.Loading -> {
 
             Box(Modifier.fillMaxSize()) {
-                AlertDialog(
+                BasicAlertDialog(
                     onDismissRequest = {},
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
@@ -170,7 +169,7 @@ fun WisataProvinsiContent(
                 modifier = modifier.fillMaxWidth()
             )
 
-
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }
