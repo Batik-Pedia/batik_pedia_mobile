@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.presentation.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,16 +31,21 @@ fun NusantaraItemRow(
     modifier: Modifier = Modifier,
     provinsi: String,
     image: String,
-    onClick : () -> Unit,
+    onClick: () -> Unit,
+    alphaBackground: Float? = null
 ) {
     Box(
         modifier = modifier
             .width(200.dp)
             .height(115.dp)
     ) {
-        Column(
+        Box(
             modifier = modifier
-                .fillMaxSize()
+                .clip(RoundedCornerShape(16.dp))
+                .clickable {
+                    onClick()
+                }
+
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -46,12 +53,15 @@ fun NusantaraItemRow(
                     .crossfade(true)
                     .build(),
                 contentDescription = "provinsi",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable {
-                        onClick()
-                    }
+                    .fillMaxSize()
+            )
 
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = alphaBackground ?: 0f))
             )
         }
 
@@ -62,7 +72,9 @@ fun NusantaraItemRow(
             fontWeight = FontWeight.SemiBold,
             color = Color.White,
             fontSize = 12.sp,
-            modifier = Modifier.align(Alignment.TopCenter).padding(end = 24.dp)
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(end = 24.dp)
         )
 
     }
