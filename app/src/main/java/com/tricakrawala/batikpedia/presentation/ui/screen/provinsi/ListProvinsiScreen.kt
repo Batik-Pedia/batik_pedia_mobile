@@ -194,7 +194,7 @@ fun ListProvinsiContent(
                     ProvinsiItemRow(
                         image = data.imgProvinsi,
                         provinsi = data.namaProvinsi,
-                        modifier = modifier.clickable { navigateToDetail(data.idProvinsi.toLong()) })
+                        onCLick = { navigateToDetail(data.idProvinsi.toLong()) })
                 }
             }
 
