@@ -166,7 +166,7 @@ fun WisataContent(
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
                 items(filteredList){data ->
-                    ProvinsiItemRow(image = data.imageWisata, provinsi = data.namaWisata, modifier = modifier.clickable { navigateToDetail(data.idWisata.toLong()) })
+                    ProvinsiItemRow(image = data.imageWisata, provinsi = data.namaWisata, onCLick = { navigateToDetail(data.idWisata.toLong()) })
 
                 }
 

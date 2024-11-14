@@ -190,19 +190,21 @@ fun HomeContent(
             NavbarHome(
                 textContent = stringResource(id = R.string.jelajahi_nusantara),
                 modifier = Modifier
-                    .height(48.dp)
-                    .clickable {
-                        navController.navigate(
-                            Screen.ToListProvinsi.route
-                        )
-                    })
+                    .height(48.dp),
+                onClick = {
+                    navController.navigate(
+                        Screen.ToListProvinsi.route
+                    )
+                })
 
             LazyRow {
                 items(listNusantara) { data ->
                     NusantaraItemRow(
                         provinsi = data.namaProvinsi,
                         image = data.imgProvinsi,
-                        onClick = { navigateToNusantara(data.idProvinsi.toLong()) }
+                        onClick = { navigateToNusantara(data.idProvinsi.toLong()) },
+                        alphaBackground = 0.3f,
+                        modifier = Modifier.padding(end = 8.dp)
                     )
 
                 }
@@ -210,7 +212,7 @@ fun HomeContent(
 
             NavbarHome(
                 textContent = stringResource(id = R.string.rekomendasi_untuk_anda),
-                isShow = false
+                isShow = false,
             )
 
 
