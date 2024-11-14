@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.presentation.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -20,9 +21,10 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun NavbarHome(
     modifier: Modifier = Modifier,
-    textContent : String,
-    isShow : Boolean = true,
-){
+    textContent: String,
+    isShow: Boolean = true,
+    onClick: () -> Unit = {},
+) {
     Row(
         modifier = modifier
             .padding(top = 8.dp)
@@ -33,14 +35,18 @@ fun NavbarHome(
             fontWeight = FontWeight.SemiBold,
             color = textColor,
             fontSize = 14.sp,
-            modifier = Modifier.align(Alignment.CenterVertically)
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .clickable { onClick() }
         )
-        if (isShow){
+        if (isShow) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = "",
                 tint = textColor,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .clickable { onClick() }
             )
         }
 
@@ -49,8 +55,8 @@ fun NavbarHome(
 
 @Preview(showBackground = true)
 @Composable
-private fun Preview(){
+private fun Preview() {
     BatikPediaTheme {
-        NavbarHome(textContent = "Jelajahi nusantara")
+        NavbarHome(textContent = "Jelajahi nusantara", onClick = {})
     }
 }
