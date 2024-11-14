@@ -58,6 +58,7 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
+import com.tricakrawala.batikpedia.presentation.ui.theme.textSecondary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -234,7 +235,7 @@ fun DetailProvinsiContent(
                         fontFamily = poppinsFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 12.sp,
-                        color = textColor,
+                        color = textSecondary,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(horizontal = 16.dp)
@@ -255,8 +256,8 @@ fun DetailProvinsiContent(
                         text = stringResource(R.string.wisata_di_wilayah_ini_belum_tersedia),
                         fontFamily = poppinsFontFamily,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp,
-                        color = textColor,
+                        fontSize = 12.sp,
+                        color = textSecondary,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)

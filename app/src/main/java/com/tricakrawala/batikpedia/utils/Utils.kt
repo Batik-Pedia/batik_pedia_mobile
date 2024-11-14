@@ -8,8 +8,6 @@ import java.util.Locale
 
 object Utils {
 
-    const val BASE_URL = ""
-
     val listScreenWithoutBottomBar = listOf(
         Screen.MainSplash.route,
         Screen.ToListProvinsi.route,
