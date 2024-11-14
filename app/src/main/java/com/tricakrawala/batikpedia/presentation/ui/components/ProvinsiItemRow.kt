@@ -1,6 +1,7 @@
 package com.tricakrawala.batikpedia.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,12 +29,14 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 fun ProvinsiItemRow(
     modifier: Modifier = Modifier,
     image: String,
-    provinsi: String
+    provinsi: String,
+    onCLick : () -> Unit
 ) {
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
+            .clickable { onCLick() }
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -67,6 +70,6 @@ fun ProvinsiItemRow(
 @Composable
 private fun Preview(){
     BatikPediaTheme {
-        ProvinsiItemRow(image = "R.drawable.yogyakarta", provinsi = "Yogyakarta")
+        ProvinsiItemRow(image = "R.drawable.yogyakarta", provinsi = "Yogyakarta", onCLick = {})
     }
 }
