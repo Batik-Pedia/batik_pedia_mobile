@@ -277,6 +277,8 @@ fun DetailProvinsiContent(
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(36.dp))
         }
     }
 

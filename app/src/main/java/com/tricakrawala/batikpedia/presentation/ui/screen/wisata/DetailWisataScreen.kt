@@ -170,6 +170,7 @@ fun DetailWisataContent(
                 modifier = modifier.fillMaxWidth()
             )
 
+            Spacer(modifier = Modifier.height(36.dp))
 
         }
     }
