@@ -91,9 +91,8 @@ fun WisataScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WisataContent(
-    modifier: Modifier = Modifier,
-    listWisata : List<WisataItem>,
-    navigateToDetail : (Long) -> Unit,
+    listWisata: List<WisataItem>,
+    navigateToDetail: (Long) -> Unit,
 
     ){
 
