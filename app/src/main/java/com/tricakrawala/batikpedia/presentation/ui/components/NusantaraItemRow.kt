@@ -3,7 +3,6 @@ package com.tricakrawala.batikpedia.presentation.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -83,7 +82,7 @@ fun NusantaraItemRow(
 
 @Composable
 @Preview(showBackground = true)
-private fun preview() {
+private fun Preview() {
     BatikPediaTheme {
         NusantaraItemRow(provinsi = "Yogyakarta", image = "R.drawable.yogyakarta", onClick = {})
     }
