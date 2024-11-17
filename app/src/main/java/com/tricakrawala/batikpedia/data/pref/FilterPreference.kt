@@ -1,7 +1,6 @@
 package com.tricakrawala.batikpedia.data.pref
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -43,7 +42,7 @@ class FilterPreference @Inject constructor(@SessionDataStore private val filterS
     }
 
     companion object {
-        private val TAG = "Preference"
+
 
         private val SORT = stringPreferencesKey("sort")
         private val WILAYAH = stringPreferencesKey("wilayah")

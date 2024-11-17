@@ -1,12 +1,10 @@
 package com.tricakrawala.batikpedia.data.pref
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -40,7 +38,6 @@ class UserPreference @Inject constructor( @SessionDataStore private val dataStor
     }
 
     companion object {
-        private val TAG = "Preference"
 
         private val NOT_NEW_USER = booleanPreferencesKey("isNotNew")
 

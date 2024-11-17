@@ -1,6 +1,5 @@
 package com.tricakrawala.batikpedia.presentation.model.katalog
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tricakrawala.batikpedia.data.pref.FilterState
