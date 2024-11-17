@@ -26,7 +26,7 @@ class FilterPreference @Inject constructor(@SessionDataStore private val filterS
             preferences[SORT] = filter.sort
             preferences[WILAYAH] = filter.wilayah
             preferences[JENIS_BATIK] = filter.jenisBatik
-            Log.d(TAG, "saveSession: $filter")
+
         }
     }
 

@@ -44,4 +44,5 @@
     <string name="image_failed">Pengklasifikasi gambar gagal melakukan inisialisasi. Lihat log kesalahan untuk detailnya</string>
     <string name="batik_di_wilayah_ini_belum_tersedia">Batik Di wilayah ini belum tersedia</string>
     <string name="wisata_di_wilayah_ini_belum_tersedia">Wisata Di wilayah ini belum tersedia</string>
+    <string name="image_classifier_failed">Image classifier failed to initialize. See error logs for details</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -111,7 +112,8 @@ fun BottomBar(
                         Icon(
                             imageVector = if (currentRoute == item.screen.route) filledItem.icon else item.icon,
                             contentDescription = item.title,
-                            tint = if (currentRoute == item.screen.route) primary else iconBottom
+                            tint = if (currentRoute == item.screen.route) primary else iconBottom,
+                                    modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     },
                     label = {
@@ -120,9 +122,10 @@ fun BottomBar(
                             color = if (currentRoute == item.screen.route) primary else iconBottom,
                             fontFamily = poppinsFontFamily,
                             fontWeight = FontWeight.Normal,
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
+                            maxLines = 1
                         )
                     },
                     selected = currentRoute == item.screen.route,

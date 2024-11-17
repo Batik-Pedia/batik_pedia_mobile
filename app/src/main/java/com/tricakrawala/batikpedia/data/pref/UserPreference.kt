@@ -25,7 +25,7 @@ class UserPreference @Inject constructor( @SessionDataStore private val dataStor
     suspend fun saveSession(user : UserModel) {
         dataStore.edit { preferences ->
             preferences[NOT_NEW_USER] = true
-            Log.d(TAG, "saveSession: $user")
+
         }
     }
 

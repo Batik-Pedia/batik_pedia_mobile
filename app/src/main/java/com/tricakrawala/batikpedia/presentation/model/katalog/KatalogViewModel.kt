@@ -54,7 +54,6 @@ class KatalogViewModel @Inject constructor(private val useCase: BatikPediaUseCas
                     _filterUiState.value = filterUiState
                     if (filterUiState is UiState.Success) {
                         getAllBatik(filterUiState.data)
-                        Log.d("Katalog Model", "getFilter: ${filterUiState.data}")
                     }
 
                 }
