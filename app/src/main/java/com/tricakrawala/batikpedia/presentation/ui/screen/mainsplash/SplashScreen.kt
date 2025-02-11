@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.tricakrawala.batikpedia.R
-import com.tricakrawala.batikpedia.presentation.ui.screen.main.MainActivity
+import com.tricakrawala.batikpedia.presentation.ui.main.MainActivity
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import kotlinx.coroutines.delay

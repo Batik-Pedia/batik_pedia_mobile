@@ -37,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -111,7 +111,7 @@ fun CameraContent(
             cameraProvider?.unbindAll()
             camera = cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)!!
             camera!!.cameraInfo.hasFlashUnit()
-            preview.setSurfaceProvider(previewView.surfaceProvider)
+            preview.surfaceProvider = previewView.surfaceProvider
         }
     }
 

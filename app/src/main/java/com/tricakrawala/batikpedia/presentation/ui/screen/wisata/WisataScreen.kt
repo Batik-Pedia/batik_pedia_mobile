@@ -2,10 +2,12 @@ package com.tricakrawala.batikpedia.presentation.ui.screen.wisata
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +19,12 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -40,9 +45,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.data.resource.remote.response.WisataItem
 import com.tricakrawala.batikpedia.presentation.model.wisata.WisataViewModel
+import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.common.UiState
 import com.tricakrawala.batikpedia.presentation.ui.components.LoadingData
 import com.tricakrawala.batikpedia.presentation.ui.components.ProvinsiItemRow
@@ -50,14 +58,16 @@ import com.tricakrawala.batikpedia.presentation.ui.components.SearchBarKatalog
 import com.tricakrawala.batikpedia.presentation.ui.theme.BatikPediaTheme
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.poppinsFontFamily
+import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WisataScreen(
-    navigateToDetail : (Long) -> Unit,
-    viewModel: WisataViewModel = hiltViewModel()
-){
+    navigateToDetail: (Long) -> Unit,
+    viewModel: WisataViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
     LaunchedEffect(true) {
         if (uiState is UiState.Loading) {
@@ -67,8 +77,13 @@ fun WisataScreen(
 
     when (val wisata = uiState) {
         is UiState.Success -> {
-            WisataContent(listWisata = wisata.data, navigateToDetail = navigateToDetail)
+            WisataContent(
+                listWisata = wisata.data,
+                navigateToDetail = navigateToDetail,
+                navController
+            )
         }
+
         is UiState.Loading -> {
             Box(Modifier.fillMaxSize()) {
                 BasicAlertDialog(
@@ -93,8 +108,8 @@ fun WisataScreen(
 fun WisataContent(
     listWisata: List<WisataItem>,
     navigateToDetail: (Long) -> Unit,
-
-    ){
+    navController: NavHostController,
+) {
 
     var query by remember { mutableStateOf("") }
     val filteredList = remember(query, listWisata) {
@@ -147,12 +162,41 @@ fun WisataContent(
 
 
         ) {
-            SearchBarKatalog(
-                query = query,
-                onQueryChange = { newQuery -> query = newQuery },
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-            )
+            ) {
+                SearchBarKatalog(
+                    query = query,
+                    onQueryChange = { newQuery -> query = newQuery },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 16.dp)
+                )
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .clip(RoundedCornerShape(10.dp))
+                        .size(56.dp)
+                        .background(primary)
+                        .clickable {
+                            navController.navigate(Screen.Favorite.route) {
+                                restoreState = true
+                            }
+                        },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Favorite",
+                        tint = Color.White,
+                        modifier = Modifier.align(
+                            Alignment.Center
+                        )
+                    )
+                }
+
+            }
 
             LazyColumn(
                 modifier = Modifier
@@ -161,8 +205,11 @@ fun WisataContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
-                items(filteredList){data ->
-                    ProvinsiItemRow(image = data.imageWisata, provinsi = data.namaWisata, onCLick = { navigateToDetail(data.idWisata.toLong()) })
+                items(filteredList) { data ->
+                    ProvinsiItemRow(
+                        image = data.imageWisata,
+                        provinsi = data.namaWisata,
+                        onCLick = { navigateToDetail(data.idWisata.toLong()) })
 
                 }
 
@@ -179,10 +226,11 @@ fun WisataContent(
 
 @Preview
 @Composable
-private fun Preview(){
+private fun Preview() {
     BatikPediaTheme {
-        WisataContent(listWisata = emptyList()) {
-
-        }
+        WisataContent(
+            listWisata = emptyList(),
+            navController = rememberNavController(),
+            navigateToDetail = {})
     }
 }

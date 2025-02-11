@@ -1,5 +1,7 @@
 package com.tricakrawala.batikpedia.presentation.ui.screen.beritaacara
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,7 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,23 +61,22 @@ import com.tricakrawala.batikpedia.presentation.ui.theme.textColor
 @Composable
 fun BeritaAcaraScreen(
     viewModel: BeritaViewModel = hiltViewModel(),
-    navigateToDetail : (Int) -> Unit,
-    navController : NavHostController,
+    navController: NavHostController,
 
-    ){
+    ) {
 
     val uiState by viewModel.uiState.collectAsState(initial = UiState.Loading)
 
     LaunchedEffect(true) {
-        if (uiState is UiState.Loading){
+        if (uiState is UiState.Loading) {
             viewModel.getAllBerita()
         }
     }
 
-    when(val listBerita = uiState){
+    when (val listBerita = uiState) {
         is UiState.Loading -> {
             Box(Modifier.fillMaxSize()) {
-                AlertDialog(
+                BasicAlertDialog(
                     onDismissRequest = {},
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
@@ -84,8 +86,12 @@ fun BeritaAcaraScreen(
                 }
             }
         }
+
         is UiState.Success -> {
-            BeritaAcaraContent(listBerita = listBerita.data, navigateToDetail = navigateToDetail,navController = navController)
+            BeritaAcaraContent(
+                listBerita = listBerita.data,
+                navController = navController
+            )
         }
 
         else -> {}
@@ -97,10 +103,9 @@ fun BeritaAcaraScreen(
 fun BeritaAcaraContent(
     modifier: Modifier = Modifier,
     listBerita: List<BeritaItem>,
-    navigateToDetail : (Int) -> Unit,
-    navController : NavHostController,
-){
-
+    navController: NavHostController,
+) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .background(background2)
@@ -160,8 +165,16 @@ fun BeritaAcaraContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(end = 4.dp, start = 4.dp, bottom = 4.dp),
             ) {
-                items(listBerita){data ->
-                    BeritaRow(image = data.imageBerita, title = data.namaBerita, time = data.tglBerita, lokasi = data.lokasiBerita, modifier = modifier.clickable { navigateToDetail(data.idBerita) })
+                items(listBerita) { data ->
+                    BeritaRow(
+                        image = data.imageBerita,
+                        title = data.namaBerita,
+                        time = data.tglBerita,
+                        lokasi = data.lokasiBerita,
+                        modifier = modifier.clickable {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.urlBerita))
+                            context.startActivity(intent)
+                        })
                 }
             }
 
@@ -171,9 +184,12 @@ fun BeritaAcaraContent(
 
 @Composable
 @Preview(showBackground = true)
-private fun preview(){
+private fun Preview() {
     BatikPediaTheme {
-        BeritaAcaraContent(listBerita = emptyList(), navigateToDetail = {}, navController = rememberNavController())
+        BeritaAcaraContent(
+            listBerita = emptyList(),
+            navController = rememberNavController()
+        )
     }
 }
 

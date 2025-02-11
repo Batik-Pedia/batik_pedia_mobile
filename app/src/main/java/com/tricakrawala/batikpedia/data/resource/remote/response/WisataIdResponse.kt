@@ -1,5 +1,8 @@
 package com.tricakrawala.batikpedia.data.resource.remote.response
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class WisataIdResponse(
@@ -8,8 +11,10 @@ data class WisataIdResponse(
 	val values: WisataId
 )
 
+@Entity(tableName = "wisata_batik_favorite")
 data class WisataId(
 
+	@PrimaryKey
 	@field:SerializedName("idWisata")
 	val idWisata: Int,
 
@@ -26,5 +31,11 @@ data class WisataId(
 	val detailWisata: String,
 
 	@field:SerializedName("lat")
-	val lat: Double
+	val lat: Double,
+
+	@field:SerializedName("wilayah")
+	val wilayah: String,
+
+	@ColumnInfo(name = "isFavorite")
+	val isFavorite : Boolean
 )

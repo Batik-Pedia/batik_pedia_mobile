@@ -107,150 +107,153 @@ fun KatalogScreen(
 }
 
 
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun KatalogContent(
-        modifier: Modifier = Modifier,
-        listBatik: List<KatalogBatikItem>,
-        navToDetail : (Int) -> Unit,
-        navController : NavHostController,
-    ) {
-        var query by remember { mutableStateOf("") }
-        val filteredList = remember(query, listBatik) {
-            if (query.isEmpty()) {
-                listBatik
-            } else {
-                listBatik.filter {
-                    it.namaBatik.contains(query, ignoreCase = true) ||
-                            it.jenisBatik.contains(query, ignoreCase = true)
-                }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun KatalogContent(
+    modifier: Modifier = Modifier,
+    listBatik: List<KatalogBatikItem>,
+    navToDetail: (Int) -> Unit,
+    navController: NavHostController,
+) {
+    var query by remember { mutableStateOf("") }
+    val filteredList = remember(query, listBatik) {
+        if (query.isEmpty()) {
+            listBatik
+        } else {
+            listBatik.filter {
+                it.namaBatik.contains(query, ignoreCase = true) ||
+                        it.jenisBatik.contains(query, ignoreCase = true)
             }
         }
+    }
 
 
-        Box(
+    Box(
+        modifier = Modifier
+            .background(background2)
+            .fillMaxSize()
+            .statusBarsPadding()
+
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ornamen_batik_beranda),
+            contentDescription = "",
             modifier = Modifier
-                .background(background2)
-                .fillMaxSize()
-                .statusBarsPadding()
+                .align(Alignment.TopEnd)
+                .size(180.dp)
+
+        )
+
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.menu_katalog),
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    color = textColor,
+                    fontSize = 16.sp
+                )
+            },
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 16.dp),
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent)
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 88.dp, start = 24.dp, end = 24.dp)
+
 
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ornamen_batik_beranda),
-                contentDescription = "",
+            Row(
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .size(180.dp)
-
-            )
-
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.menu_katalog),
-                        fontFamily = poppinsFontFamily,
-                        fontWeight = FontWeight.SemiBold,
-                        color = textColor,
-                        fontSize = 16.sp
-                    )
-                },
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 16.dp),
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent)
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(top = 88.dp, start = 24.dp, end = 24.dp)
-
-
+                    .fillMaxWidth()
             ) {
-                Row(
+                SearchBarKatalog(
+                    query = query,
+                    onQueryChange = { newQuery -> query = newQuery },
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(end = 16.dp)
+                )
+
+
+                Box(
+                    modifier = modifier
+                        .align(Alignment.CenterVertically)
+                        .clip(RoundedCornerShape(10.dp))
+                        .size(56.dp)
+                        .background(primary)
+                        .clickable {
+                            navController.navigate(Screen.Filter.route) {
+                                restoreState = true
+                            }
+                        },
                 ) {
-                    SearchBarKatalog(
-                        query = query,
-                        onQueryChange = { newQuery -> query = newQuery },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 16.dp)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_filter_catalog),
+                        contentDescription = "Filter",
+                        tint = Color.White,
+                        modifier = Modifier.align(
+                            Alignment.Center
+                        )
                     )
-
-
-                    Box(
-                        modifier = modifier
-                            .align(Alignment.CenterVertically)
-                            .clip(RoundedCornerShape(10.dp))
-                            .size(56.dp)
-                            .background(primary)
-                            .clickable {
-                                navController.navigate(Screen.Filter.route) {
-                                    restoreState = true
-                                }
-                            },
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_filter_catalog),
-                            contentDescription = "Filter",
-                            tint = Color.White,
-                            modifier = Modifier.align(
-                                Alignment.Center
-                            )
-                        )
-                    }
-
-                }
-
-                if (filteredList.isEmpty()) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.batik_tersedia_kosong),
-                            fontFamily = poppinsFontFamily,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp,
-                            color = textColor,
-                        )
-                    }
-
-                } else {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(count = 2),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 8.dp)
-                    ) {
-                        items(filteredList) { data ->
-                            KatalogItemRow(
-                                image = data.image,
-                                motif = data.namaBatik,
-                                jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
-                                modifier = modifier.clickable { navToDetail(data.idBatik) }
-                            )
-                        }
-
-                        item {
-                            Spacer(modifier = Modifier.height(250.dp))
-                        }
-                    }
                 }
 
             }
+
+            if (filteredList.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.batik_tersedia_kosong),
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        color = textColor,
+                    )
+                }
+
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(count = 2),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 8.dp)
+                ) {
+                    items(filteredList) { data ->
+                        KatalogItemRow(
+                            image = data.image,
+                            motif = data.namaBatik,
+                            jenis = stringResource(id = R.string.jBatik, data.jenisBatik),
+                            modifier = modifier.clickable { navToDetail(data.idBatik) }
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(250.dp))
+                    }
+                }
+            }
+
         }
+    }
 }
 
 @Preview
 @Composable
 private fun Preview() {
     BatikPediaTheme {
-        KatalogContent(listBatik = emptyList(), navToDetail = {}, navController = rememberNavController())
+        KatalogContent(
+            listBatik = emptyList(),
+            navToDetail = {},
+            navController = rememberNavController()
+        )
     }
 }

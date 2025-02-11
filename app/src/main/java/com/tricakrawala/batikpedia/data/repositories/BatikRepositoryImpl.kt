@@ -4,6 +4,7 @@ import com.tricakrawala.batikpedia.data.pref.FilterPreference
 import com.tricakrawala.batikpedia.data.pref.FilterState
 import com.tricakrawala.batikpedia.data.pref.UserModel
 import com.tricakrawala.batikpedia.data.pref.UserPreference
+import com.tricakrawala.batikpedia.data.resource.local.LocalDataSource
 import com.tricakrawala.batikpedia.data.resource.remote.RemoteDataSource
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaId
 import com.tricakrawala.batikpedia.data.resource.remote.response.BeritaItem
@@ -31,7 +32,8 @@ import javax.inject.Singleton
 class BatikRepositoryImpl @Inject constructor(
     private val preference: UserPreference,
     private val filterPref : FilterPreference,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource,
 ) : BatikRepository {
 
 
@@ -198,5 +200,20 @@ class BatikRepositoryImpl @Inject constructor(
             emit(UiState.Error(e.message ?: "Unknown Error"))
         }
     }
+
+    override suspend fun insertFavoriteWisata(wisata: WisataId) =
+        localDataSource.insertFavoriteWisata(wisata)
+
+    override fun getAllWisataBatikFavorite(): Flow<UiState<List<WisataId>>> = flow {
+        emit(UiState.Loading)
+        try {
+            val room = localDataSource.getAllWisataBatikFavorite()
+            emit(UiState.Success(room))
+        } catch (e: Exception) {
+            emit(UiState.Error(e.message ?: "Unknown Error"))
+        }
+    }
+
+    override suspend fun deleteFavorite(idWisata: Int) = localDataSource.deleteFavoriteWisata(idWisata)
 
 }

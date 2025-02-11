@@ -38,4 +38,11 @@ interface BatikPediaUseCase {
     fun getAllVideo(): Flow<UiState<List<ValuesItem>>>
     suspend fun saveFilter(filterState: FilterState)
     fun getFilter(): Flow<UiState<FilterState>>
+
+    suspend fun insertFavoriteWisata(wisata: WisataId)
+    fun getAllWisataBatikFavorite(): Flow<UiState<List<WisataId>>>
+    suspend fun deleteFavorite(idWisata : Int)
+
+
+
 }

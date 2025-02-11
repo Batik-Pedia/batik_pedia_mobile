@@ -4,22 +4,22 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.parcelize)
-    alias(libs.plugins.google.devtools.ksp)
-    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.google.devtools.ksp.app)
+    alias(libs.plugins.dagger.hilt.android.app)
 }
 
 android {
     namespace = "com.tricakrawala.batikpedia"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.tricakrawala.batikpedia"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 3
+        targetSdk = 35
+        versionCode = 5
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.tricakrawala.batikpedia.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -33,6 +33,7 @@ android {
 
         buildConfigField("String", "BASE_URL", apiKey)
 
+
     }
 
     buildTypes {
@@ -42,10 +43,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            ndk.debugSymbolLevel = "FULL"
         }
 
         debug {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -65,7 +67,7 @@ android {
         mlModelBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.5"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
     packaging {
         resources {
@@ -88,7 +90,14 @@ dependencies {
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.androidx.navigation.testing)
+    implementation(libs.androidx.runner)
+    implementation(libs.androidx.hilt.testing)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -129,5 +138,12 @@ dependencies {
     implementation (libs.maps.compose)
     implementation (libs.play.services.maps)
     implementation (libs.accompanist.permissions)
+
+    androidTestImplementation (libs.androidx.hilt.testing)
+    kspAndroidTest (libs.hilt.compiler)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
 }

@@ -19,9 +19,6 @@ class BeritaViewModel @Inject constructor(private val berita: BatikPediaUseCase)
     private val _uiState = MutableStateFlow<UiState<List<BeritaItem>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<BeritaItem>>> get() = _uiState
 
-    private val _uiStateDetail = MutableStateFlow<UiState<BeritaId>>(UiState.Loading)
-    val uiStateDetail: StateFlow<UiState<BeritaId>> get() = _uiStateDetail
-
     fun getAllBerita() {
         viewModelScope.launch {
             berita.getAllBerita()
@@ -30,17 +27,6 @@ class BeritaViewModel @Inject constructor(private val berita: BatikPediaUseCase)
                 }
                 .collect {
                     _uiState.value = it
-                }
-        }
-    }
-
-    fun getDetailBerita(idBerita: Int) {
-        viewModelScope.launch {
-            berita.getBeritaById(idBerita).catch {
-                _uiStateDetail.value = UiState.Error(it.message ?: "Unknown error")
-            }
-                .collect {
-                    _uiStateDetail.value = it
                 }
         }
     }

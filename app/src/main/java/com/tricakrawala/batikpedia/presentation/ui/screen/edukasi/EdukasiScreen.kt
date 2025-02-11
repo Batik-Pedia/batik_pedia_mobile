@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -81,7 +82,7 @@ fun EdukasiScreen(
     val video = uiStateVideoMembatik
 
 
-    when{
+    when {
         kursus is UiState.Success && video is UiState.Success -> {
             EdukasiContent(
                 navigateToDetail = navigateToDetail,
@@ -93,7 +94,7 @@ fun EdukasiScreen(
 
         kursus is UiState.Loading && video is UiState.Loading -> {
             Box(Modifier.fillMaxSize()) {
-                AlertDialog(
+                BasicAlertDialog(
                     onDismissRequest = {},
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
@@ -105,8 +106,6 @@ fun EdukasiScreen(
         }
     }
 }
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -160,38 +159,45 @@ fun EdukasiContent(
 
 
         )
-        {NavbarHome(textContent = stringResource(id = R.string.kursus_membatik), modifier = Modifier.height(48.dp)
-            .clickable { navController.navigate(
-            Screen.ToListKursus.route)})
+        {
+            NavbarHome(textContent = stringResource(id = R.string.kursus_membatik),
+                modifier = Modifier
+                    .height(48.dp),
+                onClick = {
+                    navController.navigate(
+                        Screen.ToListKursus.route
+                    )
+                })
 
-           Box(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp)
 
-            ){
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(count = 2),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .padding(top = 5.dp)
-
             ) {
-                items(listKursus) { data ->
-                    KursusBox(
-                        image = data.image,
-                        kursus = data.namaKursus,
-                        modifier = modifier.clickable { navigateToDetail(data.idKursus.toLong()) })
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(count = 2),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+
+                ) {
+                    items(listKursus) { data ->
+                        KursusBox(
+                            image = data.image,
+                            kursus = data.namaKursus,
+                            modifier = modifier.clickable { navigateToDetail(data.idKursus.toLong()) })
+                    }
                 }
-            }}
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             NavbarHome(textContent = stringResource(id = R.string.video_membatik),
-                modifier = Modifier.height(48.dp)
-                    .clickable { navController.navigate(Screen.VideoEdukasi.route)})
+                modifier = Modifier.height(48.dp),
+                onClick = { navController.navigate(Screen.VideoEdukasi.route) })
 
             LazyColumn(
                 modifier = Modifier
@@ -210,8 +216,8 @@ fun EdukasiContent(
                         }
                     )
                 }
-                
-                item { 
+
+                item {
                     Spacer(modifier = Modifier.height(36.dp))
                 }
             }
@@ -221,14 +227,13 @@ fun EdukasiContent(
 }
 
 
-
 @Preview
 @Composable
 private fun Preview() {
     BatikPediaTheme {
         EdukasiContent(
             navController = rememberNavController(),
-            navigateToDetail = {  },
+            navigateToDetail = { },
             listVideoMembatik = emptyList()
         )
     }

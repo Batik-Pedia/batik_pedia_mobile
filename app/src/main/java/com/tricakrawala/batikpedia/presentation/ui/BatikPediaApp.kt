@@ -28,7 +28,6 @@ import com.tricakrawala.batikpedia.R
 import com.tricakrawala.batikpedia.presentation.navigation.Screen
 import com.tricakrawala.batikpedia.presentation.ui.components.BottomBar
 import com.tricakrawala.batikpedia.presentation.ui.screen.beritaacara.BeritaAcaraScreen
-import com.tricakrawala.batikpedia.presentation.ui.screen.beritaacara.DetailBeritaScreen
 import com.tricakrawala.batikpedia.presentation.ui.screen.camera.CameraScreen
 import com.tricakrawala.batikpedia.presentation.ui.screen.detailbatik.DetailMotifBatikFullScreen
 import com.tricakrawala.batikpedia.presentation.ui.screen.detailbatik.DetailMotifScreen
@@ -44,6 +43,7 @@ import com.tricakrawala.batikpedia.presentation.ui.screen.provinsi.ListProvinsiS
 import com.tricakrawala.batikpedia.presentation.ui.screen.provinsi.WisataProvinsiScreen
 import com.tricakrawala.batikpedia.presentation.ui.screen.wisata.DetailWisataScreen
 import com.tricakrawala.batikpedia.presentation.ui.screen.wisata.WisataScreen
+import com.tricakrawala.batikpedia.presentation.ui.screen.wisatafavorite.WisataFavoriteScreen
 import com.tricakrawala.batikpedia.presentation.ui.theme.background2
 import com.tricakrawala.batikpedia.presentation.ui.theme.primary
 import com.tricakrawala.batikpedia.utils.Utils
@@ -164,7 +164,12 @@ fun BatikPediaApp(
             composable(Screen.Wisata.route) {
                 WisataScreen(navigateToDetail = { idWisata ->
                     navController.navigate(Screen.DetailWisata.createRoute(idWisata))
-                })
+                }, navController = navController)
+            }
+            composable(Screen.Favorite.route) {
+                WisataFavoriteScreen(navigateToDetail = { idWisata ->
+                    navController.navigate(Screen.DetailWisata.createRoute(idWisata))
+                },navController = navController)
             }
 
             composable(
@@ -176,9 +181,7 @@ fun BatikPediaApp(
             }
 
             composable(Screen.Berita.route) {
-                BeritaAcaraScreen(navController = navController, navigateToDetail = { idBerita ->
-                    navController.navigate(Screen.DetailBerita.createRoute(idBerita))
-                })
+                BeritaAcaraScreen(navController = navController)
             }
 
 
@@ -228,14 +231,6 @@ fun BatikPediaApp(
 
             composable(Screen.Camera.route) {
                 CameraScreen(navController = navController)
-            }
-
-            composable(
-                Screen.DetailBerita.route,
-                arguments = listOf(navArgument("idBerita") { type = NavType.IntType }),
-            ) {
-                val id = it.arguments?.getInt("idBerita") ?: 0
-                DetailBeritaScreen(idBerita = id)
             }
 
         }

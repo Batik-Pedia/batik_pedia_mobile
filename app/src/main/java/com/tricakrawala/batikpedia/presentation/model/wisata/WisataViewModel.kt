@@ -25,8 +25,38 @@ class WisataViewModel @Inject constructor(private val useCase : BatikPediaUseCas
         UiState.Loading)
     val uiStateWisataById: StateFlow<UiState<WisataId>> get() = _uiStateWisataById
 
+    private val _listFavorite : MutableStateFlow<UiState<List<WisataId>>> = MutableStateFlow(
+        UiState.Loading)
+    val listFavorite: MutableStateFlow<UiState<List<WisataId>>> get() = _listFavorite
+
     init {
         getAllWisata()
+        getAllWisataBatikFavorite()
+    }
+
+    fun getAllWisataBatikFavorite(){
+        viewModelScope.launch(Dispatchers.IO) {
+            useCase.getAllWisataBatikFavorite().collect{
+                _listFavorite.value = it
+            }
+        }
+    }
+
+    fun insertFavoriteWisata(wisataBatik: WisataId){
+        viewModelScope.launch(Dispatchers.IO) {
+            useCase.insertFavoriteWisata(wisataBatik)
+            getAllWisata()
+            getAllWisataBatikFavorite()
+        }
+
+    }
+
+    fun deleteFavorite(idWisata :Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            useCase.deleteFavorite(idWisata)
+            getAllWisata()
+            getAllWisataBatikFavorite()
+        }
     }
 
     fun getAllWisata() {

@@ -1,5 +1,6 @@
 package com.tricakrawala.batikpedia.presentation.ui.screen.home
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -39,6 +40,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -187,70 +190,92 @@ fun HomeContent(
                         .padding(horizontal = 12.dp, vertical = 16.dp)
                 )
             }
-            NavbarHome(
-                textContent = stringResource(id = R.string.jelajahi_nusantara),
-                modifier = Modifier
-                    .height(48.dp),
-                onClick = {
-                    navController.navigate(
-                        Screen.ToListProvinsi.route
-                    )
-                })
 
-            LazyRow {
-                items(listNusantara) { data ->
-                    NusantaraItemRow(
-                        provinsi = data.namaProvinsi,
-                        image = data.imgProvinsi,
-                        onClick = { navigateToNusantara(data.idProvinsi.toLong()) },
-                        alphaBackground = 0.3f,
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
+            NusantaraSection(navController,listNusantara,navigateToNusantara)
 
-                }
-            }
-
-            NavbarHome(
-                textContent = stringResource(id = R.string.rekomendasi_untuk_anda),
-                isShow = false,
-            )
-
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(count = 2),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .height(300.dp)
-            ) {
-                items(listRekomendasi) { data ->
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(data.image)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "Rekomendasi",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .height(150.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.link))
-                                context.startActivity(intent)
-                            }
-
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(100.dp))
-                }
-
-            }
+            RekomendasiSection(listRekomendasi, context)
 
         }
     }
 
+}
 
+@Composable
+private fun NusantaraSection(
+    navController: NavHostController,
+    listNusantara: List<ProvinsiItem>,
+    navigateToNusantara: (Long) -> Unit,
+
+){
+    NavbarHome(
+        textContent = stringResource(id = R.string.jelajahi_nusantara),
+        modifier = Modifier
+            .height(48.dp),
+        onClick = {
+            navController.navigate(
+                Screen.ToListProvinsi.route
+            )
+        })
+
+    LazyRow(
+        modifier = Modifier.semantics { testTag = "dataNusantara" }
+    ) {
+        items(listNusantara) { data ->
+            NusantaraItemRow(
+                provinsi = data.namaProvinsi,
+                image = data.imgProvinsi,
+                onClick = { navigateToNusantara(data.idProvinsi.toLong()) },
+                alphaBackground = 0.3f,
+                modifier = Modifier.padding(end = 8.dp)
+
+            )
+
+        }
+    }
+}
+
+@Composable
+private fun RekomendasiSection(
+    listRekomendasi: List<RekomendasiItem>,
+    context: Context
+){
+
+    NavbarHome(
+        textContent = stringResource(id = R.string.rekomendasi_untuk_anda),
+        isShow = false,
+    )
+
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(count = 2),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .height(300.dp)
+    ) {
+        items(listRekomendasi) { data ->
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(data.image)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = "Rekomendasi",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(150.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.link))
+                        context.startActivity(intent)
+                    }
+
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(100.dp))
+        }
+
+    }
 }
 
 @Preview

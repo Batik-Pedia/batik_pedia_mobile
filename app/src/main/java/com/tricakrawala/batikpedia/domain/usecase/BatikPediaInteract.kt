@@ -57,4 +57,9 @@ class BatikPediaInteract @Inject constructor(private val repository: BatikReposi
     }
 
     override fun getFilter(): Flow<UiState<FilterState>> = repository.getFilter()
+    override suspend fun insertFavoriteWisata(wisata: WisataId) = repository.insertFavoriteWisata(wisata)
+
+    override fun getAllWisataBatikFavorite(): Flow<UiState<List<WisataId>>> = repository.getAllWisataBatikFavorite()
+
+    override suspend fun deleteFavorite(idWisata: Int) = repository.deleteFavorite(idWisata)
 }

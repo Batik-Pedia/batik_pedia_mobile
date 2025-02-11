@@ -60,9 +60,9 @@ fun KursusBox(
                     .crossfade(true)
                     .build(),
                 contentDescription = "kursus",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .height(50.dp)
+                    .height(80.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .align(Alignment.Center)
             )
